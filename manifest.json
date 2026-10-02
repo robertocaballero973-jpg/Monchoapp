@@ -6,9 +6,9 @@
   "background_color": "#000000",
   "theme_color": "#000000",
   "icons": [
-    { "src": "/pueblo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/pueblo-192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "/pueblo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/pueblo-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "/pueblo_192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/pueblo_192_maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/pueblo_512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/pueblo_512_maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
