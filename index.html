@@ -460,9 +460,59 @@ const fn=`mujer_${Date.now()}_${file.name.replace(/\s/g,'_')}`; const {error:upE
 if(upErr){const r=new FileReader(); r.onload=e=>{const g=JSON.parse(localStorage.getItem('moncho_galeria_mujer')||'[]'); g.unshift({titulo,tipo,img:e.target.result}); localStorage.setItem('moncho_galeria_mujer',JSON.stringify(g)); document.getElementById('uploadStatusMujer').innerText='GUARDADO'; cargarGaleriaMujeres();}; r.readAsDataURL(file); return;}
 const {data:urlData}=supabaseClient.storage.from('cortes').getPublicUrl(fn); await supabaseClient.from('galeria').insert({titulo,tipo,imagen_url:urlData.publicUrl}); document.getElementById('uploadStatusMujer').innerText='PUBLICADO MUJERES'; document.getElementById('fileInputMujer').value=''; document.getElementById('previewMujer').style.display='none'; cargarGaleriaMujeres(); cargarGaleria();
 }
+const WHATSAPP_MONCHO = '5493758408368'; // Azara - tu numero. Si es Apostoles cambia a 5493758413920
+
 async function reservar(){
-const nombre=document.getElementById('nombre').value; const whatsapp=document.getElementById('whatsapp').value; const fecha=document.getElementById('fecha').value; const hora=document.getElementById('hora').value; const servicioId=document.getElementById('servicioId').value; if(!nombre||!whatsapp||!fecha||!hora||!servicioId) return alert('Completa'); const {data:cli}=await supabaseClient.from('clientes').upsert({nombre,whatsapp},{onConflict:'whatsapp'}).select().single(); await supabaseClient.from('turnos').insert({cliente_id:cli.id,fecha,hora,servicio_id:servicioId,estado:'pendiente'}); alert('Turno guardado'); window.open(`https://wa.me/${whatsapp.replace(/\D/g,'')}?text=Hola ${nombre}, tu turno El Moncho ${fecha} ${hora}`,'_blank'); cargarRegistro(); cargarClientes();
+ const nombre=document.getElementById('nombre').value.trim();
+ const whatsapp=document.getElementById('whatsapp').value.trim();
+ const fecha=document.getElementById('fecha').value;
+ const hora=document.getElementById('hora').value;
+ const servicioId=document.getElementById('servicioId').value;
+ const servicioNombre=document.getElementById('servicioId').options[document.getElementById('servicioId').selectedIndex]?.text||'Servicio';
+ if(!nombre||!whatsapp||!fecha||!hora||!servicioId) return alert('Completá todo');
+
+ // 1) Verificar disponibilidad REAL en Supabase
+ const {data:ocupado, error:errOcup} = await supabaseClient.from('turnos').select('id').eq('fecha',fecha).eq('hora',hora).limit(1);
+ if(errOcup){ console.warn(errOcup); }
+ if(ocupado && ocupado.length>0){
+   alert('❌ Ese horario YA está reservado, elegí otro');
+   return;
+ }
+
+ // 2) Guardar cliente (upsert por whatsapp)
+ const {data:cli, error:cliErr} = await supabaseClient.from('clientes').upsert({nombre,whatsapp},{onConflict:'whatsapp'}).select().single();
+ if(cliErr){ alert('Error cliente: '+cliErr.message); return; }
+
+ // 3) Guardar turno como confirmado
+ const {error:turnoErr} = await supabaseClient.from('turnos').insert({cliente_id:cli.id,fecha,hora,servicio_id:servicioId,estado:'confirmado'});
+ if(turnoErr){
+   if((turnoErr.message||'').toLowerCase().includes('duplicate') || (turnoErr.message||'').toLowerCase().includes('unique')){
+     alert('❌ Ese horario se acaba de ocupar, elegí otro');
+     return;
+   }
+   alert('Error turno: '+turnoErr.message); return;
+ }
+
+ // 4) Mensaje en la pagina al cliente: turno reservado y disponible
+ let msgBox=document.getElementById('msgReserva');
+ if(!msgBox){
+   msgBox=document.createElement('div');
+   msgBox.id='msgReserva';
+   msgBox.style.cssText='background:#00c851;color:#fff;padding:18px;border-radius:12px;margin-top:12px;font-weight:900;font-size:16px;text-align:center;line-height:1.4;border:3px solid #000';
+   const container=document.getElementById('tab-turnos');
+   if(container) container.querySelector('.card').appendChild(msgBox);
+ }
+ const fechaLinda=fecha.split('-').reverse().join('/');
+ msgBox.style.display='block';
+ msgBox.innerHTML=`✅ ¡TURNO CONFIRMADO!<br>${fechaLinda} - ${hora}hs<br><small style="display:block;margin-top:8px;font-weight:700;font-size:13px">Hola ${nombre}, tu turno está DISPONIBLE y ha sido reservado en El Moncho Azara.<br>Servicio: ${servicioNombre}<br><br>👉 Se abre WhatsApp para avisarle a Moncho. Dale a ENVIAR ▶️</small>`;
+
+ // 5) Mensaje que te llega a TU WhatsApp (5493758408368)
+ const textoParaVos=`*¡NUEVO TURNO CONFIRMADO!* %0A💈 El Moncho Azara%0A👤 ${encodeURIComponent(nombre)}%0A📱 ${encodeURIComponent(whatsapp)}%0A📅 ${fechaLinda}%0A⏰ ${hora}%0A✂️ ${encodeURIComponent(servicioNombre)}%0A%0A_Reservado desde la app_`;
+ window.open(`https://wa.me/${WHATSAPP_MONCHO}?text=${textoParaVos}`,'_blank');
+
+ cargarRegistro(); cargarClientes();
 }
+
 function reservarPromo(promo){const w=prompt('Tu WhatsApp para reservar promo '+promo); if(!w) return; window.open(`https://wa.me/${w.replace(/\D/g,'')}?text=Hola El Moncho, quiero la PROMO ${promo}`,'_blank');}
 async function cargarRegistro(){const {data}=await supabaseClient.from('turnos').select('*, clientes(nombre), servicios(nombre)').order('fecha',{ascending:false}).limit(20); if(!data) return; let h=''; data.forEach(t=>{h+=`<div class="line"><span>${t.fecha} ${t.hora} - ${t.clientes?.nombre||''} - ${t.servicios?.nombre||''}</span><span style="font-size:9px;border:1px solid #333;padding:2px 6px">${t.estado}</span></div>`;}); document.getElementById('registroCortes').innerHTML=h||'Sin registros';}
 async function cargarClientes(){
