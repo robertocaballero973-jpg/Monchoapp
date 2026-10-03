@@ -517,7 +517,7 @@ function reservarPromo(promo){const w=prompt('Tu WhatsApp para reservar promo '+
 async function cargarRegistro(){const {data}=await supabaseClient.from('turnos').select('*, clientes(nombre), servicios(nombre)').order('fecha',{ascending:false}).limit(50); if(!data) return; let h=''; data.forEach(t=>{h+=`<div class="line"><span>${t.fecha} ${t.hora} - ${t.clientes?.nombre||''} - ${t.servicios?.nombre||''}</span><div style="display:flex;gap:6px;align-items:center"><span style="font-size:9px;border:1px solid #333;padding:2px 6px">${t.estado}</span><button onclick="borrarTurno('${t.id}')" style="width:auto;padding:4px 8px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px">X</button></div></div>`;}); document.getElementById('registroCortes').innerHTML=h||'Sin registros';}
 async function borrarTurno(id){if(!confirm('¿Borrar este turno? Va a liberar el horario.')) return; const {error}=await supabaseClient.from('turnos').delete().eq('id',id); if(error){alert('Error: '+error.message); return;} alert('Turno borrado, horario liberado'); cargarRegistro(); cargarClientes();}
 async function cargarClientes(){
-const {data:cl}=await supabaseClient.from('clientes').select('*').order('nombre').limit(50);
+const {data:cl}=await supabaseClient.from('clientes').select('*').order('nombre').limit(100);
 const {data:tu}=await supabaseClient.from('turnos').select('cliente_id');
 let h=''; 
 cl?.forEach(c=>{
@@ -527,9 +527,20 @@ cl?.forEach(c=>{
  let dots=''; for(let i=1;i<=5;i++){const done=i<=progreso; dots+=`<div class="dot ${done?'done':''}">${done?'✓':i}</div>`;}
  const vipClass=isVip?'vip':''; const statusText=gratis?'¡GRATIS! 6to corte gratis - Es VIP GOLD':`${progreso}/5 cortes`;
  const badge=isVip?'<span class="badge-vip">VIP GOLD</span>':'<span class="badge-vip" style="background:var(--gold);color:#000">GOLD</span>';
- h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${c.nombre.toUpperCase()}</b>${badge}</div><div style="font-size:10px;opacity:0.7">${c.whatsapp} • ${cnt} cortes</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><button onclick="window.open('https://wa.me/${c.whatsapp.replace(/\D/g,'')}','_blank')" style="width:auto;padding:6px 12px;font-size:10px" class="sec">${gratis?'CANJEAR':'WA'}</button></div></div>`;
+ const isAlejandro = c.nombre.toLowerCase().includes('alejandro');
+ const borrarBtn = isAlejandro ? '' : `<button onclick="borrarCliente('${c.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px;margin-left:6px">🗑️ BORRAR</button>`;
+ h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${c.nombre.toUpperCase()}</b><div style="display:flex;gap:6px">${badge}${borrarBtn}</div></div><div style="font-size:10px;opacity:0.7">${c.whatsapp} • ${cnt} cortes</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><button onclick="window.open('https://wa.me/${c.whatsapp.replace(/\D/g,'')}','_blank')" style="width:auto;padding:6px 12px;font-size:10px" class="sec">${gratis?'CANJEAR':'WA'}</button></div></div>`;
 });
 document.getElementById('listaClientes').innerHTML=h||'<div class="small">Sin clientes.</div>';
+}
+async function borrarCliente(clienteId){
+ if(!confirm('¿Seguro que querés BORRAR esta tarjeta de cliente? Se borran también sus turnos.')) return;
+ const {error:errTurnos}=await supabaseClient.from('turnos').delete().eq('cliente_id',clienteId);
+ if(errTurnos){ console.warn(errTurnos); }
+ const {error}=await supabaseClient.from('clientes').delete().eq('id',clienteId);
+ if(error){alert('Error: '+error.message); return;}
+ alert('Cliente borrado');
+ cargarRegistro(); cargarClientes();
 }
 function loginAdmin(){if(document.getElementById('adminPass').value==='moncho2026'){localStorage.setItem('admin','1'); checkAdmin();} else alert('Contraseña incorrecta');}
 function checkAdmin(){if(localStorage.getItem('admin')==='1'){document.getElementById('adminLogin').style.display='none'; document.getElementById('adminPanel').style.display='block'; cargarServicios(); cargarServiciosMujeres(); cargarPromos(); buildFontSelectors(); loadAppConfig();}}
