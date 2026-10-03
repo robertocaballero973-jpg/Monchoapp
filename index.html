@@ -446,8 +446,9 @@ if(error){data=JSON.parse(localStorage.getItem('moncho_galeria')||'[]').map(x=>(
 if(!data||data.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">SIN CORTES AUN</div>'; if(e) e.innerText=''; cargarGaleriaAdmin(data||[]); return;}
 const filtrada = data.filter(i=> !['mujer','alisado','tintura','balayage','flequillo','novia','color'].includes((i.tipo||'').toLowerCase()));
 const lista = filtrada.length?filtrada:data;
-const isAdmin = localStorage.getItem('admin')==='1';
-c.innerHTML=''; lista.forEach(i=>{const delBtn = isAdmin && i.id ? `<button onclick="borrarFoto('${i.id}')" style="position:absolute;top:6px;right:6px;width:auto;padding:4px 8px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px;z-index:2">🗑️ X</button>` : ''; c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy">${delBtn}<div class="cap"><b>${(i.titulo||'CORTE').toUpperCase()}</b></div></div>`;}); if(e) e.innerText=isAdmin?'Modo admin: toca 🗑️ para borrar':'';
+// PUBLICO: sin tachito, limpio para clientes
+c.innerHTML=''; lista.forEach(i=>{c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy"><div class="cap"><b>${(i.titulo||'CORTE').toUpperCase()}</b></div></div>`;}); 
+if(e) e.innerText='';
 cargarGaleriaAdmin(data||[]);
 }
 async function cargarGaleriaMujeres(){
@@ -459,10 +460,10 @@ if(error){data=JSON.parse(localStorage.getItem('moncho_galeria_mujer')||'[]').ma
 if(!data||data.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">SIN TRABAJOS MUJERES AUN</div>'; if(e) e.innerText=''; cargarGaleriaMujeresAdmin([]); return;}
 const filtrada = data.filter(i=> ['mujer','alisado','color','tintura','balayage','flequillo','novia'].includes((i.tipo||'').toLowerCase()));
 const lista = filtrada.length?filtrada:data.slice(0,20);
-const isAdmin = localStorage.getItem('admin')==='1';
+// PUBLICO: sin tachito
 c.innerHTML=''; 
-if(lista.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">Subi trabajos tipo MUJER, COLOR, ALISADO</div>';} else {lista.forEach(i=>{const delBtn = isAdmin && i.id ? `<button onclick="borrarFoto('${i.id}')" style="position:absolute;top:6px;right:6px;width:auto;padding:4px 8px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px;z-index:2">🗑️ X</button>` : ''; c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy">${delBtn}<div class="cap"><b>${(i.titulo||'MUJER').toUpperCase()}</b></div></div>`;});}
-if(e) e.innerText=isAdmin?'Modo admin: toca 🗑️ para borrar':'';
+if(lista.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">Subi trabajos tipo MUJER, COLOR, ALISADO</div>';} else {lista.forEach(i=>{c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy"><div class="cap"><b>${(i.titulo||'MUJER').toUpperCase()}</b></div></div>`;});}
+if(e) e.innerText='';
 cargarGaleriaMujeresAdmin(data||[]);
 }
 function cargarGaleriaAdmin(todas){
