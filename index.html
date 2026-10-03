@@ -514,7 +514,8 @@ async function reservar(){
 }
 
 function reservarPromo(promo){const w=prompt('Tu WhatsApp para reservar promo '+promo); if(!w) return; window.open(`https://wa.me/${w.replace(/\D/g,'')}?text=Hola El Moncho, quiero la PROMO ${promo}`,'_blank');}
-async function cargarRegistro(){const {data}=await supabaseClient.from('turnos').select('*, clientes(nombre), servicios(nombre)').order('fecha',{ascending:false}).limit(20); if(!data) return; let h=''; data.forEach(t=>{h+=`<div class="line"><span>${t.fecha} ${t.hora} - ${t.clientes?.nombre||''} - ${t.servicios?.nombre||''}</span><span style="font-size:9px;border:1px solid #333;padding:2px 6px">${t.estado}</span></div>`;}); document.getElementById('registroCortes').innerHTML=h||'Sin registros';}
+async function cargarRegistro(){const {data}=await supabaseClient.from('turnos').select('*, clientes(nombre), servicios(nombre)').order('fecha',{ascending:false}).limit(50); if(!data) return; let h=''; data.forEach(t=>{h+=`<div class="line"><span>${t.fecha} ${t.hora} - ${t.clientes?.nombre||''} - ${t.servicios?.nombre||''}</span><div style="display:flex;gap:6px;align-items:center"><span style="font-size:9px;border:1px solid #333;padding:2px 6px">${t.estado}</span><button onclick="borrarTurno('${t.id}')" style="width:auto;padding:4px 8px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px">X</button></div></div>`;}); document.getElementById('registroCortes').innerHTML=h||'Sin registros';}
+async function borrarTurno(id){if(!confirm('¿Borrar este turno? Va a liberar el horario.')) return; const {error}=await supabaseClient.from('turnos').delete().eq('id',id); if(error){alert('Error: '+error.message); return;} alert('Turno borrado, horario liberado'); cargarRegistro(); cargarClientes();}
 async function cargarClientes(){
 const {data:cl}=await supabaseClient.from('clientes').select('*').order('nombre').limit(50);
 const {data:tu}=await supabaseClient.from('turnos').select('cliente_id');
