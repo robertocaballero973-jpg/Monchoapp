@@ -225,6 +225,16 @@ button.pink{background:#FF8FAB;color:#000}
 <div class="admin-block"><div class="title">PRECIOS BARBERIA</div><div id="adminServicios"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="newNombre" placeholder="Nuevo servicio"><input id="newPrecio" type="number" placeholder="$" style="width:90px"><input id="newDur" type="number" placeholder="min" style="width:70px"></div><button onclick="crearServicio()" class="sec" style="margin-top:8px;background:#000;color:#fff">CREAR</button></div>
 <div class="admin-block"><div class="title">PRECIOS MUJERES</div><div id="adminServiciosMujeres"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="newNombreM" placeholder="Nuevo servicio mujer"><input id="newPrecioM" type="number" placeholder="$" style="width:90px"><input id="newDurM" type="number" placeholder="min" style="width:70px"></div><button onclick="crearServicioMujer()" class="sec" style="margin-top:8px;background:#000;color:#fff">CREAR MUJERES</button></div>
 
+<div class="admin-block" style="background:#111;color:#fff;border:1px solid #222">
+<div class="title" style="color:#fff">📸 GALERIA - BORRAR FOTOS BARBERIA</div>
+<div id="adminGaleria"></div>
+</div>
+
+<div class="admin-block" style="background:#1a0a14;color:#fff;border:1px solid #332">
+<div class="title" style="color:#FF8FAB">📸 GALERIA - BORRAR FOTOS MUJERES</div>
+<div id="adminGaleriaMujeres"></div>
+</div>
+
 </div>
 </div>
 
@@ -429,24 +439,59 @@ async function crearServicioMujer(){const n=document.getElementById('newNombreM'
 
 async function cargarGaleria(){
 const c=document.getElementById('galeria'); const e=document.getElementById('estadoGaleria');
+if(!c) return;
 if(e) e.innerText='CARGANDO...';
-let {data,error}=await supabaseClient.from('galeria').select('*').order('created_at',{ascending:false}).limit(40);
-if(error){data=JSON.parse(localStorage.getItem('moncho_galeria')||'[]').map(x=>({titulo:x.titulo,tipo:x.tipo,imagen_url:x.img}));}
-if(!data||data.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">SIN CORTES AUN</div>'; if(e) e.innerText=''; return;}
-const filtrada = data.filter(i=> !['mujer','alisado','tintura','balayage','flequillo','novia'].includes((i.tipo||'').toLowerCase()));
-c.innerHTML=''; (filtrada.length?filtrada:data).forEach(i=>{c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy"><div class="cap"><b>${(i.titulo||'CORTE').toUpperCase()}</b></div></div>`;}); if(e) e.innerText='';
+let {data,error}=await supabaseClient.from('galeria').select('*').order('created_at',{ascending:false}).limit(60);
+if(error){data=JSON.parse(localStorage.getItem('moncho_galeria')||'[]').map(x=>({id:x.id||'',titulo:x.titulo,tipo:x.tipo,imagen_url:x.img}));}
+if(!data||data.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">SIN CORTES AUN</div>'; if(e) e.innerText=''; cargarGaleriaAdmin(data||[]); return;}
+const filtrada = data.filter(i=> !['mujer','alisado','tintura','balayage','flequillo','novia','color'].includes((i.tipo||'').toLowerCase()));
+const lista = filtrada.length?filtrada:data;
+const isAdmin = localStorage.getItem('admin')==='1';
+c.innerHTML=''; lista.forEach(i=>{const delBtn = isAdmin && i.id ? `<button onclick="borrarFoto('${i.id}')" style="position:absolute;top:6px;right:6px;width:auto;padding:4px 8px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px;z-index:2">🗑️ X</button>` : ''; c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy">${delBtn}<div class="cap"><b>${(i.titulo||'CORTE').toUpperCase()}</b></div></div>`;}); if(e) e.innerText=isAdmin?'Modo admin: toca 🗑️ para borrar':'';
+cargarGaleriaAdmin(data||[]);
 }
 async function cargarGaleriaMujeres(){
 const c=document.getElementById('galeriaMujeres'); const e=document.getElementById('estadoGaleriaMujeres');
 if(!c) return;
 if(e) e.innerText='CARGANDO...';
-let {data,error}=await supabaseClient.from('galeria').select('*').order('created_at',{ascending:false}).limit(40);
-if(error){data=JSON.parse(localStorage.getItem('moncho_galeria_mujer')||'[]').map(x=>({titulo:x.titulo,tipo:x.tipo,imagen_url:x.img}));}
-if(!data||data.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">SIN TRABAJOS MUJERES AUN</div>'; if(e) e.innerText=''; return;}
+let {data,error}=await supabaseClient.from('galeria').select('*').order('created_at',{ascending:false}).limit(60);
+if(error){data=JSON.parse(localStorage.getItem('moncho_galeria_mujer')||'[]').map(x=>({id:x.id||'',titulo:x.titulo,tipo:x.tipo,imagen_url:x.img}));}
+if(!data||data.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">SIN TRABAJOS MUJERES AUN</div>'; if(e) e.innerText=''; cargarGaleriaMujeresAdmin([]); return;}
 const filtrada = data.filter(i=> ['mujer','alisado','color','tintura','balayage','flequillo','novia'].includes((i.tipo||'').toLowerCase()));
-c.innerHTML=''; const lista = filtrada.length?filtrada:data.slice(0,6);
-if(lista.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">Subi trabajos tipo MUJER, COLOR, ALISADO</div>';} else {lista.forEach(i=>{c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy"><div class="cap"><b>${(i.titulo||'MUJER').toUpperCase()}</b></div></div>`;});}
-if(e) e.innerText='';
+const lista = filtrada.length?filtrada:data.slice(0,20);
+const isAdmin = localStorage.getItem('admin')==='1';
+c.innerHTML=''; 
+if(lista.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">Subi trabajos tipo MUJER, COLOR, ALISADO</div>';} else {lista.forEach(i=>{const delBtn = isAdmin && i.id ? `<button onclick="borrarFoto('${i.id}')" style="position:absolute;top:6px;right:6px;width:auto;padding:4px 8px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px;z-index:2">🗑️ X</button>` : ''; c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy">${delBtn}<div class="cap"><b>${(i.titulo||'MUJER').toUpperCase()}</b></div></div>`;});}
+if(e) e.innerText=isAdmin?'Modo admin: toca 🗑️ para borrar':'';
+cargarGaleriaMujeresAdmin(data||[]);
+}
+function cargarGaleriaAdmin(todas){
+ const adminList = document.getElementById('adminGaleria');
+ if(!adminList) return;
+ const barberia = (todas||[]).filter(i=> !['mujer','alisado','color','tintura','balayage','flequillo','novia'].includes((i.tipo||'').toLowerCase()));
+ let h='';
+ barberia.forEach(i=>{
+   h+=`<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;background:#111;padding:8px;border-radius:8px"><img src="${i.imagen_url}" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><div style="flex:1"><div style="font-size:11px;font-weight:800">${(i.titulo||'CORTE').toUpperCase()}</div><div style="font-size:9px;color:#888">${i.tipo||''} • ${i.id?i.id.slice(0,8):''}</div></div><button onclick="borrarFoto('${i.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px">🗑️ BORRAR</button></div>`;
+ });
+ adminList.innerHTML = h || '<div class="small">Sin fotos barberia. Subi desde pestaña CORTES.</div>';
+}
+function cargarGaleriaMujeresAdmin(todas){
+ const adminList = document.getElementById('adminGaleriaMujeres');
+ if(!adminList) return;
+ const mujeres = (todas||[]).filter(i=> ['mujer','alisado','color','tintura','balayage','flequillo','novia'].includes((i.tipo||'').toLowerCase()));
+ let h='';
+ mujeres.forEach(i=>{
+   h+=`<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;background:#111;padding:8px;border-radius:8px"><img src="${i.imagen_url}" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><div style="flex:1"><div style="font-size:11px;font-weight:800">${(i.titulo||'MUJER').toUpperCase()}</div><div style="font-size:9px;color:#888">${i.tipo||''}</div></div><button onclick="borrarFoto('${i.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px">🗑️ BORRAR</button></div>`;
+ });
+ adminList.innerHTML = h || '<div class="small">Sin fotos mujeres. Subi desde pestaña MUJERES.</div>';
+}
+async function borrarFoto(id){
+ if(!id) return alert('Esta foto es local, borra cache del navegador');
+ if(!confirm('¿Borrar esta foto de la galería?')) return;
+ const {error}=await supabaseClient.from('galeria').delete().eq('id',id);
+ if(error){alert('Error: '+error.message); return;}
+ alert('Foto borrada');
+ cargarGaleria(); cargarGaleriaMujeres();
 }
 async function subirCorte(){
 const file=document.getElementById('fileInput').files[0]; const titulo=document.getElementById('tituloCorte').value||'Corte Azara'; const tipo=document.getElementById('tipoCorte').value; if(!file) return alert('Elegi foto'); document.getElementById('uploadStatus').innerText='SUBIENDO...';
