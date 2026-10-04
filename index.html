@@ -575,7 +575,13 @@ cl?.forEach(c=>{
  const badge=isVip?'<span class="badge-vip">VIP GOLD</span>':'<span class="badge-vip" style="background:var(--gold);color:#000">GOLD</span>';
  const isAlejandro = c.nombre.toLowerCase().includes('alejandro');
  const borrarBtn = isAlejandro ? '' : `<button onclick="borrarCliente('${c.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px;margin-left:6px">🗑️ BORRAR</button>`;
- h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${c.nombre.toUpperCase()}</b><div style="display:flex;gap:6px">${badge}${borrarBtn}</div></div><div style="font-size:10px;opacity:0.7">${c.whatsapp} • ${cnt} cortes</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><button onclick="window.open('https://wa.me/${c.whatsapp.replace(/\D/g,'')}','_blank')" style="width:auto;padding:6px 12px;font-size:10px" class="sec">${gratis?'CANJEAR':'WA'}</button></div></div>`;
+ const isAdmin = localStorage.getItem('admin')==='1';
+ const waClean = c.whatsapp.replace(/\D/g,'');
+ const waMasked = waClean.length>4 ? '•••• ••'+waClean.slice(-4) : '••••';
+ const waDisplay = isAdmin ? `${c.whatsapp} • ${cnt} cortes` : `${waMasked} • ${cnt} cortes`;
+ const nombreDisplay = isAdmin ? c.nombre.toUpperCase() : c.nombre.toUpperCase().split(' ')[0] + ' ' + (c.nombre.split(' ')[1]?.[0] ? c.nombre.split(' ')[1][0]+'.' : '');
+ const btnAction = gratis ? `canjearGratis('${c.id}','${c.nombre.replace(/'/g,"\\'")}','${waClean}')` : `window.open('https://wa.me/${waClean}','_blank')`;
+ h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${nombreDisplay}</b><div style="display:flex;gap:6px">${badge}${borrarBtn}</div></div><div style="font-size:10px;opacity:0.7">${waDisplay}</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><button onclick="${btnAction}" style="width:auto;padding:6px 12px;font-size:10px" class="sec ${gratis?'':''}" ${gratis?'style="background:var(--gold);color:#000;font-weight:900;border:0"':''}>${gratis?'CANJEAR 🎉':'WA'}</button></div></div>`;
 });
 document.getElementById('listaClientes').innerHTML=h||'<div class="small">Sin clientes.</div>';
 }
@@ -586,6 +592,22 @@ async function borrarCliente(clienteId){
  const {error}=await supabaseClient.from('clientes').delete().eq('id',clienteId);
  if(error){alert('Error: '+error.message); return;}
  alert('Cliente borrado');
+ cargarRegistro(); cargarClientes();
+}
+async function canjearGratis(clienteId,nombre,waClean){
+ if(!confirm(`¿Canjear el CORTE GRATIS VIP de ${nombre}?\n\nSe va a reiniciar su tarjeta a 0/5 y se le avisa por WhatsApp.`)) return;
+ // Borrar 5 turnos mas viejos de ese cliente
+ const {data:turnosViejos, error:errFetch} = await supabaseClient.from('turnos').select('id').eq('cliente_id',clienteId).order('fecha',{ascending:true}).limit(5);
+ if(errFetch){ alert('Error buscando turnos: '+errFetch.message); return; }
+ if(turnosViejos && turnosViejos.length>0){
+   const ids=turnosViejos.map(t=>t.id);
+   const {error:errDel}=await supabaseClient.from('turnos').delete().in('id',ids);
+   if(errDel){ alert('Error borrando: '+errDel.message); return; }
+ }
+ alert(`✅ ¡GRATIS CANJEADO para ${nombre}! Tarjeta reiniciada a 0/5`);
+ // Aviso WhatsApp
+ const texto=`*¡CORTE GRATIS VIP CANJEADO!* %0A💈 El Moncho Azara%0A👤 ${encodeURIComponent(nombre)}%0A🎉 Canjeó su 6to corte GRATIS%0A🔄 Tarjeta reiniciada a 0/5%0A%0A_Cliente VIP GOLD_`;
+ window.open(`https://wa.me/${waClean}?text=${texto}`,'_blank');
  cargarRegistro(); cargarClientes();
 }
 function loginAdmin(){if(document.getElementById('adminPass').value==='moncho2026'){localStorage.setItem('admin','1'); checkAdmin();} else alert('Contraseña incorrecta');}
