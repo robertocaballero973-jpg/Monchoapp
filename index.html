@@ -581,7 +581,8 @@ cl?.forEach(c=>{
  const waDisplay = isAdmin ? `${c.whatsapp} • ${cnt} cortes` : `${waMasked} • ${cnt} cortes`;
  const nombreDisplay = isAdmin ? c.nombre.toUpperCase() : c.nombre.toUpperCase().split(' ')[0] + ' ' + (c.nombre.split(' ')[1]?.[0] ? c.nombre.split(' ')[1][0]+'.' : '');
  const btnAction = gratis ? `canjearGratis('${c.id}','${c.nombre.replace(/'/g,"\\'")}','${waClean}')` : `window.open('https://wa.me/${waClean}','_blank')`;
- h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${nombreDisplay}</b><div style="display:flex;gap:6px">${badge}${borrarBtn}</div></div><div style="font-size:10px;opacity:0.7">${waDisplay}</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><button onclick="${btnAction}" style="width:auto;padding:6px 12px;font-size:10px" class="sec ${gratis?'':''}" ${gratis?'style="background:var(--gold);color:#000;font-weight:900;border:0"':''}>${gratis?'CANJEAR 🎉':'WA'}</button></div></div>`;
+ const btnUno = isAdmin && cnt>1 ? `<button onclick="dejarEnUno('${c.id}','${c.nombre.replace(/'/g,"\\'")}')" style="width:auto;padding:6px 8px;background:#333;color:#fff;font-size:8px;border-radius:6px;margin-right:4px">1/5</button>` : '';
+ h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${nombreDisplay}</b><div style="display:flex;gap:6px">${badge}${borrarBtn}</div></div><div style="font-size:10px;opacity:0.7">${waDisplay}</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><div style="display:flex;gap:4px">${btnUno}<button onclick="${btnAction}" style="width:auto;padding:6px 12px;font-size:10px" class="sec ${gratis?'':''}" ${gratis?'style="background:var(--gold);color:#000;font-weight:900;border:0"':''}>${gratis?'CANJEAR 🎉':'WA'}</button></div></div></div>`;
 });
 document.getElementById('listaClientes').innerHTML=h||'<div class="small">Sin clientes.</div>';
 }
@@ -608,6 +609,17 @@ async function canjearGratis(clienteId,nombre,waClean){
  // Aviso WhatsApp
  const texto=`*¡CORTE GRATIS VIP CANJEADO!* %0A💈 El Moncho Azara%0A👤 ${encodeURIComponent(nombre)}%0A🎉 Canjeó su 6to corte GRATIS%0A🔄 Tarjeta reiniciada a 0/5%0A%0A_Cliente VIP GOLD_`;
  window.open(`https://wa.me/${waClean}?text=${texto}`,'_blank');
+ cargarRegistro(); cargarClientes();
+}
+async function dejarEnUno(clienteId, nombre){
+ if(!confirm(`¿Dejar a ${nombre} en 1 solo corte?\n\nSe borran 4 turnos y queda 1/5`)) return;
+ const {data:turnos, error:errFetch} = await supabaseClient.from('turnos').select('id').eq('cliente_id',clienteId).order('fecha',{ascending:false});
+ if(errFetch){ alert(errFetch.message); return; }
+ if(!turnos || turnos.length<=1){ alert('Ya tiene 1 o menos'); return; }
+ const idsBorrar = turnos.slice(0, turnos.length-1).map(t=>t.id); // deja el mas viejo
+ const {error:errDel}=await supabaseClient.from('turnos').delete().in('id',idsBorrar);
+ if(errDel){ alert(errDel.message); return; }
+ alert(`✅ ${nombre} ahora queda en 1/5`);
  cargarRegistro(); cargarClientes();
 }
 function loginAdmin(){if(document.getElementById('adminPass').value==='moncho2026'){localStorage.setItem('admin','1'); checkAdmin();} else alert('Contraseña incorrecta');}
