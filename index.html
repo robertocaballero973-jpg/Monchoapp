@@ -1,130 +1,630 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A0A0A"><meta name="description" content="EL MONCHO AZARA. Barbería de barrio desde 2018. Cortes, servicios, promos y turnos."><title>EL MONCHO AZARA · Barbería de barrio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&family=Oswald:wght@500;700&family=Montserrat:wght@500;800&display=swap" rel="stylesheet">
-<style>
-:root{--gold:#D4AF37;--bg:#0A0A0A;--hero-bg:#0A0A0A;--hero-text:#fff;--radius:12px;--title:Anton;--body:Inter;--pink:#FF8FAB;--card:#121212;--muted:#929292}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:white;font:13px var(--body),sans-serif}button,input,select,textarea{font:inherit}button,a,input,select{ -webkit-tap-highlight-color:transparent}button,a{transition:background .18s,transform .18s}button:active,.btn:active{transform:scale(.98)}button{cursor:pointer}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}.app{max-width:520px;margin:auto;min-height:100dvh;border-left:1px solid #202020;border-right:1px solid #202020}header{padding:25px 23px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #252525}.brand{font:25px/1 var(--title),sans-serif;letter-spacing:.5px}.brand span{color:var(--gold)}.brand small{display:block;font:8px var(--body),sans-serif;letter-spacing:1.9px;color:#aaa;margin-top:10px}.wa{width:40px;height:40px;display:grid;place-items:center;border:1px solid #343434;border-radius:50%;color:var(--gold)}svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}nav{display:flex;gap:4px;padding:12px 14px;background:#0e0e0e;position:sticky;top:0;z-index:5;border-bottom:1px solid #242424}nav button{flex:1;border:0;background:#1a1a1a;color:#aaa;font-size:9px;font-weight:800;padding:13px 0;border-radius:5px;letter-spacing:.3px}nav button.active{background:white;color:#0A0A0A}.hero{padding:35px 24px 29px;background:var(--hero-bg);color:var(--hero-text);position:relative;overflow:hidden}.eyebrow{display:flex;align-items:center;gap:8px;letter-spacing:2px;font-size:9px;font-weight:700;color:var(--gold)}.eyebrow:before{content:'';width:18px;height:1px;background:var(--gold)}h1{font:clamp(48px,12vw,65px)/1.07 var(--title),sans-serif;letter-spacing:.4px;margin:20px 0 20px;max-width:410px}h1 em{font-style:normal;color:var(--gold)}.hero-sub{color:#aaa;font-size:10px;line-height:1.8;max-width:350px}.hero-actions{display:flex;gap:10px;margin-top:22px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:1px solid #353535;border-radius:6px;padding:14px 17px;background:transparent;color:#fff;font-size:10px;font-weight:800;letter-spacing:.6px;min-height:44px}.btn.gold{background:var(--gold);border-color:var(--gold);color:#0a0a0a}.btn.white{background:#fff;border-color:#fff;color:#111}.hero-stamp{position:absolute;right:22px;bottom:30px;color:#444;font:9px var(--body);writing-mode:vertical-rl;letter-spacing:3px}.perks{display:flex;border-top:1px solid #242424;border-bottom:1px solid #242424;padding:16px 20px;justify-content:space-between;color:#a9a9a9;font-size:9px;letter-spacing:.2px}.perks b{color:var(--gold);font-size:12px}.content{padding:26px 22px 30px}.section-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:10px}h2{font:25px/1.15 var(--title),sans-serif;letter-spacing:.6px;margin:0}h3{font:20px var(--title),sans-serif;margin:0}.tiny{font-size:9px;letter-spacing:1px;color:var(--muted)}.upload{padding:10px 12px;font-size:9px;color:var(--gold);border-color:#51451f;min-height:38px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.photo{margin:0;position:relative}.photo img{width:100%;aspect-ratio:1/1.15;object-fit:cover;border-radius:var(--radius);display:block;background:#181818}.photo figcaption{padding:12px 2px}.photo strong{font:17px var(--title);letter-spacing:.4px}.photo small{display:block;color:#929292;font-size:8px;letter-spacing:1.3px;margin-top:6px}.tag{position:absolute;top:10px;left:10px;padding:5px 7px;background:#0a0a0abf;border:1px solid #ffffff26;border-radius:4px;font-size:8px;letter-spacing:.8px}.gold-banner{background:var(--card);border:1px solid #3c341d;border-radius:var(--radius);padding:19px;margin-top:17px;display:flex;justify-content:space-between;align-items:center;gap:15px}.gold-banner h3{color:var(--gold)}.gold-banner p{font-size:10px;color:#a6a6a6;margin:7px 0 0}.dots{display:flex;gap:5px;margin-top:10px}.dots i{height:10px;width:10px;border:1px solid var(--gold);border-radius:50%}.dots i.filled{background:var(--gold)}.page-hero{padding:30px 24px;background:white;color:#111}.page-hero h2{font-size:41px}.page-hero p{font-size:10px;letter-spacing:1px;margin:12px 0 0}.page-hero.pink{background:var(--pink)}.page-hero.dark{background:#111;color:var(--gold)}.filters{display:flex;gap:8px;margin-bottom:20px}.filters button{border:1px solid #333;border-radius:5px;background:#161616;color:#aaa;padding:11px 15px;font-size:10px;font-weight:700}.filters button.active{background:var(--gold);border-color:var(--gold);color:#111}.service{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #292929;padding:18px 0;gap:12px}.service strong{font-size:13px}.service small{display:block;font-size:10px;color:#888;margin-top:8px}.service .price{font:23px var(--title);color:var(--gold)}.promo{padding:25px;border-radius:var(--radius);background:var(--gold);color:#111;margin-bottom:15px;position:relative}.promo.blanca{background:#eee}.promo.rosa{background:var(--pink)}.promo h3{font-size:29px;margin:10px 0}.promo p{font-size:11px;line-height:1.6}.promo-price{font:33px var(--title);margin:16px 0}.promo del{font:12px var(--body);opacity:.6;margin-left:10px}.promo .btn{border-color:#111;color:#111}.panel{padding:20px;background:#121212;border:1px solid #303030;border-radius:var(--radius);margin:15px 0}.panel h3{margin-bottom:17px}label{display:block;font-size:11px;margin:15px 0 7px;color:#ccc}input,select,textarea{width:100%;border:1px solid #393939;background:#1b1b1b;color:#fff;border-radius:6px;padding:12px;min-height:44px;max-width:100%;color-scheme:dark}textarea{min-height:90px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}form .btn{margin-top:20px;width:100%}.note{font-size:10px;line-height:1.8;color:#999}.status{padding:14px;border-radius:6px;font-size:12px;background:#242015;color:#e9cf77;margin:15px 0;line-height:1.7}.status.error{background:#311718;color:#ffaaaa}.record{padding:15px 0;border-bottom:1px solid #333;font-size:12px;line-height:1.9}.client{background:linear-gradient(115deg,#b68b25,#e5c76b);color:#201908;padding:20px;border-radius:var(--radius);margin:14px 0}.client h3{font-size:24px}.client .dots i{border-color:#493910}.client .dots i.filled{background:#493910}.client .btn{color:#201908;border-color:#493910;margin-top:15px}.client .tiny{color:#493910}.empty{border:1px dashed #333;padding:25px;text-align:center;color:#aaa;font-size:12px}.edit-row{margin:15px 0;padding-bottom:20px;border-bottom:1px solid #333}details{margin-top:18px;border-top:1px solid #333;padding-top:18px}summary{cursor:pointer;line-height:1.8;font-size:12px;color:var(--gold)}footer{padding:22px;border-top:1px solid #292929;text-align:center;color:#777;font-size:9px;line-height:2}footer .brand{font-size:18px;color:#eee;margin-bottom:9px}.install{padding:13px 20px;border-top:1px solid #2b2b2b;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#151515}.install strong{font-size:10px;letter-spacing:.7px}.install small{display:block;font-size:9px;color:#888;margin-top:4px}.install .btn{padding:10px;min-height:36px;font-size:9px}.download{display:block;text-align:center;color:var(--gold);font-size:10px;padding:16px;border-top:1px solid #252525}.hidden{display:none!important}@media(min-width:600px){body{background:#171717}.app{box-shadow:0 0 70px #0006}}@media(max-width:350px){nav{padding:10px 6px;gap:3px}nav button{font-size:8px}.content{padding:22px 16px}.hero{padding:30px 18px}.brand{font-size:22px}}@media(prefers-reduced-motion:reduce){*{transition:none!important}} 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EL MONCHO - Azara</title>
+<meta name="theme-color" content="#D4AF37" id="metaTheme">
+<link rel="icon" href="https://i.imgur.com/8Km9tLL.png">
+<link rel="apple-touch-icon" href="https://i.imgur.com/8Km9tLL.png">
+<link rel="manifest" href="manifest.json">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style id="dynamicFonts">@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Montserrat:wght@400;600;800&family=Poppins:wght@400;600;800&family=Inter:wght@400;600;800&family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Righteous&family=Staatliches&family=Teko:wght@500;700&family=Bangers&family=Permanent+Marker&family=Archivo+Black&family=Fjalla+One&family=Alfa+Slab+One&family=Bebas+Neue&display=swap');</style>
+<style id="appStyles">
+:root{--gold:#D4AF37;--bg:#0A0A0A;--card:#121212;--text:#fff;--hero-bg:#D4AF37;--hero-text:#000;--radius:14px;--font-title:'Anton',sans-serif;--font-body:'Inter',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);max-width:520px;margin:0 auto;min-height:100vh;transition:background 0.3s,color 0.3s}
+.header{padding:24px 20px;background:#000;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--font-title);font-size:40px;letter-spacing:-1px;line-height:0.9}
+.logo span{color:var(--gold)}
+.sub{font-size:10px;letter-spacing:3px;color:#666;margin-top:8px;font-weight:600}
+.tabs{display:flex;gap:1px;background:#1a1a1a;padding:1px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1;min-width:68px;background:var(--bg);padding:14px 6px;text-align:center;font-size:10px;letter-spacing:1.2px;font-weight:800;color:#555;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.tab.active{background:#fff;color:#000}
+.hero{padding:28px 20px;background:var(--hero-bg);color:var(--hero-text);transition:all 0.3s}
+.hero.pink{background:#FF8FAB;color:#000}
+.hero.black{background:#fff;color:#000}
+.hero h1{font-family:var(--font-title);font-size:36px;line-height:0.9;letter-spacing:-1px}
+.hero p{font-size:12px;margin-top:12px;line-height:1.5;font-weight:600;max-width:320px;font-family:var(--font-body)}
+.card{background:var(--card);border-bottom:1px solid #1a1a1a;padding:20px;border-radius:var(--radius);transition:all 0.3s}
+.card-title{font-family:var(--font-title);font-size:18px;letter-spacing:1px;margin-bottom:12px}
+.line{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #1a1a1a}
+.galeria{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#1a1a1a;border-radius:var(--radius);overflow:hidden}
+.foto{aspect-ratio:1;background:#111;position:relative;overflow:hidden}
+.foto img{width:100%;height:100%;object-fit:cover}
+.foto .cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,black);padding:20px 10px 10px}
+.foto .cap b{font-family:var(--font-title);font-size:12px}
+input,select,textarea{width:100%;background:#000;color:#fff;border:1px solid #222;padding:14px;margin-bottom:10px;font-size:14px;border-radius:8px;font-family:var(--font-body)}
+button{width:100%;background:var(--gold);color:#000;border:0;padding:16px;font-family:var(--font-title);letter-spacing:1px;font-size:14px;cursor:pointer;border-radius:8px;transition:all 0.2s}
+button.sec{background:#000;color:#fff;border:1px solid #333;font-family:var(--font-body);font-weight:800;font-size:11px;letter-spacing:1px}
+button.pink{background:#FF8FAB;color:#000}
+.preview{width:100%;max-height:360px;object-fit:cover;display:none;margin-bottom:12px;border-radius:var(--radius)}
+.small{font-size:11px;color:#777;line-height:1.5}
+.pizarron{background:#fff;color:#000;padding:20px;border-radius:var(--radius)}
+.pizarron .title{font-family:var(--font-title);font-size:20px;letter-spacing:1px}
+.install{background:var(--gold);color:#000;padding:12px 16px;display:none;justify-content:space-between;align-items:center;font-weight:800;font-size:11px;letter-spacing:1px}
+.gold-card{background:linear-gradient(135deg,var(--gold) 0%,#F5D76E 30%,var(--gold) 60%,#8A6D00 100%);color:#000;border-radius:var(--radius);padding:18px;position:relative;overflow:hidden;margin-bottom:12px;box-shadow:0 8px 20px rgba(212,175,55,0.3)}
+.gold-card.vip{background:linear-gradient(135deg,#000 0%,#1a1a1a 100%);color:var(--gold);border:2px solid var(--gold)}
+.gold-card .dots{display:flex;gap:8px;margin:12px 0}
+.gold-card .dot{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.15);display:grid;place-items:center;font-weight:800;font-size:12px;border:2px solid rgba(0,0,0,0.1)}
+.gold-card .dot.done{background:#000;color:var(--gold);border-color:#000}
+.gold-card.vip .dot{background:rgba(212,175,55,0.15);border-color:rgba(212,175,55,0.3);color:#555}
+.gold-card.vip .dot.done{background:var(--gold);color:#000}
+.badge-vip{background:#000;color:var(--gold);font-size:9px;padding:4px 8px;border-radius:20px;font-weight:800;letter-spacing:1px}
+.promo-card{background:#fff;color:#000;border-radius:var(--radius);padding:18px;margin-bottom:12px;position:relative;border-left:6px solid var(--gold)}
+.promo-card.pink{border-left-color:#FF8FAB}
+.promo-card.gold{background:linear-gradient(135deg,var(--gold),#F5D76E);border-left-color:#000}
+.promo-card .price{font-family:var(--font-title);font-size:28px;line-height:1}
+.promo-card .old{text-decoration:line-through;color:#999;font-size:12px}
+.admin-block{background:#fff;color:#000;border-radius:12px;padding:16px;margin-bottom:16px}
+.admin-block .title{color:#000;font-family:var(--font-title);font-size:16px;margin-bottom:10px}
+.color-dot{width:28px;height:28px;border-radius:50%;display:inline-block;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px #ddd;margin:4px}
+.font-opt{padding:8px 12px;border:1px solid #ddd;border-radius:8px;margin:4px;display:inline-block;cursor:pointer;font-size:12px;background:#f9f9f9}
+.font-opt.active{background:#000;color:#fff;border-color:#000}
+.design-preview{width:100%;height:60px;border-radius:8px;margin:4px 0;display:grid;place-items:center;font-family:var(--font-title);cursor:pointer;border:2px solid transparent}
+.design-preview.active{border-color:#000}
 </style>
 </head>
-<body><div class="app">
-<header><a href="#" class="brand" id="brand">EL MONCHO <span>AZARA</span><small id="brand-sub">BARBERÍA DE BARRIO • DESDE 2018 • AZARA</small></a><a class="wa" href="https://wa.me/5493758408368" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp"><svg viewBox="0 0 24 24"><path d="M21 11.5a9 9 0 0 1-13.5 7.8L3 21l1.6-4.6A9 9 0 1 1 21 11.5Z"/><path d="M8 7c-2 3 3 8 6 8l2-2-3-2-1 1-2-2 1-1-2-2Z"/></svg></a></header>
-<nav aria-label="Pestañas principales" id="tabs"></nav>
-<main id="main"></main>
-<div class="install"><div><strong>TU BARBERÍA, EN EL BOLSILLO.</strong><small>Siempre a un toque de tu próximo corte.</small></div><button class="btn" id="install">INSTALAR APP ↗</button></div><div id="install-note" class="content hidden"><p class="note">En iPhone: Compartir → Agregar a inicio. En Android: menú del navegador → Agregar a pantalla principal. Este archivo permite un acceso directo; una PWA completa requiere HTTPS, un manifest y un service worker servido en un archivo separado.</p></div>
-<a class="download" href="/el-moncho.html" download="index.html" id="download">↓ DESCARGAR INDEX.HTML</a>
-<footer><div class="brand">EL MONCHO <span>AZARA</span></div>BARBERÍA DE BARRIO. DESDE 2018.<br><a href="https://wa.me/5493758408368" target="_blank" rel="noopener">WhatsApp · +54 9 3758 408368</a><br>© 2026 EL MONCHO AZARA · Hecho para el barrio.<br>Fotos iniciales ilustrativas. Los trabajos reales los publica la barbería.</footer>
+<body>
+<div class="install" id="installBar"><span>INSTALAR APP</span><button onclick="instalar()" style="width:auto;padding:8px 14px;background:#000;color:var(--gold)">INSTALAR</button></div>
+<div class="header">
+<div><div class="logo" id="logoText">EL MONCHO <span id="logoSpan">AZARA</span></div><div class="sub" id="logoSub">BARBERIA DE BARRIO • DESDE 2018 • AZARA</div></div>
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAA4vElEQVR4nO2dd5wlVZn3v6fCTd3TPdMTmCEHJSg5COgCyrqrLusa1rCur7qGRRTZVRddlVUQV0HAVdTVFcHXfTG8ipn1g/KRnGHIGWZgYBic3D2h+6aqc94/6t471dWVw713eP19GLr73qpznnPOc55cp0SpVFIAQgi8UErN+ax7rVJq1s+w64cFbjr9xpsUfmMf1FyEjcdLW1J0xymEQEoZi4Yo3omDONfGGXdY20YsShI0vLPAO4agifTbLO573b8PoyDw0upmKj96oxjKy5RJBGfUd34I2wR+37npidpAQojwDRDVeRdFLXieDBU1GV5Gj2L8QSFoHHG1mt+9YXPjNy9R7WWFdxxZ+MBP6yulem2l0gDDKOnyQFLmKAJxNmrYd1kEU5B0z2pCpYV3PF6T2/1ZFILGorn/CLox7cDD7o3bZpgGiqLNe02ScSQds3dRsvSR5POwecg63qzSPg3fRM1j1nF6ocW5yCsVkkxEmGpNe2/avtO0l5aGqEWJMjvS0pKWXrdZkAfCNmsUHUXBr+1IEyiOJ939PeqaIhC1OfOK+MShI8h2DULePkYQ0wWZdnHbyiL5wxztNHTF6TPsGm9QIFQDBDlb3Z+D9AH8+veb5LT+Sr/H557XfvbXRRoTLm7bQW0mFRhZ4TdmI8qG9t6cxjFKqgWyag0/mz8oZxGWG8hDQvVLAyVFElu6yGhYP+fGr6/YPoBfCMn9dxJPPE5/WRAVKQnavF4p7LVZ0y5W2PxkSfQM48bqws0XeWyYPDfdLB4ol8vK/UUWJyWNdIxqK0vsN6y/fof44uQZwuhxf55Wq+SpjeIKvGHVgF26DPcHcdDvuHgSJIkJxzGB8obfBkx6X5CvENcUTYvu/CSNAA4z80PCMGhUTD4pgmLYXrMjiekUN6eR1AHLEppMgqj5GCSKEHx5mLtZolSa+8MoJ8grOdMwfhTBRSarguiJ+j6PCE3Y5ot7/zAgyZrHFSpp8zN5bMhYGsDbYdjA4jh1aZIkcaRiWrMiC5LMRRFxfm/bRZunRTm1SU0rN7IIh9gboNtRkQmUuP3nEZlJSuewSO00myDO+OJo5iRaP4uQDIPXj8oaWYy9AbI6bVGEeK9JmjfIijj+TdZ+0vpKbgxTACIpA/Yr4ubXd5ADP6cUIk/PPY2ZknaS8t4Ew2Jz57Ee/dZEaaV/nLFmycX49TFHA/iZBmESPYjIfkkqr5OaVwJmGCStd/6z2MlF3xfWxqDmMg4PGGG7zi+RkVcEIO/7wsKUUdEtv3vjJK3ygJ9DF+XkFSFg0rYZRn9RvlVcxBmTBvlmdweBtOo4j/bTIMoM8PssjWkYl6G9oe08kDYamKSNNPD2GflAjJegfpo2Wa8NGpd3HF5HN01uo4hr3XDTVYT0z+v+YTAd3YiyXhKHQaF/g4yy6bOqbL+NkKW9NMgaUizivjR9FJXATDq/Sa9PtAH6wfh+ktkv/hw3nNr9mdTsSIqovuKaMXmWQQxSGheVB0iDMK2e+KH4pImHQUmvrgMU5FAGMWncvsPu7/4eN3gQ5Dh678mi8fLKP+wMPmGSoEXoAzFe9CM2X4QTliQf4fe5N5HiVft5pOa97UeZe0k3Rx4MXKTpkrW/tPclMoHSEJGXukvrgCfd4EEh0aTS3Y+B44zBvbnc90T1l6YkIMxU8/O98jRdijKDkm6aVOcCJUGeqf8itZW3r6Rtuzd8FMMESeOkf6dB2EaKuzmz9l9kXiUpCtMAeSCtFE2LIGcprnmRFFnui4qQpekzSrNEbegk/Q9LuLRwDZAFcZjRT4rlLV3CMopZFjKJ2ZLFn8qSe3D/jLouTdt+6KeG6MsG6OeA0qjYILs/6PuoCFCaftNGnqKujxIiScfpvScthiWqVKgJVKS5AskiOX6Iyg0UTX9cJEk2eXMmSegvkhmTjqFfGGoTyIskdm7cOpNhYHDIT0smlazufvPwI5LeO2iHuC9OcF4DzFKvE9Vm3M/TtF+ET5JHf95ri2BEdx9ZwrdFIZMGCNu9eUtWb19xIjNxsq9RUZGsDmQSxJGG3jyB+/OoGH9aupIiL57oh58QewP4LU4cBstLrSexIf3ui4skmyzPhYlimjTjyJI4zCrA8jRtijSTYm+ApARkJTqJNEwj7bJK9qJ9h6CITNRGiZqLLOsSJBy8c+L9GWT6DIP/VXgpRBb4TaDfZ0kTWFHRH3e77vbT2MtxI0lR+Y3uZ2mc9zzs/CxZ6aCxFW2OxVn/geYBouLgWdV+2glOa3KF0eVtOw4D+2mbYZGccfyNLuLOZRHjijLdB1YK0Q/nMk3CKu+oTdDkp/VN4m4cb/tJ59vbRhwNNUyIO95Zp0P3C1GZ16TtJNUuefWfB5JorDgZ67hzkabfon06L11Z+4wDzW1T9ku1ZrEn0/TRb5MhbfQla9TJb8x+znRWbeDtIwzDkk0PQuSpEEWjqB0et64lz/6ySMo0TBnWljcM7Sd0ska04oyziERgnhjqcugoJM16QnRkIE6CLcv3WdEdcxi9XqZ3bwa/aFY/ojHDaP5AzOPRi0C/+4uKSbuviZMdDlLtWRJvRd5XxFzHNW/SRK76xRs7tQZIijR5AT8EbaIsi+aV7MOOYWXopDBgeInrJ7LmHPLqOwkdea5b1mhU2LXDyl9CCLRhJS4KaZnPbQt3kZaZBzl3bjMsKN+RNls8qGu71/dzXne6RJhfG2lDbW6zI2jShz2MlyfSBBXCEDV33g3cb4GilNq5Hohxw+2MehGXYeMWmA2rlgyja1B1Nn7fx5nHQZhKQojBbYC8amyyTtwgmSgLBpm5juOzBGXfvZth0HO802qALoIyvmF2/SAku6YJNCEAhQLokOaQIDofOPRIKbHlcDmPQcVvUeYj+OdghsGs3KlNID8MKoISBU0T1BttUHYYRfR2BTrVqolty94GGeZoShDCSl6GZTwvqA3gB7eZ5J30PEqn4/Rfr7d56YsX84aTd2derYQtFQjQeswtUQgEiukZiytveI4HH99ApWLO8nMGwTRx633yMEe97fUDA6kG7SfiVIwWNdm6JphptDj5mD34xTdOZnxMgXRrgW6/nSVQGmiCbdM6b/6na/jDbc9QrZaxbbnjjpjRl7zGFDfTmyf6WRKR6wboh0QN69dPxaYtmc6KbnOGBnf++PUcdPAozS1tNE2BUgjlso0BDQEIbAnm/Aorn5jmqLf+ikbbRiCQCTZr1qK8IC0ZhCSJs6Q1QVnWJY4gKMQEGkQ4q8jvk6A76bataLdb7LZ0PusnLdbfuAmhAUqhpEQ5WUgEYCsQCHRNIISGbW9FNw0m5ld5+rnNmKaJpiVL2eQ1pqgk4TDY8V54k52hdWBFaIBBTEpQxCEq9hx1TVIahBC02zbjo2X22WMMaStQICUYpo5SEik7dn0vFOhsAKGBJgRW20YBuiHQNY1n1mxj45Y65ZLRl7LuLuJqgiDnNuiepKUWSdbH794wTZCrBhg2adBPyQ9OtMeyFQvnV/nNN/6Sww6cR6vdjeQ43ysUKImSoIRCoLlCoc5mkApQCoSGocPKZxuc8uGr+eOGbRhG8ZugC7/nCaL6zjqnedr/cXINszbAsGc+g5AmRp13v12Va7VbHLDPMo47cVeYmaGq6R1JrzqcDTtCnhLQdjgMuL/vXGNJDjluCYe8eILVf5ykZBrYBfF/WNze72/353G0hTt7H3ddil7D3gZIUj6ws22QouBmFKUUSoJhGDyzZgtnfPIW6s0Whq4hNLBtJ7mlIdB04fgCCqRwEmDuGXUzopJQqZg8vGITum70nOEixxP1d5bCwTi8ExW8yBO9N8Un9c6LRtwJiFOT0i8toABd13h+wzTLlo5x5EvGmam3ESiUkgjNcGgRXW3gRP87/znfKZBKIZVCKUGtrLPiuQaX/fwRx4SKsQRBdrD3s7QI87OiIjhR65qlRCLNpknkA0RFBIYR/Y9IgabBldc8yeMrxykZmsPwgFnSAcHmqQZSAqiOpaMc7WBoCCWomIJqxcCyFfW6xep100il0DQt1ob2MmhRa+YbVYlRgtL9Pe+kWRr+LCQMmsfg4t4fNuiimd+/X4G0FStXb+GUV+7N5755B0paOJXnTkLrz4/fh9e/chmtto2uCwQCSyosy2a3JfP4w23rueSKhwCdz37oGK5b/kcsy8Y0jV6/w2CGBkncKOkel/64m93PWY/bRiHvCR5EHiBOIVxU4VYedAvAloqli2qc/o4D+e4VD7N20wxSKRaMVrnwE8fxnjftBcLuEuvYTkrB/DKPLN/KBZc9jGkaLJpf5ePveilX37yKtRu2O5fmJMyzjjepNE+TDItTXhGnGC+s7xdMLVCUFAoqx/X7zu/+oD79paDAsiWbpppIpWi12uy/1yKu+NorOfTAGlOT0ygcxrelZKRmUi6X+c63HuNfLridetPGMHVabcnGzXVabYk7MtQv7RrVRhKbO4l5EibR/dp13xf32i5eMBsgDFHawE+DxEXQtZqmYRoajabFxHiVX3zzZF66X4XNmxuYhoZlS8oljdpojUdXTHPOt+7mp1c9jmHo1KomM402CoNSSUfXXAmzhLRFOb9JQ5LudtLY3MMS/uwi0Zvii0SRYa8okyj/miCFEKBrOq2m5HOnH8lLD6iyeUMdvePILlhQZd36Fl+69CG++aOH2bKtTrVaQSlFq22xeGIei8fLWJblyhPkjzTMn/b+PARLGoT6AMPiUHVRFD1hyZ2ixm9JybIlNU45cRnN7W1QMFLVUcLkuz99mvMuuZ+n10xiGAbVahkppZNNtmw+d9ox/PKaJ7Ek6Bme3M7D58kaRXKbmEX6kGnCvUN1LlDcfETWPrzoJbJCFjrONd5+LEtRMnUqJZ1222ZifpmHVzZ57anXcurZ1/P081upVSvouoZSTh1Qvd7k4+85jH944x5s3NzA0HUk+TNqmnmO8pui7ksb208y7+4+4/Q3ND5AP7N/UYib2g9tQ0psaaFQ2FIyOjbC//75s3z0vFvZOt2kVq0gpcKyJYauUW9aKAlnffAYPn/6QTy3djtty6ZltXc8D5BDHU6SEGS3TXcJQ5q24tKWB5L2k3gDFGky9HuSgvyCsL+TLLiuGwg0Fs+v8n9+uZr3/du16IZBrVrGsqVT/gzM1BvsvfsEX/3UsbzxpMVsm24h0BGakyPQnDgpecRB45pESWP2RaLI/lM5wV7ncdAT1EVSeoLyB1GJnDjo1u/PGzW54e5JPvSFmymVnLp+W0p0XVCvt9B1gw/93SF89kOHsmyhzubJBpWKU/MjJVTKJUTCZwHiIGic7s+DzBw/WzvPUosk7WTtt5BE2CARJ3nivT7J33EhlULaFtMzbT52wW3MNFpUymWEULTaEmnbnPyyPTj79MM48ZhF1KcbbNliI4RGrWpw633Ps3rtNjRBxwTKd97jZFD97vH7Pey6opEmFOtGah9gWGuCwhJe/ei3G7KUNpiGwbpN21m7cYZqpQQo6vUmSxfN45yPHM3737QXOhaTkzMYnVDPSFVn0xbJ2f95N0raWJbVPUilEHr9QsBRtTxR2n9QlkFS4QcZwqDDqAn8FrBfNuycPoTCNA1KZgndaKGARqPJW1+zPxeeeSR77VZm65Y6EoFhaLTbNmMjJk1Z5j2fuYkVz06yy6J5CM1AE+lMoDBGdDNLkNCI0gJ+7Q0CcTWTH2JpgGFwhIIQZ9KTLGReEKJ7wJUEpbDakos+cQL/8g8vollvMjnZQDc0kAopFRMTFR5bOcMHPncDt9z7PKVSGYXzfEERPoBDY7znfcPs/SDeSDK/g+SvWBtgWJl/mKEUWJaFLSW2bfPts0/itHfvx9S67QhNQ9M1pC0ZGzGxlc53frKKsy5ezqapGUZqZeoNC2lJlLQ7kZ/0D6EE0xg/p+H3d1GObz9ReClE/mUG+aAfUkfXBFNbG7znjQdx2jv3ZXLtVnTdwJaSWlmnXKlxw10b+fy37ue6O1ejGzrVTohU03TKJQPbtlDEywPkhaTVnUnnMiz83G8eKTwR1q/Mbty6nn5NtNYJ2U+MVTjtbS/Cmmmi0BFCsWBBhUef3M4F37uPy698Etu2qFZLSOnUEDWbLU57xzE8smI9jZbVfVzeob/3W3FIOjd5zmW/N8JQlULERZBNmlalp0m1B9HS6QEBtC3J4okaSxdXqTdsRioaplnmi//1GC9/51V8/1ePYBiCaqWEbSsMQ2dmpsErj9mdcz98CNPTLefsICHomkB5sUXW4rY05Q1J5rlfDvXQFcPFgZ9Nmpb5gz5LS4uDjjZCYdkWrabF6LIRVj7b4tSzr+e6u57BMExq1QqWLVHC0RjT03X+8hX78MMvH4+06zRblhNVFTj/yyET7KbbLwmYtI20fbsxiCBFF0NTC1QEkqjTrBLRC6kUuqYhhM780RIPPr6dv/7wNaxet5WRmsP4tnTqgGbqLTRN58z3HskXPnIImmixfrPCNHRQxZn+UZngOJ/HQZRZ6q276qdA3ik3gN8khUmwqElNIvncvoYvo3RMFYXztFe5pLFxCt728RtYvW4LI7UKbcsphWi3Jc1mgyNfspQLznwZf378BNum6miac1iWZUvnCfvCrX4HceuEBkFDURiaB2IGge7CxlHJ7uvjbhipFIau88mv3sPjz2zqmDwKXXPqgCbGa5z5vqP5yDtexGhVMTU5A0qjNqLz9BNbeW79NKWOFhgk0mRYu0g6Z/3GUPoAUaZLXIYNuj7s86CS37glFt0jrpQCUxOsWbeNOx5cR7lcQgGttlP2/PevP4izP3ww++9dYdvWBlu2O2FTJRW6Weai7z3Ctu1NlLJBSd+++o204U5vyBT8cwmD4MOhM4HSSIqkEibppCe6vve1wjRNVKeK2dA1pmca7LbLGBed+TL+7pQ9aDWbTG5uOKfHIZFKMr54jAu//Ri/vm4FCxfUsGX8SiC/5xiyMlXSZwC8zxEEteNua5DaYeg2QBwk8QGyJGiyLI6maWi6jtA0dF1jeqbFKa/cj2999mXsudRkamoGITQMQ8duS0ZqOppR4pyvPcS537ob0yyhazol0+xSF+uBGD+N1feCwBifeytRB0EvJPQB+pGkcKvGpHUmXgbIUrLrtzix0LlUSkW71UYpidVu8Y6/OojLL3g5VqvO5FQLw9Acf0DB/IVVnlgxzUcvuI2rblpFtVqmbanOMwFyRyIsRhg0TjIwLeLMWRIG9ivHzuJvpEHioxH7BT/GizMxcUyAvOLXYbTZtg0otm5vcviBS7jk80fTmJnGsgWa5hTKLRgvsXVacOGlT3L+pfexecs01WrZqSNq2yhLIW27UwjhaIC85iAO0gi8KKETd3P2axMMvQmUZhP4XZ9Fe8Wti1Fdgx/nkFzdNKhWyvz7GUcwWoXNW0AIybyagcLkJ1c9x5e++yAPPL4O3XCuBUGj0eTwA3cFJJZ0IkmwIxiUZA7SboY87fO48z8Ihzh1KUSRjktUyjyJrRn0eViJb1hb3mvm3NcrWRC0Wxa7TFR46YvnMVO30DRYML/CPY/O8Fcfup6/O/MaHnh8A7VqxXkgRkCrZbFwfo2vn3U8JROE0NG06GhVHFqL2Pz9bidvpNYARfsBUQsc5AgnQZDTnEn9Kud/UjknPiglsTtnW9UqJS747hOc8+17qDeaO8wdW2IajqNcq5b48X+czNEHjVFvShQSy5r7fuG0WjCp5ijCFOmHLxm3j8A8QL+r8pIiL2cpro+QLPvsFK9pnZfeCaFAmLzr03fy0989RrlU6rz+1EmKaZpgeqbB/ntPcOm5r+CEYxawes00GgrbtjLlgQcVXYkDN01ZLYqgtvzG7f5sThQoq81dJPyYPukkJrEz48xF0CZwyhkEmoCxkRE+fO5d/PR3j/XqgKRUrjogjQ++7RDO/cihLByDbVNNDF1Ddg5FCdsBbkGVtEQkDoqQ/nkxvV+bED1m97WxH4n0u7kIJLX9wwabZfHj5hTmXCd6/8OybMbHKlzyi2f5/q8f7YQ3Jbqu0WpZNO0Wxx22K+eecQR/8YrFNLa32LpdUqvqbNvYYmprC9M0Zr85LGD+Bxn3T2t65ulfpN1YczaAH9MMYkLjDMIbQ3a34b4maYIszJmOO8lSgmHorN04w/mXLu9lhTVNUK83WDwxyqdPPZzT3roPFROmJrsH50rKoxWuuPop562Quuj4FXPzAHF9mCzrl/eGCsrz5CGs0twfqQGyxpTj3BPGoFFZxDCmTBNJ8kOUmTj7y+7/nAdctmxvsm17nVrNpNWysSybt7/uAL740UPZb88K27a02dJyNku7LZlYPMKd92zl/MvuY6RmYtlWt9FYNCQZl1ezp2GgLPyQVx4gy+aZswHCzJ1BhtH82ow76CQaJY56jtOec7/j4BqGRr3eZv5Yha996jje/YbdnZMhNjsZYaGc1yMtWFTjjnu38paPXct0vcWiBbXZ74+MYYpGbfooWzkJMyXNKbjvCQo+9NvnDNUA/SDGz+yJI5m8nn4QkixoEts0cBN2b1WOFtA1gWVZ7LPbOFd89SSOOnScyc11NKGj6wLLkozUDEqGwSU/foozL7yD6bqFaZqdZ4R1EBrdDENcGr2hz6Rz4PdZljBz0bwUNsYw+kN9gH7sxChJm4QOL1OmsS+TjnlO2x0TSAFISaPZZsFYhV9/41Ucsn+VTRvrlEwdpRQlQ1CZX+ORFXX+7Wt38Ms/rMAwTCplg5l6G1U1nP0k49Hupb+fwYsgWpKaJlnoTNNfoAbIa8L8wpZ+fcWVVElUfNrJzy6tBLomqFZLtNqSz552FIccPsG2DXVGa+WeM7xmXZNv/ed9XPqLJ5jaMkOtVgHlPDPwor0mmFfR0Q0dw5y7THFoTOLoR81/UnMnjiYpYoNGaYI5Zn25XC6upsGHgFmdxwgrJrH3EzmrITQkhbcfKRW2JXnJfot4eOUm9tl9nGrFecxRIJDKORr9yVVbabSagPP+4B3OrmTh/FHabZvddhnhiVWTCE2g6ztelJ2G7qAcip/JmTVyFISsQZW0NAT1E6gB4phBeezgqElIG9WIgyKYXxMCW0nOPuPlnHz8MpASy3ZenSqEM1a7kwgrmTq1agkQWO02INF1HVBYNp2XacMd92/krItv8e03axQmbuQsbjQviaZIek8WBPUT6gTHUbFZwolx+igKcfpNszhSKUxT56nVU2ya3Ea90QahdZJYs1JaKKWczaAUouM3iF6s3+m3VNLZss1G1zWknP1oZBp/JeizPIRZ0H15rnvS8GgUQp8JjttZVrWZNoabFnGZ3/0zbHG712iaoNlsc/D+Szj1b/el0Ww6zK8kiA5Tix2BIoST5JLSeS+A1nmDZI8GHC1Qq5V4bv12brl7NeWyc4Jcl7a8BUgSJo5qpyjpHsWzQZ8l0gBJd1meA41jEuUZYfCbIK9kjOV04ghvJRWvOHYJlDovttBULyzKrMIeAcjOx8IpTpc41wkBUjgRoFIZ/av3odSOu7Mkf3xpz7G9InjC23Ze94hSqaT8nMekO9jLmEmkbBxi81icKIc6yQYJok0IsG3F+990AK87cXe21y1m6m00oG3baJpA03Qnpi/t3qtRdaHRNYR0TUMqRbViMFI1uf2+DXztBw8lmq8ghJk6ft/1MySeB+I6v73v84oCeSMKcRym7nVJHe4sCJJ0eUc9Wq02AGOjVU44atfOuwJsEAJNCDTNOR5dSoVZcp74smyFkhLTMBACbrz7ebZumwHANM3MtnQU88eJuA16I0StXVKzK9dHIt2bIO+NkCQc6nevX5bZ+11a+LUxUivTaLbZe9d5/M8lrwK75XzRSZQhtB1mUfcNMEp1vtegXObIN/ya+x9rUK2UaFtzHWD3PHc/i4t+RV/6jaRjym0DeO3npBOcNGWfBHkleZKgbUlM0+DBJzZy+c9X8q637M7kxgZap7rHifp3mFpodCs+lVSMLxrhit+s4v7HNmCahi/zu3/G8VOiygSirhtG5BFJKkQDQP6htCwoamN5+4C5DGSYgo99+Q6EpvirE3cFIbCVc2KEJkzH11WO7a8JDaUJfvG75/mn825B05zEmSLeES9RY4zSsnHuTwu/zZlGC+XBH7OEdT8zwV4kdbCyMHERtn9cWJbEtiX77TmfalnHsu1OPEh06txEzxlutRUrn92C0BQl08gl4RV1XRD85izP+H3UZuzH2vhGgZIS0g9i84oC9dv2dfpz+m40u+/78um/G0MVUC4ZvXvnXJZSWCQJMHidyqR9R7Udx5HN0mcSRG6ALkHxQoDFEJt3vDstDVkZQAhm1/c7jsDs6ynWFAmjz6+PLGHQLFUC/RJUs3yAJPah29Yvmlh3H34/vdeFtZMFedisXepUL+KTDHnPc9Bc9lMKB9HVD8w6GEuIuWflx/2uaHid66S0ZPEzhi0ykjc9RQUJvJHBoGsGGY7V4nTuHUiRBHtj22ngpS9LttR9f17jjju+QQic7vq6/2VtD3Zoz2HLPQzd2aB5h9ri3NNPDJs26aJwZzOGNghDUSUZO+VrUrsIktRFMVlQNjnuvVnDuEFhxDh9J7k+6bVRyDt2nydSaYCinV5Nc+pl3O9G6QVMOlFEJRW2a40MQ0MpOg+Sz3XowswJpRS67sgC25axQobOsYdO4VuscXSSXVIGM1f3elt2qkgD6NU14bw5JmBTCdF5QYeAXs5Zgu0pURE4p1grpbBl8CbRdYcW91i9ErlLe+97FFIq8pRFafIaUfcMNBHmD6emHmxmM4Hqfe/8rlMudxNFglarCWhUyuacUGKciXP6VFQqJackJ6Q4TNM0Gg3nCa5yuTTrGiGco1CUUr1r3GPTDYNySce259ZLNZsWYFMqlRHCfzFbbRslLYQwKJX0OWFWTdNotiykbXlGqFOpGAicDSaEs4msdqs3b7InYWbPW3duSqUS3ans9qtrAgUhYzWw7f694yzpuotSqaTiXlw0hBBYls1xhy3loL3HmGm2HWlvKzRNw9B12q02RknnsVXbuPvhdQihUSvrvPnV+7B+ssnVtzyL0LuFZv59eGHbklNO2IuRis5Prl6JYeiBG0AIQbttc8KRu7F0UZlfX7cKqUSPMbTOGyCFpnPEQYs5/MAJdpmo0GwpHl01xW33rmNq63bXxnHu6Y77gH0X8JPfrqDZtjobqdOuEFi2zb57zOekY3flzvvW8/CKjei6m1ZFs9li4cQ8jj9kCQfsM061bLB2c4M7H1jPA49vAKBSMbAsybyREn/zqj1Zu7HBNbc/19MGzjg7eTkhOOXPdqdSNvnNDc/SalsurSmo19sIoXP4QYs54sAFLFs8Qr1p8fjTW7jzgQ1smNxKpVLujbVIxGF+rzUwVE6wrkHDavPeN76Y9/3D/jDdhErJeSxK6M6qtNqweB7f/fr93HH/GnTDZOF4me9dcCJ3LF/Lb29YRUXXZsuiwM2tOptOcuZ7DuLP/nIvJt9ucdVNK3tvcXdD0wRty2aXhTV+9Y1XYdk2v7/1ObbXLQzNsdHr9SZHH7yML5/5Mk4+aTcwBDRs52fJYM2TW/jCt+/lOz95mHJZ75k0DcvinX+9H6d9/DAOO38+/3TezZ0TpGWvb6tpccKRy7jkO6/mkx+7kfsfW0vJNLAlnVIKjU9/8Fg++q4DWbL3GLQl2ApKOrQlV12zhk9eeCuPr5rEsiSLJ6p8/6KTuPW29fz+5tV438iqlMI0DL5+1rEsGDW5+rVrqDfbmIZA15yDfY89dFe+9PFjOfmEpVDqjlWDssH6p7Zw3iUP8o0fPoCui94Tb0WZ0HFyUt7vDL8Po5DnANxmQOc3pmfa2I02nzzvHu58aCPVsuHYvNIpFTBMnVWrt2KaJpYlEZpGc2uLmboNQgvML3npdiSc0+fU9iZy2wznfuRwblj+HJZtownnwZQuBGBbNp/70NHMX6jzxJNNDMNAqTaacBjilBP35Yqvv4rqqMH3fvgYV/z+adZsaFA24c+O2IWPvvtg/uurJ3DUQYv48L/f5Jz92R33tIX97CQfeeeLePyZaf7zR/e4NqJDhy0l1pYZWt13BghQSqJrGj+84C948zv248nl6/n8J25k+cMbmWnZLJlf4s0n78PpHzyMvXYd47i3/wzLaiBtSX1qhummY25630epFGgIttfbgNUzDTVNMDPT5K9P2o+ffePPKdcE3/+/j3HF1atYvX6GWsnguEMXcvrfH8BXzz+eIw5cyAc+dx1KqM7ZwcWGcZNg4C/K7u5aJzPq0CKljW4a3Pv4FDffvQbn2JCuNO76ABqVskFbSTQBJVNzXqquFEEp1qB6E5BowkCr2xx92ALO+PtD+PJly6lVK8iO46frGvV6k+MP241T3/oirHoDTXPO+tQENFsWe+82zv8+7xVIy+JvPnADV17/ZKd954GX5Q8+z+W/eZIfXfAq/vG0g3nwySm+8cN7GJtXw6kOBV03aNZtLjjzcO59ZD233reGWrXcY07bUhhC9B6Q1zXBTMvinA8fy5vfsgc/++HjfOBzN7Fl2zROkM+Zr2tvf5ZfXvsMSkC96dj9QgjKJROlJCARwsDrd1iddxSbhmOyaULQalrst8cEl553Aq12m7f+481ced0Tnb6cYMId96/mv3/9OP/9pVfy7vfuz6NPTXL+pXdRq1WxLHsoTG5IGAZ1Rx386sjd/9LBYV7ZWexqScfQNcbmlajVytSqZWpVk2q1RKW8w3qTgCVlZyHnFpt5afKNdGiSqRmbRx7fxqc/dCj77LGIZqvdez2RlBLTMPnKp47jqee28tCTWymX6FVx2rbFGe98CYv3rvLp/7iPK69/ktGRCtVqmUrFoFo1mTdaY9PUDO8760bWrZji0/94CIsXjtPsSGCHXwXf+ekqDCG5/KJXsfvScZotC13TdtCuVG8D1Js2++4+wcf+4QCefGAzH/jsTWzd3mB0pEq1Yvb6rlUrXHP7M1x727OYhtGT5KBQqo1zZIvD4JoQHYfaEdZSyk5/Ck13fJHT33kwu+w7j7O+ci9XXvcEo6PVHWOtGIyOVpna2uS9Z93I0w9t4sz3HcRuu8yn0bR6c5okPFtUaDt1HiBptjVsY8y+17GJwVlcy5Zsn7ap1yUzdZuZuk2zJVFdmdjTIO7QYfJiMk13oiKfufheRkdMvvDhw3shUUPXaDZbvOv1+3P8yXvwLxfcw7N/3Ea5c3Z/uy0ZHRnhTa/ek3UrZ7j8f1ZgmiZtS2LbTjjQtiXNlsXoSJk1G7ZwxW9XsezF4xx36BKarTZ0jkmhqnPpLx7js998hH0PHuOSc16BpomeKWYYBhjOCRJ0zhM66ehdGNt9Hv/9q6fZsn2aWq1Eq21jy27fzuuaqpUSlYrZWwfblti2ha4bKAX1uk2jadNoWjQaNq2WotlynlOQ0nl437IkoyM1/uakXVm/Yis/uso5zrHdtnvnHdlS0WrZjNRKbN4yzeW/eoqFe49z4tHLkHbbCQ0nZOi0ybMogezrBEeVsMYplosbjpolmTv/14QGjRbfPOsYZppHOQ+NawK7LamNlrjm1g2c8cXrqFZL3R46yn7HJujlDQLQK2/ontEjJWMjBlff9ixfueQBPvlPh/O9X63g2jueoVQyWbhgHud98hiu/Z8V/Oa6FXzq/fujOm95kVKydFGV3ZdWuPGujUxtnaFcMVA+0T8nTwH3PzmFEop9dhula9J1J2Hh/AoXXHYXR71knLe9fR++tOJYPnHRrWhCw+6EfQ1th3mz/74LUArue2KzI7EDwo7dI0a7fo8QiplGmyMPms8tP3ojAonQnOeSnVc7ORttj6VVNky20HSBtBWL55fYbZcqdz60iU2TM65wtLc/x+d6eMUWFIIX7zk65xq3FogbuYmDuBtMy1qXEvW9u47G75rZnzvMqAlBtz5eKYc5LcvGls6D407MWfRKi5VSSD9uC8DcMQvMkoFtw7yayfmX3c+mtXXO/9jhVMolWq0W//qeg1kyUeGjX74TcF5dqmk6WieBpqQEKTv2tYp8r5d04p+YpnMSXDci5TCmc82Hzr2Ve27fxJmnH8h73/QSpJI4lyu0HQekYBo6Qiqkpei9TCME3XkzDB1N10HZLBo32GVhmYVjJgvGDCbGTRaMG8yrOZtM1zRHMKEQmkAgsdqSsN6E46HTtp3nIEqGjvcGr1/mJ7Hzqkfyg285dJ6Iu3uF6C68wlYSahU+fuH1/P7mp9H0knNMYJfJhfPQSPeAKJRCeCM8AbR4f1e9xA6ARrVisH7TNj7zlbv5zsV/xt+9dj/+cMfznPmRw/nadx7kwSfWoRvdw6kc8wIh2LSlycbJBvvvPka5XHYOu0LMoaMbXz9gzzGEbbPq+a3ssES7kR6HlsltDd79qZu49vt/wdfPPprbHljLpi1NMPSOn+Rcv/KZKdAFB+w9zlU34Txl5iMPutnfzkHr2JZipGJy3UNTvPp9v6da0TvM6lwrFZRMg/t+/gbGR42O9tLYvKXF+skW++42Sq1aom3NzlnMGiuw/17zEEKyeu3MLFrCEMQ3Scrfo9oCVzXo8BRpCect69LuRHY0alWdakWjWjWoVHQqZUdqdhcSIRCa1gtrdjeT918wHFuZTmmDrht871ePsvyWDXz+jCP4wXmvYuPGJl+67P5O2LMjs6XjjJZMnamtM9x0z2b2P2whrz5+D1qtNqWSPosWw9BotCzGR0d4y+v2Zutz27n9vvUYRkcLqB30gGS0VuLhFes59d9uZ2TU4Afnn8BLX7QY2nbPgdU0jRvvXou9uck7TtkHTTOxLBtD12aN3TR0Wm2bestyJLkQWFJi2bZjTglHK2lCQ9c1NN15wZ8TWQMNZ35MU2Nq6ww3LN/A3geN85qX70G73aZk6rP6M3TNORjAKPG21+1Dc8MMN9z9R4TQnHB2GAd4rAU/czqvKFIsJ9idvAiz06Luj0K3ZV3ogE6r5UQfWi2bVtum1bJptyWtto1lSXr87/zAthRK2bQtOftfW2JZc/t3D0VJULZ0bGzhHGD7rxctZ89lNU46eSnnXHwvGzZvczSPbdNstzu0il5b//njJ5ANyUVnHsFeu06wbXu94xw6mmJmpoltKb7yyePZ9/BFXPKzlaxZN0W1YuBEYxz7vkuXZUlq1Qq/vn4lZ1/0IEcds4R//l/7OAnCzkW1qsnDKzby098+w8tOXMK5ZxxDq2UxU29hdZxgy5JMz9TZY+kY++85Qavd3qFxleocwtth+E7fGs7vSikUNkra2LbtCBkNLr78YZrbLC781FEcsPcuzlgt2XO6Z+otWq0W55x+FEcet4TLf7mKx57aSLlszqljcvNVXGvBL6EW19d0I3YUKE3jaSERWJ0zMUdrFebPKzv/xpx/C+ZVGRstdwhzmL9tSXRTY95IlfnzykyM15g/VmF8tMyC8QqjI6XQcVgd5tc7zF+tlrj2zme47OcrWX7bBi79+cOUSiUnMysEmtBotS2kcpisUilz4/LVfO7CeznwkPncfPlreM+bDmbp4lFKJZORaolXHLEbv/32a3j/Bw/kpt+t5gv/tZxSydxhygnNebm2iy7bllQqZf79krv56c+fYckCHavRxrLtztw7muVfLrqdh+7cxFn/eghXfPU1HHvoMkYqJXTdYGK8yttfdwC3/OC1/P67r2NstAJIDF1HKeEc4qXcRlVPtqBUd26cD2wpqZRLLH/oeT715XvY7yUT3PiD1/D+vz2EZQtHMAyTWrXEyw5dxo8v+ks+84nDuOvmdXz64jsxTH9n2RlHcEg0ive6GygNH/Z8AL9IT1RFpd9n7nS0+2cSjM8rY1Q1fvjlV2DJl6MJ2evPljBWM7n6tg289tSrEDhJsFqlzEnH78Ka698OSqJrYNkWUsL8eWV+dd1a3nTG76hWzF4V6Y5MsGJ8XonRiWqnKtRJNJVKJv98/m2UTCcjrGta54gSjcULRli8sIbo2L5KKSoVky9eejebt7X40kcP5fvfeiWtdQ3WT7aolQUTSyvQtvn+pY9y5oW3M11vY+p6x3YWzBstY0xUMPUdckkBQoGhw6nnXM++u5/C0X+xKyPVHfU1ztsot/O6D/6eiz9zHG95w9685fV7seGPM0w3JYvHDUaW1Vj/9Db+7eK7mKm3UMphmvJElYnxMo7ToPushmDBWIXFC8odU83JC1QqZb52+X3MNGy++NFDufQbJ9JcV2f9pEWtorNw1xooyRU/fYp//tKtbNrSoGwaszLrXr5JAq+JlHYTzHKCg5jZ3ZH7ujiRH792/OBEcgSaLrjm9rW0bUWr0cYwxI5jw1EdCWTy4BNTOLyqsWVbi69e/hiVssOgmq4hUEhpI5WgUja499FJ5zhC5e3XqaD8ye+e5a6Hp9g23UTXRe9s/lbbotECQ3edAi0kl1zxBIsnali22nHIG1CpmHz7J/dz5Q3P8MY/34uXH7GEZQsrbK/b3PXgBq68fjX3ProOXdcpdSolBU6m+fc3PYfUBGvWz3TqZpw2pXKiTlu2t3j3Z27ijJWHcdcD63u1NVIqymWTNRu287f//AdO/MFunHLCbrz0xc4xLDevr3P9Xev4zXXPOGZcuYSmweTWBl+/5BFWPT/TeS/B7Hlx1Kvksl8+TdlQNJo7EnKO1jO55Ir7+Z/rV/GGV+/FCUcuYemiGo2GzQM/m+S3N67hpuXPoelidtAiZ2TxB2KVQ0eppaQlqGH9CCF65bedT/FPcGmd+LOzWO2OTe6XCe5QRqls+IaHdvQp55zB2QmZ95jRqVlStJrOUYemuaNE2F0b32haKGl1WuhKdCfj6y657t4nBDQaTjm0ppuuGqHZdHbLobvl4LO/d+hsNpu9OaJ7AjUKTd9Rii2EQEpFu1MOXSobs0+scKHZCe2WSqU53xmGTqNpIe22a6yq06fWSbwFm8lxTOskPBXVzxy/Ie7zAGGbIA2hYW07Jyi745Pu8KbqHaFjuySKYWiByS+BkwRy16W7tVK3IhPhOJ5h6I5xx0Mick74z92mQnVMLcfJ7GZnvdd2SxN0TcOWMlBaappwXpZhK19zwilT1joOrEsciB20dhNh4Gi27twErV93rH5z0928XfOwS5Im5s65e6zd38OQlq/CrI05Vk6SB2LykvRh7WZBHFMrDt1JpVWSZGJa+sLmPm4dfBgtcZnRD3EqA9L2mxZuST+r4tijAVLVAg2qkq/r6GQ1swaV88iiKeMydhjj+flmaQVC0FrEmd8g8zlPxN2UiR6IKYrxoyRjUAmFF0UzdlAkLApeSZSVzjgBhSQ+WtS6xpHaft8Hbfh+aAA3wvoY6KkQ3mRI92dYJjDPvoOQd85jEFonKt6eFFHaN8nneWjyvDCnGK7IhXIzQlh4tftZkonKwphhKj7qszCEbeowmopE2oRR3LbD/h5GzDkZLkr65SHNghg+Dh1pwmlxacqTMdLSk4VBgzaZn2DJG+7ShLxMvX6gLz5AHHUcxfBx+i5CuuXpsMZtL645ETR/aez8PODnZA87Qt8UH5Q8SIKsDOnngAXRk0dfWdvMwwxIM99FSfa4CNqcw74J+u4Ee9V0HNs4LlNlmeywNgexiFk33p8QD6EmUFQxXBr4Od15OYcvJCYYhrFkSdoV6WznicBngtPEu/3gNlniOrpZEGS2hfWdJJMbdk9e4xkG5odonypIeA2zD+Clec4jkVFJjCQdhf2dpa2w67yTn+beOMjDP8qCfieTdnYEWTOR5dBB30UhiAHTOndR4c8kjJjGUS3C78iCJP3uLA5pP+Cdg0AfIIldniRmH4dR42Rps2ysQTBEXn0mMb36oXV3BoSNxXcDpDEF4lyXhfnTxraHwRkrIpjQRdacQ1F9DyP86M0UBo1iLj+nMU14L6vDGSYhvf+ywttOnDaj+vd+n9XJjKIpid9URP95IyyUHftgrLDG876+S3Ce0QRvm0kQh2HiMH7c/uOYd3mYkUm/d69HkrkMqgEbBvQ9EZY2tpwnkmwu98IlrUMKi4QFSf0kfUS1kUVCBzF72vVxa/JBRc385qPvx6MPk90YxFRpol9ZfY0skShI/oxAnH78ckFp1m+Y8wKFa4AsodQXCtwS1C0Fs5hl3TbC+sp77otav0GaRUbeUYlBF2WlQR70JinVKKqsxN32zpKcc5trRdIc6AT3q6OdbVMkhVfyeqV7UQudJqlXNPyif0nu6Sc06M9TSEmQNSyZ53iiQqVehzPKTs8rLxHk6OZZgpIUfponqSboN3oaYFjCU3ksYNHSxLsZBmH+xNG0O4M5mtUPSgrvWg30ofg4GPQCBi1QlvKDPDVAGE3DkAUfJvgJBA0Gz2RuDMqBSwOv3R8lcfMKBybNjKfZBC+UjRNlTmt5LUreGDZ63Ejr6Bcl+cOQZR7z3gRFbiq/hGWc/obqTfFeDNsmyBrhKkLyR12fZ45hmOHNefgFHPzGNJQ+gJ8jvDOq5LyjUUGIU7szLOjHOoZF27yf5Z4IywNBzlwaWrOML01ix40i5jVNjD0McQrv8kKatuPWD7mv8wrMsHuHxgQqaiOGFWElYaBBCoqk0n+QRWd5I84YoqpwveUnbgzNBohClsX0qsOoisth1IpdeCs1414bhEGOM495zqoFRalUUvDCkBbeCR3GJJofoiR2Gome1XxLgiAzyo/Bk5R7p+0/Cu6+enmAYXcy49KXtRY+K7L0G8YcSRnErw6paHjp7JcwydJnrxZomDRAUO1N3BqhqO+TJo3C+kxat5Q2opU2w+zeBGnCqGHj9vaZ5Fo/GrPAm5QMg5sOw/3hMG2CLpKE8oIknt+9SU2lMGczCZ1ZVX2cTHPY90nMqaRznjRPMih+m2MCDRuS2rp+DJ8lBh6mBfwkfj8WMksEyw9xtGiYBoiTZPK7p2gk9gfcTvCwaoEg5B3uCxt/mkRU0r7zaisP7Gy80EVSbT6nHDqNnZgGcW35pDZ5FmQxL/Loe5gYbphocSNs3dOYspGnQw8yjjzMtmMWJJGuO6skLgpxhVRcAenrA7glbFEhtGGReIOoM0pTzpE2ClQU8p63fvCcH4bSCR4mFBWyzPO+rPemQZ41Sd5Qat5hUfdnXsQqhXghq+E0OYGo+/OKPCVpy68ILEt7cfvMq50iLY0w7DS1QINA3EIsP2k4LNWj/UBeEnsQMLqdpwnzvZA1QxD85ipJgVpYu3nS9v/buqRF4CORXRsqSVr5Txg8+sn4RSfjir4fIt4QE4VBVU4OWrpllbR+9+Y5rkEUoe2M98NOGAUaNPN3kTWMGydCkQZ/0sgOMuUB/oS5yFNdDyJ5mDeGeaMl0aZ/2gAxUWQV586GYR9PEtp2ig0wzNLGi6Dq1BcSXkjjGfoNMGzMP2z0/AnZMPQbAIbPro3KmaSl90+bq/8Y+kxwP9XtoB/qeCGZFjsL/h9pYtxZKsB9jAAAAABJRU5ErkJggg==" style="width:48px;height:48px;border-radius:12px;border:1px solid #222" id="appLogo">
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="tabs">
+<div class="tab active" id="t-cortes" onclick="showTab('cortes')">CORTES</div>
+<div class="tab" id="t-servicios" onclick="showTab('servicios')">SERVICIOS</div>
+<div class="tab" id="t-promos" onclick="showTab('promos')">PROMOS</div>
+<div class="tab" id="t-mujeres" onclick="showTab('mujeres')">MUJERES</div>
+<div class="tab" id="t-turnos" onclick="showTab('turnos')">TURNOS</div>
+<div class="tab" id="t-admin" onclick="showTab('admin')">ADMIN</div>
+</div>
+
+<div class="hero" id="hero">
+<h1 id="heroTitle">PUEBLO CHICO,<br>CORTE GRANDE.</h1>
+<p id="heroSub">GOLD 5=GRATIS + VIP • Promos editables por vos • Mujeres • Diseño editable desde ADMIN</p>
+</div>
+
+<div id="tab-cortes">
+<div class="card" style="padding:0;border:0"><div id="galeria" class="galeria"></div><div id="estadoGaleria" class="small" style="padding:12px;text-align:center"></div></div>
+<div class="card">
+<div class="card-title">SUBIR CORTE</div>
+<img id="preview" class="preview">
+<input type="file" id="fileInput" accept="image/*" onchange="previewImg(this,'preview')">
+<input id="tituloCorte" placeholder="Titulo del corte">
+<select id="tipoCorte"><option value="fade">FADE</option><option value="clasico">CLASICO</option><option value="barba">BARBA</option><option value="nino">NIÑO</option><option value="color">COLOR</option></select>
+<button onclick="subirCorte()">PUBLICAR</button>
+<div id="uploadStatus" class="small" style="color:var(--gold);margin-top:8px"></div>
+</div>
+</div>
+
+
+<div id="tab-servicios" style="display:none">
+<div class="hero" style="background:#fff;color:#000;padding:20px"><h1>SERVICIOS<br>EL MONCHO</h1><p id="serviciosSub">Elegi tu servicio, ves precio y duracion. Todo editable desde ADMIN.</p></div>
+<div style="padding:1px;background:#1a1a1a">
+<div style="display:flex"><div style="flex:1;background:#000;padding:12px;text-align:center;font-size:11px;font-weight:800;letter-spacing:1px" onclick="filterServ('barberia')" id="f-barberia">BARBERIA</div><div style="flex:1;background:#1a1a1a;padding:12px;text-align:center;font-size:11px;font-weight:800;color:#666;letter-spacing:1px" onclick="filterServ('mujeres')" id="f-mujeres">MUJERES</div><div style="flex:1;background:#1a1a1a;padding:12px;text-align:center;font-size:11px;font-weight:800;color:#666;letter-spacing:1px" onclick="filterServ('todos')" id="f-todos">TODOS</div></div>
+</div>
+<div class="card" style="background:var(--bg)" id="listaServiciosBarberia"></div>
+<div class="card" style="background:#FFF0F5" id="listaServiciosMujeresCliente"></div>
+</div>
+<div id="tab-promos" style="display:none">
+<div class="hero black" style="padding:20px"><h1>PROMOS DE<br>BARRIO</h1><p id="promoSub">Las ponés vos desde ADMIN. Se ven acá público.</p></div>
+<div class="card" style="background:var(--bg)" id="listaPromos"></div>
+</div>
+
+<div id="tab-mujeres" style="display:none">
+<div class="hero pink" style="padding:20px"><h1>EL MONCHO<br>MUJERES</h1><p>Corte, color, alisado, flequillo. Mismo barrio, misma tijera.</p></div>
+<div class="card" style="padding:0;border:0"><div id="galeriaMujeres" class="galeria"></div><div id="estadoGaleriaMujeres" class="small" style="padding:12px;text-align:center"></div></div>
+<div class="card">
+<div class="card-title">SUBIR TRABAJO MUJERES</div>
+<img id="previewMujer" class="preview">
+<input type="file" id="fileInputMujer" accept="image/*" onchange="previewImg(this,'previewMujer')">
+<input id="tituloMujer" placeholder="Ej: Balayage rubio, Alisado keratina">
+<select id="tipoMujer"><option value="mujer">CORTE MUJER</option><option value="color">COLOR</option><option value="alisado">ALISADO</option><option value="flequillo">FLEQUILLO</option><option value="novia">NOVIA / FIESTA</option></select>
+<button onclick="subirCorteMujer()" class="pink">PUBLICAR MUJERES</button>
+<div id="uploadStatusMujer" class="small" style="color:#FF8FAB;margin-top:8px"></div>
+</div>
+<div class="card" style="background:#fff;color:#000"><div class="card-title" style="color:#000">PRECIOS MUJERES</div><div id="serviciosMujeres"></div></div>
+</div>
+
+<div id="tab-turnos" style="display:none">
+<div class="pizarron"><div class="title">PIZARRON DE PRECIOS</div><div id="servicios"></div></div>
+<div class="card"><div class="card-title">RESERVAR TURNO</div><input id="nombre" placeholder="Tu nombre"><input id="whatsapp" placeholder="WhatsApp"><input id="fecha" type="date"><input id="hora" type="time"><select id="servicioId"><option value="">Elegi servicio</option></select><button onclick="reservar()">RESERVAR</button></div>
+<div class="card" style="background:var(--bg)"><div class="card-title">TARJETAS GOLD - 5 CORTES = GRATIS VIP</div><div id="listaClientes"></div></div>
+<div class="card"><div class="card-title">REGISTRO</div><div id="registroCortes" class="small"></div></div>
+</div>
+
+<div id="tab-admin" style="display:none">
+<div class="card" id="adminLogin"><div class="card-title">ADMIN</div><input id="adminPass" type="password" placeholder="Contraseña"><button onclick="loginAdmin()">ENTRAR</button></div>
+<div id="adminPanel" style="display:none">
+
+<div class="admin-block" style="background:#111;color:#fff;border:1px solid #222">
+<div class="title" style="color:#fff">🎨 EDITAR MI APP - DISEÑO, COLORES, FUENTES</div>
+<div class="small" style="color:#aaa;margin-bottom:12px">Todo lo que cambies acá se guarda en Supabase y se actualiza para TODO EL MUNDO al toque, sin subir a Vercel.</div>
+
+<div style="margin-bottom:14px">
+<b style="font-size:12px;letter-spacing:1px">COLOR PRINCIPAL (DORADO)</b>
+<div style="margin-top:8px">
+<span class="color-dot" style="background:#D4AF37" onclick="setColor('--gold','#D4AF37')"></span>
+<span class="color-dot" style="background:#FFD700" onclick="setColor('--gold','#FFD700')"></span>
+<span class="color-dot" style="background:#FF8FAB" onclick="setColor('--gold','#FF8FAB')"></span>
+<span class="color-dot" style="background:#00D084" onclick="setColor('--gold','#00D084')"></span>
+<span class="color-dot" style="background:#FF3B30" onclick="setColor('--gold','#FF3B30')"></span>
+<span class="color-dot" style="background:#007AFF" onclick="setColor('--gold','#007AFF')"></span>
+<span class="color-dot" style="background:#000" onclick="setColor('--gold','#000')"></span>
+<span class="color-dot" style="background:#fff;border:2px solid #000" onclick="setColor('--gold','#fff')"></span>
+</div>
+<div style="display:flex;gap:8px;margin-top:8px"><input id="customGold" type="color" value="#D4AF37" style="width:60px;height:40px;padding:2px"><button onclick="setColor('--gold',document.getElementById('customGold').value)" class="sec" style="width:120px">USAR COLOR</button></div>
+</div>
+
+<div style="margin-bottom:14px">
+<b style="font-size:12px;letter-spacing:1px">COLOR FONDO APP</b>
+<div style="margin-top:8px">
+<span class="color-dot" style="background:#0A0A0A" onclick="setColor('--bg','#0A0A0A')"></span>
+<span class="color-dot" style="background:#111" onclick="setColor('--bg','#111')"></span>
+<span class="color-dot" style="background:#fff" onclick="setColor('--bg','#ffffff')"></span>
+<span class="color-dot" style="background:#F5F5F5" onclick="setColor('--bg','#F5F5F5')"></span>
+<span class="color-dot" style="background:#1a1a2e" onclick="setColor('--bg','#1a1a2e')"></span>
+</div>
+</div>
+
+<div style="margin-bottom:14px">
+<b style="font-size:12px;letter-spacing:1px">COLOR HERO (CABECERA GRANDE)</b>
+<div style="display:flex;gap:8px;margin-top:8px"><input id="customHeroBg" type="color" value="#D4AF37" style="width:60px;height:40px;padding:2px"><input id="customHeroText" type="color" value="#000000" style="width:60px;height:40px;padding:2px"><button onclick="setHeroColors()" class="sec" style="width:120px">APLICAR HERO</button></div>
+</div>
+
+<div style="margin-bottom:14px">
+<b style="font-size:12px;letter-spacing:1px">FUENTE TITULOS (20 FUENTES)</b>
+<div style="margin-top:8px;display:flex;flex-wrap:wrap" id="fontTitles">
+</div>
+</div>
+
+<div style="margin-bottom:14px">
+<b style="font-size:12px;letter-spacing:1px">FUENTE TEXTOS</b>
+<div style="margin-top:8px;display:flex;flex-wrap:wrap" id="fontBody">
+</div>
+</div>
+
+<div style="margin-bottom:14px">
+<b style="font-size:12px;letter-spacing:1px">DISEÑO CARDS</b>
+<div style="display:flex;gap:8px;margin-top:8px">
+<div class="design-preview" style="background:#fff;color:#000;border-radius:0" onclick="setRadius('0px')">CUADRADO</div>
+<div class="design-preview active" style="background:#fff;color:#000;border-radius:14px" onclick="setRadius('14px')">REDONDEADO</div>
+<div class="design-preview" style="background:#fff;color:#000;border-radius:24px" onclick="setRadius('24px')">MUY REDONDO</div>
+</div>
+</div>
+
+<div style="margin-bottom:14px">
+<b style="font-size:12px;letter-spacing:1px">TEXTOS DE TU APP</b>
+<input id="editLogo" placeholder="Logo ej: EL MONCHO">
+<input id="editLogoSpan" placeholder="Logo color ej: AZARA">
+<input id="editLogoSub" placeholder="Subtitulo logo">
+<input id="editHeroTitle" placeholder="Titulo hero HTML <br> permitido">
+<textarea id="editHeroSub" placeholder="Subtitulo hero"></textarea>
+<button onclick="saveTexts()" style="background:#fff;color:#000">GUARDAR TEXTOS</button>
+</div>
+
+<button onclick="saveAppConfig()" style="background:var(--gold);color:#000;margin-top:12px">💾 GUARDAR TODO DISEÑO PARA TODO EL MUNDO</button>
+<button onclick="resetDesign()" class="sec" style="margin-top:8px">RESET A ORIGINAL</button>
+<div class="small" style="margin-top:8px;color:#666" id="designStatus"></div>
+<div class="small" style="margin-top:12px;color:#888">SQL para que quede online (correlo 1 vez):<br><code style="font-size:9px;word-break:break-all">CREATE TABLE IF NOT EXISTS app_config (id int PRIMARY KEY DEFAULT 1, gold text, bg text, hero_bg text, hero_text text, font_title text, font_body text, radius text, logo text, logo_span text, logo_sub text, hero_title text, hero_sub text, updated_at timestamp DEFAULT now()); ALTER TABLE app_config ENABLE ROW LEVEL SECURITY; DROP POLICY IF EXISTS "public all app_config" ON app_config; CREATE POLICY "public all app_config" ON app_config FOR ALL USING (true) WITH CHECK (true);</code></div>
+</div>
+
+<div class="admin-block">
+<div class="title">🔥 PROMOS - EDITABLES 100% POR VOS</div>
+<div id="adminPromos"></div>
+<div style="border-top:1px solid #eee;margin-top:12px;padding-top:12px">
+<input id="newPromoTitulo" placeholder="Titulo promo">
+<input id="newPromoDesc" placeholder="Descripcion">
+<div style="display:flex;gap:8px"><input id="newPromoPrecio" type="number" placeholder="Precio $"><input id="newPromoOld" type="number" placeholder="Viejo"><select id="newPromoEstilo" style="flex:1"><option value="gold">DORADA</option><option value="white">BLANCA</option><option value="pink">ROSA</option></select></div>
+<button onclick="crearPromo()" style="margin-top:8px;background:#000;color:#fff">CREAR PROMO</button>
+</div>
+</div>
+
+<div class="admin-block"><div class="title">PRECIOS BARBERIA</div><div id="adminServicios"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="newNombre" placeholder="Nuevo servicio"><input id="newPrecio" type="number" placeholder="$" style="width:90px"><input id="newDur" type="number" placeholder="min" style="width:70px"></div><button onclick="crearServicio()" class="sec" style="margin-top:8px;background:#000;color:#fff">CREAR</button></div>
+<div class="admin-block"><div class="title">PRECIOS MUJERES</div><div id="adminServiciosMujeres"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="newNombreM" placeholder="Nuevo servicio mujer"><input id="newPrecioM" type="number" placeholder="$" style="width:90px"><input id="newDurM" type="number" placeholder="min" style="width:70px"></div><button onclick="crearServicioMujer()" class="sec" style="margin-top:8px;background:#000;color:#fff">CREAR MUJERES</button></div>
+
+<div class="admin-block" style="background:#111;color:#fff;border:1px solid #222">
+<div class="title" style="color:#fff">📸 GALERIA - BORRAR FOTOS BARBERIA</div>
+<div id="adminGaleria"></div>
+</div>
+
+<div class="admin-block" style="background:#1a0a14;color:#fff;border:1px solid #332">
+<div class="title" style="color:#FF8FAB">📸 GALERIA - BORRAR FOTOS MUJERES</div>
+<div id="adminGaleriaMujeres"></div>
+</div>
+
+</div>
+</div>
+
 <script>
-const URL='https://zcxkjqtqsaiakgxdjxyc.supabase.co',KEY='sb_publishable_50H-kGE6vkWztMRO4SltQw_N5wrJpFb';
-const db=window.supabase?window.supabase.createClient(URL,KEY):null;
-const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money=n=>Number(n)===0?'GRATIS':'$'+Number(n).toLocaleString('es-AR');
-const wa=text=>'https://wa.me/5493758408368?text='+encodeURIComponent(text);
-const base={gold:'#D4AF37',bg:'#0A0A0A',hero_bg:'#0A0A0A',hero_text:'#ffffff',radius:'12px',font_title:'Anton',font_body:'Inter',logo:'EL MONCHO',logo_span:'AZARA',logo_sub:'BARBERÍA DE BARRIO • DESDE 2018 • AZARA',hero_title:'PUEBLO CHICO, CORTE GRANDE.',hero_sub:'GOLD 5=GRATIS + VIP • Promos editables por vos • Mujeres • Diseño editable desde ADMIN'};
-let config={...base},tab='CORTES',filter='TODOS',admin=false,ready=false,loadError='',uploadOpen=false;
-let services=[{id:'demo1',nombre:'Corte clásico',precio:5000,duracion:30},{id:'demo2',nombre:'Corte + barba',precio:8000,duracion:45},{id:'demo3',nombre:'Fade + diseño',precio:9000,duracion:45},{id:'demo4',nombre:'Color + corte',precio:12000,duracion:60}],women=[{id:'demo5',nombre:'Corte mujeres',precio:5000,duracion:40},{id:'demo6',nombre:'Brushing',precio:8000,duracion:45},{id:'demo7',nombre:'Color',precio:9000,duracion:60},{id:'demo8',nombre:'Balayage',precio:12000,duracion:90}];
-let promos=[{titulo:'PADRE + HIJO',descripcion:'Dos generaciones. El mismo estilo. Vení con tu viejo o tu pequeño.',precio:8500,precio_old:10000,estilo:'dorada'},{titulo:'CORTE + BARBA',descripcion:'El combo para salir listo. Corte a tu estilo y barba bien prolija.',precio:7000,precio_old:8000,estilo:'blanca'},{titulo:'ESTUDIANTES',descripcion:'Un buen corte también va a clases. Presentá tu credencial.',precio:4500,precio_old:5000,estilo:'rosa'},{titulo:'GOLD VIP',descripcion:'5 cortes = 6to GRATIS. Tu fidelidad tiene premio en el barrio.',precio:0,precio_old:0,estilo:'dorada'}];
-const samples=[{id:'sample1',titulo:'LOW FADE',tipo:'FADE',categoria:'barberia',url:'https://images.hostinger.com/4bd38191-9e3d-4c69-a03b-33a5ac36b94b.png'},{id:'sample2',titulo:'TEXTURA + BARBA',tipo:'BARBA',categoria:'barberia',url:'https://images.hostinger.com/72e590cc-fb27-4df5-afc4-3cb6b0c8ee71.png'},{id:'sample3',titulo:'BALAYAGE CARAMELO',tipo:'COLOR',categoria:'mujeres',url:'https://images.hostinger.com/872a795c-bcf9-477b-b437-0dc565a3f6b1.png'},{id:'sample4',titulo:'BOB CLÁSICO',tipo:'CLASICO',categoria:'mujeres',url:'https://images.hostinger.com/f6807da2-0219-4e1a-8587-f015509b36f3.png'}];
-let gallery=[...samples],clients=[],appointments=[];
-function apply(){for(const [k,v] of Object.entries({gold:config.gold,bg:config.bg,'hero-bg':config.hero_bg,'hero-text':config.hero_text,radius:config.radius,title:config.font_title,body:config.font_body})){if(/^(#[a-f0-9]{3,8}|\d{1,2}px|Anton|Inter|Bebas Neue|Oswald|Montserrat)$/i.test(v))document.documentElement.style.setProperty('--'+k,v)}$('#brand').innerHTML=esc(config.logo)+' <span>'+esc(config.logo_span)+'</span><small>'+esc(config.logo_sub)+'</small>'}
-function setTab(t){tab=t;uploadOpen=false;render();window.scrollTo({top:0,behavior:'auto'})}
-function notice(){return !ready?'<p class="status">'+(loadError?'Vista previa: '+esc(loadError)+' Configurá la base desde ADMIN para activar reservas y edición.':'Conectando con la barbería…')+'</p>':''}
-function render(){ $('#tabs').innerHTML=['CORTES','SERVICIOS','PROMOS','MUJERES','TURNOS','ADMIN'].map(t=>'<button data-tab="'+t+'" class="'+(tab===t?'active':'')+'" aria-pressed="'+(tab===t)+'">'+t+'</button>').join('');$('#tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab)); $('#main').innerHTML=tab==='CORTES'||tab==='MUJERES'?galleryPage():tab==='SERVICIOS'?servicePage():tab==='PROMOS'?promoPage():tab==='TURNOS'?bookingPage():adminPage();bind();}
-function galleryPage(){const female=tab==='MUJERES',cat=female?'mujeres':'barberia';const hero=female?'<div class="page-hero pink"><span class="tiny" style="color:#59313b">TU ESTILO. TU MOMENTO.</span><h2 style="margin-top:12px">EL MONCHO MUJERES</h2><p>COLOR, CORTES Y MUCHA ACTITUD.</p></div>':'<section class="hero"><div class="eyebrow">AZARA, MISIONES · DESDE 2018</div><h1>'+esc(config.hero_title).replace('CORTE GRANDE.','<em>CORTE GRANDE.</em>')+'</h1><div class="hero-sub">'+esc(config.hero_sub)+'</div><div class="hero-actions"><button class="btn gold" data-go="TURNOS">RESERVÁ TU TURNO ↗</button><button class="btn" data-go="SERVICIOS">VER PRECIOS</button></div><span class="hero-stamp">EL BARRIO NOS CONOCE.</span></section><div class="perks"><span><b>✦</b> CORTES CON IDENTIDAD</span><span><b>5+1</b> GOLD VIP</span><span>HECHO EN AZARA</span></div>';
-return hero+'<section class="content"><div class="section-top"><div><div class="tiny" style="margin-bottom:8px">'+(female?'TRABAJOS CON ESTILO':'EL ESTILO SE LLEVA')+'</div><h2>'+(female?'NUESTROS TRABAJOS':'CORTES DEL BARRIO')+'</h2></div><button class="btn upload" id="upload-toggle">＋ '+(female?'SUBIR TRABAJO':'SUBIR CORTE')+'</button></div>'+notice()+(uploadOpen?'<form id="upload-form" class="panel"><h3>PUBLICAR '+(female?'TRABAJO':'CORTE')+'</h3><p class="note">Solo el personal autorizado puede publicar fotos.</p><label>Imagen (JPG, PNG o WebP, máximo 5 MB)</label><input type="file" name="image" accept="image/jpeg,image/png,image/webp" required><label>Título del corte</label><input name="titulo" maxlength="80" required><label>Tipo</label><select name="tipo">'+['FADE','CLASICO','BARBA','NIÑO','COLOR'].map(v=>'<option>'+v+'</option>').join('')+'</select><button class="btn gold">PUBLICAR</button><div id="form-status" role="status"></div></form>':'')+'<div class="grid">'+gallery.filter(g=>g.categoria===cat).map(g=>'<figure class="photo"><img src="'+esc(g.url)+'" alt="'+esc(g.titulo)+'" loading="lazy"><span class="tag">'+esc(g.tipo)+'</span><figcaption><strong>'+esc(g.titulo)+'</strong><small>EL MONCHO AZARA</small></figcaption></figure>').join('')+'</div>'+(!gallery.some(g=>g.categoria===cat)?'<p class="empty">Todavía no hay trabajos publicados.</p>':'')+'<div class="gold-banner"><div><div class="tiny">EL QUE VUELVE, GANA.</div><h3 style="margin-top:7px">TU CORTE TIENE PREMIO.</h3><p>5 cortes y el sexto va por la casa.</p><div class="dots"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i></div></div><button class="btn upload" data-go="PROMOS">GOLD<br>VIP ↗</button></div></section>'}
-function servicePage(){return '<div class="page-hero"><h2>SERVICIOS<br>EL MONCHO</h2><p>BUEN CORTE. PRECIO DE BARRIO.</p></div><section class="content">'+notice()+'<div class="filters">'+['BARBERIA','MUJERES','TODOS'].map(f=>'<button data-filter="'+f+'" class="'+(f===filter?'active':'')+'">'+f+'</button>').join('')+'</div>'+[['BARBERIA',services],['MUJERES',women]].filter(([c])=>filter==='TODOS'||filter===c).map(([c,ss])=>'<h3 style="margin-top:20px">'+c+'</h3>'+ss.map(s=>'<div class="service"><div><strong>'+esc(s.nombre)+'</strong><small>'+s.duracion+' MIN · '+c+'</small></div><div class="price">'+money(s.precio)+'</div></div>').join('')).join('')+'<button class="btn gold" style="width:100%;margin-top:25px" data-go="TURNOS">ELEGÍ TU TURNO ↗</button></section>'}
-function promoPage(){return '<div class="page-hero dark"><span class="tiny">MÁS ESTILO. MENOS EXCUSAS.</span><h2 style="margin-top:14px">PROMOS<br>DE BARRIO</h2></div><section class="content">'+notice()+promos.map(p=>'<article class="promo '+esc(p.estilo)+'"><div class="tiny" style="color:inherit">EXCLUSIVO EL MONCHO ↗</div><h3>'+esc(p.titulo)+'</h3><p>'+esc(p.descripcion)+'</p><div class="promo-price">'+(p.titulo==='GOLD VIP'?'5 = 6TO GRATIS':money(p.precio))+(p.precio_old?'<del>'+money(p.precio_old)+'</del>':'')+'</div><a class="btn" target="_blank" rel="noopener" href="'+wa('Hola EL MONCHO AZARA, quiero reservar la promo '+p.titulo+' ('+money(p.precio)+').')+'">RESERVAR PROMO ↗</a></article>').join('')+'</section>'}
-function bookingPage(){return '<div class="page-hero dark"><h2>TU PRÓXIMO<br>BUEN CORTE.</h2><p>RESERVÁ ACÁ. TE ESPERAMOS EN EL BARRIO.</p></div><section class="content">'+notice()+'<form id="booking" class="panel"><h3>RESERVAR TURNO</h3><label for="nombre">Nombre</label><input id="nombre" name="nombre" autocomplete="name" required maxlength="80" placeholder="¿Cómo te llamás?"><label for="whatsapp">WhatsApp</label><input id="whatsapp" name="whatsapp" autocomplete="tel" type="tel" required minlength="8" maxlength="25" placeholder="Ej. 5493758123456"><div class="row"><div><label for="fecha">Fecha</label><input id="fecha" name="fecha" type="date" required></div><div><label for="hora">Hora</label><input id="hora" name="hora" type="time" step="900" required></div></div><label for="servicio">Servicio</label><select id="servicio" name="servicio" required><option value="">Elegí un servicio</option>'+[...services,...women].map(s=>'<option value="'+esc(s.id)+'">'+esc(s.nombre)+' · '+money(s.precio)+'</option>').join('')+'</select><p class="note">Al confirmar guardamos tus datos para gestionar el turno. Solo el personal puede consultar tus datos. Pago en la barbería. Consultá horarios de atención por WhatsApp.</p><button class="btn gold" '+(!ready?'disabled':'')+'>CONFIRMAR TURNO ↗</button><div id="form-status" role="status" aria-live="polite"></div></form>'+(admin?'<h2 style="margin-top:30px">REGISTRO DE TURNOS</h2>'+appointments.map(a=>'<div class="record"><strong>'+esc(a.clientes?.nombre||'Cliente')+'</strong><br>'+esc(a.fecha)+' · '+esc(a.hora)+' · '+esc(a.estado)+'<br>'+esc([...services,...women].find(s=>s.id===a.servicio_id)?.nombre||'Servicio')+'</div>').join('')+(appointments.length?'':'<p class="empty">Todavía no hay turnos.</p>')+'<h2 style="margin-top:30px">CLIENTES GOLD</h2>'+clients.map(c=>'<article class="client"><div class="tiny">VIP GOLD · EL MONCHO AZARA</div><h3 style="margin-top:12px">'+esc(c.nombre)+'</h3><div class="dots">'+Array.from({length:6},(_,i)=>'<i class="'+(i<(c.cortes||0)%6?'filled':'')+'"></i>').join('')+'</div><p>'+((c.cortes||0)%6===5?'¡EL PRÓXIMO CORTE ES GRATIS!':((c.cortes||0)%6)+' / 5 cortes para tu premio')+'</p><button class="btn" data-cut="'+c.id+'">+ CORTE REALIZADO</button> <a class="btn" href="https://wa.me/'+esc(c.whatsapp.replace(/\D/g,''))+'" target="_blank" rel="noopener">WA ↗</a> '+(c.nombre.trim().toLowerCase()==='alejandro'?'':'<button class="btn" data-client-delete="'+c.id+'">BORRAR</button>')+'</article>').join('')+(clients.length?'':'<p class="empty">Todavía no hay clientes.</p>'):'<p class="note">El registro de turnos y las tarjetas GOLD son privados. El personal puede verlos al iniciar sesión en ADMIN.</p>')+'</section>'}
-function field(name,label,value,type='text'){return '<label>'+label+'</label><input type="'+type+'" name="'+name+'" value="'+esc(value)+'" required>'}
-function adminPage(){return '<div class="page-hero dark"><h2>LA BARBERÍA,<br>A TU MANERA.</h2><p>PANEL ADMIN · SOLO PERSONAL AUTORIZADO</p></div><section class="content">'+(admin?'<button class="btn" id="logout">CERRAR SESIÓN</button><details open><summary>01 · DISEÑO</summary><form id="design">'+Object.keys(base).map(k=>k.startsWith('font_')?'<label>'+k+'</label><select name="'+k+'">'+['Anton','Bebas Neue','Oswald','Montserrat','Inter'].map(f=>'<option '+(config[k]===f?'selected':'')+'>'+f+'</option>').join('')+'</select>':field(k,({gold:'Dorado',bg:'Fondo',hero_bg:'Fondo del hero',hero_text:'Texto del hero',radius:'Radio (ej. 12px)',logo:'Logo',logo_span:'Logo dorado',logo_sub:'Subtítulo',hero_title:'Título hero',hero_sub:'Texto hero'})[k],config[k],['gold','bg','hero_bg','hero_text'].includes(k)?'color':'text')).join('')+'<button class="btn gold">GUARDAR TODO DISEÑO PARA TODO EL MUNDO</button><div id="design-status" role="status"></div></form></details><details><summary>02 · PROMOS</summary>'+promos.map((p,i)=>'<form class="edit-row promo-edit" data-i="'+i+'">'+field('titulo','Título',p.titulo)+field('descripcion','Descripción',p.descripcion)+field('precio','Precio',p.precio,'number')+field('precio_old','Precio anterior',p.precio_old,'number')+'<label>Estilo</label><select name="estilo">'+['dorada','blanca','rosa'].map(v=>'<option '+(v===p.estilo?'selected':'')+'>'+v+'</option>').join('')+'</select><button class="btn gold">GUARDAR PROMO</button><p role="status"></p></form>').join('')+'</details>'+[['03 · PRECIOS BARBERÍA','servicios',services],['04 · PRECIOS MUJERES','servicios_mujeres',women]].map(([label,table,items])=>'<details><summary>'+label+'</summary>'+items.map(s=>'<form class="edit-row service-edit" data-table="'+table+'" data-id="'+s.id+'">'+field('nombre','Servicio',s.nombre)+field('precio','Precio',s.precio,'number')+field('duracion','Duración en minutos',s.duracion,'number')+'<button class="btn gold">GUARDAR PRECIO</button><p role="status"></p></form>').join('')+'</details>').join('')+[['05 · GALERÍA BARBERÍA','barberia'],['06 · GALERÍA MUJERES','mujeres']].map(([label,cat])=>'<details><summary>'+label+'</summary>'+gallery.filter(g=>g.categoria===cat).map(g=>'<div class="service"><strong>'+esc(g.titulo)+'</strong><button class="btn" data-photo-delete="'+esc(g.id)+'">BORRAR FOTO</button></div>').join('')+'</details>').join(''):'<form id="login" class="panel"><h3>ENTRAR A ADMIN</h3><p class="note">Usá una cuenta de personal de Supabase Auth. No hay contraseña compartida en el archivo: un login local no protege la base de datos.</p><label>Email del administrador</label><input name="email" type="email" autocomplete="username" required><label>Contraseña</label><input name="password" type="password" autocomplete="current-password" required><button class="btn gold">INICIAR SESIÓN ↗</button><div id="form-status" role="status"></div></form>')+'<details><summary>CONFIGURAR BASE DE DATOS / DESCARGAR SQL</summary><p class="note">Ejecutá el SQL en el SQL Editor de tu proyecto. Incluye el esquema solicitado y, al final, reglas seguras que reemplazan el acceso público total. Creá el administrador en Authentication → Users y autorizá su UUID en el último INSERT. No uses las reglas «public all» sin la sección de seguridad final.</p><button class="btn" id="sql-download">DESCARGAR CONFIGURACIÓN SQL ↓</button><p class="note">Imágenes: bucket público «cortes», máximo 5 MB, subida y borrado solo para administradores. La reserva usa una función atómica para evitar duplicados sin exponer clientes. PWA completa: necesitás HTTPS, manifest, íconos y service worker externo. Este HTML usa CDN para fuentes y Supabase; requiere Internet, pero no un build.</p><textarea id="sql-view" readonly rows="9" aria-label="SQL de configuración">'+esc(SQL)+'</textarea></details></section>'}
-function status(message,error=false,target='#form-status'){const el=$(target);if(el)el.innerHTML='<p class="status '+(error?'error':'')+'">'+esc(message)+'</p>'}
-async function load(){try{if(!db)throw Error('No se pudo cargar Supabase. Revisá tu conexión.');const results=await Promise.all(['app_config','servicios','servicios_mujeres','promos','galeria'].map(t=>db.from(t).select('*')));const error=results.find(r=>r.error)?.error;if(error)throw error;const [c,s,w,p,g]=results.map(r=>r.data);config={...base,...c.find(x=>x.id===1)};services=s;women=w;promos=p;gallery=g;ready=true;loadError='';apply();await checkAdmin();if(admin)await privateLoad()}catch(e){loadError='No se pudo leer la base de datos ('+(e.message||'error de conexión')+').'}render()}
-async function checkAdmin(){const {data}=await db.auth.getSession();if(!data.session){admin=false;return}const r=await db.from('admin_users').select('user_id').eq('user_id',data.session.user.id).maybeSingle();admin=!!r.data}
-async function privateLoad(){const [c,a]=await Promise.all([db.from('clientes').select('*').order('nombre'),db.from('turnos').select('*, clientes(nombre)').order('fecha',{ascending:false})]);if(c.error||a.error)throw c.error||a.error;clients=c.data;appointments=a.data}
-async function submit(form,fn){const b=form.querySelector('button[type="submit"],button:last-of-type'),original=b?.textContent;if(b){b.disabled=true;b.textContent='GUARDANDO…'}try{if(!db)throw Error('Supabase no está disponible.');await fn()}catch(e){const el=form.querySelector('[role="status"]');if(el)el.innerHTML='<p class="status error">'+esc(e.message||'No se pudo guardar. Revisá la configuración y la conexión.')+'</p>';else alert(e.message)}finally{if(b){b.disabled=false;b.textContent=original}}}
-function bind(){document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>setTab(b.dataset.go));document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;render()});if($('#upload-toggle'))$('#upload-toggle').onclick=()=>{uploadOpen=!uploadOpen;render()};if($('#upload-form'))$('#upload-form').onsubmit=e=>{e.preventDefault();submit(e.target,async()=>{if(!admin)throw Error('Iniciá sesión en ADMIN para publicar.');const fd=new FormData(e.target),file=fd.get('image');if(file.size>5242880||!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('Usá una imagen JPG, PNG o WebP de hasta 5 MB.');const path=crypto.randomUUID()+'.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'})[file.type];const u=await db.storage.from('cortes').upload(path,file);if(u.error)throw u.error;const url=db.storage.from('cortes').getPublicUrl(path).data.publicUrl;const r=await db.from('galeria').insert({titulo:fd.get('titulo'),tipo:fd.get('tipo'),categoria:tab==='MUJERES'?'mujeres':'barberia',url,path});if(r.error){await db.storage.from('cortes').remove([path]);throw r.error}uploadOpen=false;await load()})};if($('#fecha')){const d=new Date();$('#fecha').min=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
-if($('#booking'))$('#booking').onsubmit=e=>{e.preventDefault();submit(e.target,async()=>{if(!ready)throw Error('Configurá primero la base de datos.');const fd=new FormData(e.target),s=[...services,...women].find(x=>x.id===fd.get('servicio')),phone=String(fd.get('whatsapp')).replace(/\D/g,'');if(phone.length<8)throw Error('Ingresá un WhatsApp válido.');const r=await db.rpc('reservar_turno',{p_nombre:fd.get('nombre'),p_whatsapp:phone,p_fecha:fd.get('fecha'),p_hora:fd.get('hora'),p_servicio:s.id});if(r.error)throw Error(r.error.code==='23505'||r.error.message.includes('unico_turno')?'Ese horario YA está reservado':r.error.message);const link=wa('*¡NUEVO TURNO CONFIRMADO!*\nEL MONCHO AZARA\nNombre: '+fd.get('nombre')+'\nWhatsApp: '+phone+'\nFecha: '+fd.get('fecha')+'\nHora: '+fd.get('hora')+'\nServicio: '+s.nombre+' · '+money(s.precio));status('TURNO CONFIRMADO');$('#form-status').insertAdjacentHTML('beforeend','<a class="btn gold" href="'+link+'" target="_blank" rel="noopener">ENVIAR CONFIRMACIÓN POR WHATSAPP ↗</a>');window.open(link,'_blank','noopener');e.target.reset();if(admin)await privateLoad()})};
-if($('#login'))$('#login').onsubmit=e=>{e.preventDefault();submit(e.target,async()=>{const fd=new FormData(e.target),r=await db.auth.signInWithPassword({email:fd.get('email'),password:fd.get('password')});if(r.error)throw Error('No se pudo iniciar sesión. Revisá tu email y contraseña.');await checkAdmin();if(!admin){await db.auth.signOut();throw Error('Esta cuenta no está autorizada como administrador.')}await privateLoad();render()})};if($('#logout'))$('#logout').onclick=async()=>{await db.auth.signOut();admin=false;clients=[];appointments=[];render()};if($('#design'))$('#design').onsubmit=e=>{e.preventDefault();submit(e.target,async()=>{const values=Object.fromEntries(new FormData(e.target));if(!/^\d{1,2}px$/.test(values.radius))throw Error('Radio inválido. Usá por ejemplo 12px.');const r=await db.from('app_config').upsert({id:1,...values,updated_at:new Date().toISOString()});if(r.error)throw r.error;config={...config,...values};apply();status('Diseño guardado para todo el mundo.',false,'#design-status')})};document.querySelectorAll('.promo-edit,.service-edit').forEach(f=>f.onsubmit=e=>{e.preventDefault();submit(f,async()=>{const values=Object.fromEntries(new FormData(f));for(const k of ['precio','precio_old','duracion'])if(k in values){values[k]=Number(values[k]);if(values[k]<0)throw Error('Los valores no pueden ser negativos.')}const isPromo=f.classList.contains('promo-edit'),table=isPromo?'promos':f.dataset.table,id=isPromo?promos[Number(f.dataset.i)].id:f.dataset.id;if(!id||id.startsWith('demo'))throw Error('Ejecutá primero el SQL de configuración.');const r=await db.from(table).update(values).eq('id',id).select('id');if(r.error)throw r.error;if(!r.data.length)throw Error('No tenés permisos para editar.');await load()})});
-document.querySelectorAll('[data-photo-delete]').forEach(b=>b.onclick=async()=>{if(!confirm('¿Borrar esta foto?'))return;const g=gallery.find(x=>x.id===b.dataset.photoDelete);if(g.id.startsWith('sample')){alert('Esta foto es ilustrativa. Configurá la base de datos para administrar fotos reales.');return}try{const r=await db.from('galeria').delete().eq('id',g.id);if(r.error)throw r.error;if(g.path){const sr=await db.storage.from('cortes').remove([g.path]);if(sr.error)throw sr.error}await load()}catch(e){alert('No se pudo borrar: '+e.message)}});document.querySelectorAll('[data-client-delete],[data-cut]').forEach(b=>b.onclick=async()=>{try{const id=b.dataset.clientDelete||b.dataset.cut,c=clients.find(x=>x.id===id);if(b.dataset.clientDelete){if(c.nombre.trim().toLowerCase()==='alejandro')throw Error('No se puede borrar cliente Alejandro.');if(!confirm('¿Borrar el cliente y sus turnos?'))return;const r=await db.from('clientes').delete().eq('id',id);if(r.error)throw r.error}else{const r=await db.rpc('sumar_corte',{p_cliente:id});if(r.error)throw r.error}await privateLoad();render()}catch(e){alert(e.message)}});if($('#sql-download'))$('#sql-download').onclick=()=>downloadText(SQL,'configuracion-el-moncho.sql','text/plain')}
-function downloadText(text,name,type){const u=window.URL.createObjectURL(new Blob([text],{type})),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>window.URL.revokeObjectURL(u),1000)}
-let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});$('#install').onclick=async()=>{if(installPrompt){await installPrompt.prompt();installPrompt=null}else $('#install-note').classList.toggle('hidden')};$('#download').href=location.pathname;$('#brand').onclick=e=>{e.preventDefault();setTab('CORTES')};
-const SQL=`-- EL MONCHO AZARA · Ejecutar el script completo en Supabase SQL Editor.
--- Esquema solicitado:
-create table if not exists clientes (id uuid default gen_random_uuid() primary key, nombre text, whatsapp text unique);
-create table if not exists servicios (id uuid default gen_random_uuid() primary key, nombre text, precio int, duracion int);
-create table if not exists servicios_mujeres (id uuid default gen_random_uuid() primary key, nombre text, precio int, duracion int);
-create table if not exists turnos (id uuid default gen_random_uuid() primary key, cliente_id uuid references clientes(id), fecha date, hora text, servicio_id uuid, estado text);
-create unique index if not exists unico_turno on turnos (fecha, hora);
-create table if not exists promos (id uuid default gen_random_uuid() primary key, titulo text, descripcion text, precio int, precio_old int, estilo text, created_at timestamp default now());
-create table if not exists app_config (id int primary key default 1, gold text, bg text, hero_bg text, hero_text text, font_title text, font_body text, radius text, logo text, logo_span text, logo_sub text, hero_title text, hero_sub text, updated_at timestamp default now());
-alter table clientes enable row level security; drop policy if exists "public all clientes" on clientes; create policy "public all clientes" on clientes for all using (true) with check (true);
-alter table servicios enable row level security; drop policy if exists "public all servicios" on servicios; create policy "public all servicios" on servicios for all using (true) with check (true);
-alter table servicios_mujeres enable row level security; drop policy if exists "public all servicios_mujeres" on servicios_mujeres; create policy "public all servicios_mujeres" on servicios_mujeres for all using (true) with check (true);
-alter table turnos enable row level security; drop policy if exists "public all turnos" on turnos; create policy "public all turnos" on turnos for all using (true) with check (true);
-alter table promos enable row level security; drop policy if exists "public all promos" on promos; create policy "public all promos" on promos for all using (true) with check (true);
-alter table app_config enable row level security; drop policy if exists "public all app_config" on app_config; create policy "public all app_config" on app_config for all using (true) with check (true);
+const SB_URL='https://zcxkjqtqsaiakgxdjxyc.supabase.co';
+const SB_KEY='sb_publishable_50H-kGE6vkWztMRO4SltQw_N5wrJpFb';
+let supabaseClient, deferredPrompt=null;
+let currentConfig = {gold:'#D4AF37', bg:'#0A0A0A', hero_bg:'#D4AF37', hero_text:'#000', font_title:"'Anton',sans-serif", font_body:"'Inter',sans-serif", radius:'14px', logo:'EL MONCHO', logo_span:'AZARA', logo_sub:'BARBERIA DE BARRIO • DESDE 2018 • AZARA', hero_title:'PUEBLO CHICO,<br>CORTE GRANDE.', hero_sub:'GOLD 5=GRATIS + VIP • Promos editables por vos • Mujeres • Diseño editable desde ADMIN'};
 
--- SEGURIDAD OBLIGATORIA: reemplaza acceso público total por permisos reales.
-create table if not exists public.admin_users(user_id uuid primary key references auth.users(id) on delete cascade);
-alter table public.admin_users enable row level security;
-drop policy if exists admin_self on public.admin_users;
-create policy admin_self on public.admin_users for select to authenticated using(user_id=auth.uid());
-create or replace function public.es_admin() returns boolean language sql stable security definer set search_path=public as $$ select exists(select 1 from public.admin_users where user_id=auth.uid()) $$;
-alter table public.clientes add column if not exists cortes integer not null default 0;
-create table if not exists public.galeria(id uuid primary key default gen_random_uuid(),titulo text not null,tipo text,categoria text check(categoria in ('barberia','mujeres')),url text not null,path text,created_at timestamptz default now());
-alter table public.galeria enable row level security;
-do $$ declare t text; begin
-foreach t in array array['clientes','servicios','servicios_mujeres','turnos','promos','app_config','galeria'] loop
-execute format('drop policy if exists %I on public.%I','public all '||t,t);
-execute format('drop policy if exists admin_manage on public.%I',t);
-execute format('create policy admin_manage on public.%I for all to authenticated using(public.es_admin()) with check(public.es_admin())',t);
-end loop;
-foreach t in array array['servicios','servicios_mujeres','promos','app_config','galeria'] loop
-execute format('drop policy if exists public_read on public.%I',t);
-execute format('create policy public_read on public.%I for select using(true)',t);
-end loop; end $$;
+const FONTS_TITLE = ["'Anton',sans-serif","'Bebas Neue',sans-serif","'Oswald',sans-serif","'Montserrat',sans-serif","'Poppins',sans-serif","'Archivo Black',sans-serif","'Alfa Slab One',cursive","'Righteous',cursive","'Staatliches',cursive","'Teko',sans-serif","'Bangers',cursive","'Permanent Marker',cursive","'Fjalla One',sans-serif","'Playfair Display',serif","'Inter',sans-serif","'Roboto',sans-serif","'Oswald',sans-serif","'Montserrat',sans-serif","'Bebas Neue',sans-serif","'Anton',sans-serif"];
+const FONTS_BODY = ["'Inter',sans-serif","'Poppins',sans-serif","'Montserrat',sans-serif","'Roboto',sans-serif","'Oswald',sans-serif"];
 
--- Proteger Alejandro incluso frente a llamadas directas a la API.
-create or replace function public.proteger_alejandro() returns trigger language plpgsql as $$ begin if lower(trim(old.nombre))='alejandro' then raise exception 'No se puede borrar cliente Alejandro'; end if; return old; end $$;
-drop trigger if exists proteger_alejandro on public.clientes;
-create trigger proteger_alejandro before delete on public.clientes for each row execute function public.proteger_alejandro();
--- Reemplaza la FK para permitir borrado de otros clientes con sus turnos.
-alter table public.turnos drop constraint if exists turnos_cliente_id_fkey;
-alter table public.turnos add constraint turnos_cliente_id_fkey foreign key(cliente_id) references public.clientes(id) on delete cascade;
+function buildFontSelectors(){
+ const tCont=document.getElementById('fontTitles');
+ const bCont=document.getElementById('fontBody');
+ if(tCont){tCont.innerHTML=''; FONTS_TITLE.slice(0,15).forEach(f=>{const d=document.createElement('div'); d.className='font-opt'; d.style.fontFamily=f; d.textContent=f.replace(/'/g,'').split(',')[0]; d.onclick=()=>setFontTitle(f,d); tCont.appendChild(d);});}
+ if(bCont){bCont.innerHTML=''; FONTS_BODY.forEach(f=>{const d=document.createElement('div'); d.className='font-opt'; d.style.fontFamily=f; d.textContent=f.replace(/'/g,'').split(',')[0]; d.onclick=()=>setFontBody(f,d); bCont.appendChild(d);});}
+}
+function setFontTitle(f,el){document.querySelectorAll('#fontTitles .font-opt').forEach(x=>x.classList.remove('active')); if(el) el.classList.add('active'); currentConfig.font_title=f; document.documentElement.style.setProperty('--font-title',f); applyConfigToDOM();}
+function setFontBody(f,el){document.querySelectorAll('#fontBody .font-opt').forEach(x=>x.classList.remove('active')); if(el) el.classList.add('active'); currentConfig.font_body=f; document.documentElement.style.setProperty('--font-body',f); applyConfigToDOM();}
+function setColor(varName,val){currentConfig[varName==='--gold'?'gold':'bg']=val; document.documentElement.style.setProperty(varName,val); if(varName==='--gold'){document.getElementById('metaTheme').setAttribute('content',val);}}
+function setRadius(val){currentConfig.radius=val; document.documentElement.style.setProperty('--radius',val); document.querySelectorAll('.design-preview').forEach(x=>x.classList.remove('active')); event.target.classList.add('active');}
+function setHeroColors(){const bg=document.getElementById('customHeroBg').value; const txt=document.getElementById('customHeroText').value; currentConfig.hero_bg=bg; currentConfig.hero_text=txt; document.documentElement.style.setProperty('--hero-bg',bg); document.documentElement.style.setProperty('--hero-text',txt); document.getElementById('hero').style.background=bg; document.getElementById('hero').style.color=txt;}
+function saveTexts(){currentConfig.logo=document.getElementById('editLogo').value||currentConfig.logo; currentConfig.logo_span=document.getElementById('editLogoSpan').value||currentConfig.logo_span; currentConfig.logo_sub=document.getElementById('editLogoSub').value||currentConfig.logo_sub; currentConfig.hero_title=document.getElementById('editHeroTitle').value||currentConfig.hero_title; currentConfig.hero_sub=document.getElementById('editHeroSub').value||currentConfig.hero_sub; applyConfigToDOM(); document.getElementById('designStatus').innerText='Textos aplicados (falta guardar)';}
+function applyConfigToDOM(){
+ document.documentElement.style.setProperty('--gold',currentConfig.gold);
+ document.documentElement.style.setProperty('--bg',currentConfig.bg);
+ document.documentElement.style.setProperty('--hero-bg',currentConfig.hero_bg);
+ document.documentElement.style.setProperty('--hero-text',currentConfig.hero_text);
+ document.documentElement.style.setProperty('--font-title',currentConfig.font_title);
+ document.documentElement.style.setProperty('--font-body',currentConfig.font_body);
+ document.documentElement.style.setProperty('--radius',currentConfig.radius);
+ const lt=document.getElementById('logoText'); if(lt) lt.innerHTML=currentConfig.logo+' <span id="logoSpan">'+currentConfig.logo_span+'</span>';
+ const ls=document.getElementById('logoSub'); if(ls) ls.innerText=currentConfig.logo_sub;
+ const ht=document.getElementById('heroTitle'); if(ht) ht.innerHTML=currentConfig.hero_title;
+ const hs=document.getElementById('heroSub'); if(hs) hs.innerText=currentConfig.hero_sub;
+ const hero=document.getElementById('hero'); if(hero){hero.style.background=currentConfig.hero_bg; hero.style.color=currentConfig.hero_text;}
+ document.getElementById('metaTheme').setAttribute('content',currentConfig.gold);
+}
+async function loadAppConfig(){
+ try{
+   const {data,error} = await supabaseClient.from('app_config').select('*').eq('id',1).single();
+   if(!error && data){
+     currentConfig={gold:data.gold||currentConfig.gold, bg:data.bg||currentConfig.bg, hero_bg:data.hero_bg||currentConfig.hero_bg, hero_text:data.hero_text||currentConfig.hero_text, font_title:data.font_title||currentConfig.font_title, font_body:data.font_body||currentConfig.font_body, radius:data.radius||currentConfig.radius, logo:data.logo||currentConfig.logo, logo_span:data.logo_span||currentConfig.logo_span, logo_sub:data.logo_sub||currentConfig.logo_sub, hero_title:data.hero_title||currentConfig.hero_title, hero_sub:data.hero_sub||currentConfig.hero_sub};
+     applyConfigToDOM();
+     document.getElementById('editLogo').value=currentConfig.logo;
+     document.getElementById('editLogoSpan').value=currentConfig.logo_span;
+     document.getElementById('editLogoSub').value=currentConfig.logo_sub;
+     document.getElementById('editHeroTitle').value=currentConfig.hero_title;
+     document.getElementById('editHeroSub').value=currentConfig.hero_sub;
+     return;
+   }
+ }catch(e){}
+ const saved=JSON.parse(localStorage.getItem('moncho_config')||'null');
+ if(saved){currentConfig={...currentConfig,...saved}; applyConfigToDOM();}
+}
+async function saveAppConfig(){
+ localStorage.setItem('moncho_config',JSON.stringify(currentConfig));
+ document.getElementById('designStatus').innerText='GUARDANDO EN SUPABASE...';
+ try{
+   const payload={id:1, gold:currentConfig.gold, bg:currentConfig.bg, hero_bg:currentConfig.hero_bg, hero_text:currentConfig.hero_text, font_title:currentConfig.font_title, font_body:currentConfig.font_body, radius:currentConfig.radius, logo:currentConfig.logo, logo_span:currentConfig.logo_span, logo_sub:currentConfig.logo_sub, hero_title:currentConfig.hero_title, hero_sub:currentConfig.hero_sub};
+   const {error} = await supabaseClient.from('app_config').upsert(payload,{onConflict:'id'});
+   if(error) throw error;
+   document.getElementById('designStatus').innerText='✅ GUARDADO - TODO EL MUNDO VE EL NUEVO DISEÑO AL RECARGAR';
+ }catch(e){
+   document.getElementById('designStatus').innerText='⚠️ Guardado local (corre el SQL de app_config en Supabase para que sea global). Error: '+e.message;
+ }
+}
+function resetDesign(){
+ currentConfig={gold:'#D4AF37', bg:'#0A0A0A', hero_bg:'#D4AF37', hero_text:'#000', font_title:"'Anton',sans-serif", font_body:"'Inter',sans-serif", radius:'14px', logo:'EL MONCHO', logo_span:'AZARA', logo_sub:'BARBERIA DE BARRIO • DESDE 2018 • AZARA', hero_title:'PUEBLO CHICO,<br>CORTE GRANDE.', hero_sub:'GOLD 5=GRATIS + VIP • Promos editables por vos • Mujeres • Diseño editable desde ADMIN'};
+ localStorage.removeItem('moncho_config');
+ applyConfigToDOM();
+ document.getElementById('designStatus').innerText='Reseteado a original';
+}
 
--- Reserva atómica: ni clientes ni turnos son públicamente legibles.
-create or replace function public.reservar_turno(p_nombre text,p_whatsapp text,p_fecha date,p_hora text,p_servicio uuid) returns uuid language plpgsql security definer set search_path=public as $$
-declare cid uuid; tid uuid; begin
-if length(trim(p_nombre)) not between 1 and 80 or p_whatsapp !~ '^[0-9]{8,20}$' or p_fecha<current_date or p_hora !~ '^([01][0-9]|2[0-3]):[0-5][0-9]$' then raise exception 'Datos de turno inválidos'; end if;
-if not exists(select 1 from servicios where id=p_servicio) and not exists(select 1 from servicios_mujeres where id=p_servicio) then raise exception 'Servicio inválido'; end if;
-if exists(select 1 from turnos where fecha=p_fecha and hora=p_hora) then raise exception 'Ese horario YA está reservado'; end if;
-insert into clientes(nombre,whatsapp) values(trim(p_nombre),p_whatsapp) on conflict(whatsapp) do update set nombre=case when lower(trim(clientes.nombre))='alejandro' then clientes.nombre else excluded.nombre end returning id into cid;
-insert into turnos(cliente_id,fecha,hora,servicio_id,estado) values(cid,p_fecha,p_hora,p_servicio,'confirmado') returning id into tid;
-return tid; end $$;
-revoke all on function public.reservar_turno(text,text,date,text,uuid) from public;
-grant execute on function public.reservar_turno(text,text,date,text,uuid) to anon,authenticated;
-create or replace function public.sumar_corte(p_cliente uuid) returns void language plpgsql security definer set search_path=public as $$ begin if not public.es_admin() then raise exception 'Acceso denegado'; end if; update clientes set cortes=cortes+1 where id=p_cliente; end $$;
-revoke all on function public.sumar_corte(uuid) from public;
-grant execute on function public.sumar_corte(uuid) to authenticated;
+function showTab(t){
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+['cortes','servicios','promos','mujeres','turnos','admin'].forEach(id=>{const el=document.getElementById('tab-'+id); if(el) el.style.display='none';});
+const hero=document.getElementById('hero'); if(hero) hero.style.display = (t==='cortes') ? 'block' : 'none';
+document.getElementById('t-'+t).classList.add('active');
+document.getElementById('tab-'+t).style.display='block';
+if(t==='cortes') cargarGaleria();
+if(t==='mujeres') {cargarGaleriaMujeres(); cargarServiciosMujeres();}
+if(t==='promos') cargarPromos();
+if(t==='turnos'){cargarServicios(); cargarClientes(); cargarRegistro();}
+if(t==='admin') checkAdmin();
+}
+function previewImg(i,target){const f=i.files[0]; if(!f) return; const r=new FileReader(); r.onload=e=>{document.getElementById(target).src=e.target.result; document.getElementById(target).style.display='block';}; r.readAsDataURL(f);}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredPrompt=e; document.getElementById('installBar').style.display='flex';});
+function instalar(){if(deferredPrompt){deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{deferredPrompt=null; document.getElementById('installBar').style.display='none';});}}
+async function init(){
+supabaseClient=window.supabase.createClient(SB_URL,SB_KEY);
+buildFontSelectors();
+await loadAppConfig();
+cargarServicios(); cargarGaleria(); cargarClientes(); cargarRegistro(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
+if('serviceWorker' in navigator){
+ const sw=`self.addEventListener('install',e=>{e.waitUntil(caches.open('moncho-design-v4').then(c=>c.addAll(['./'])) )}); self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))})`;
+ const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
+}
+}
 
--- Almacenamiento de imágenes: lectura pública, escritura solo personal.
-insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values('cortes','cortes',true,5242880,array['image/jpeg','image/png','image/webp']) on conflict(id) do nothing;
-drop policy if exists cortes_read on storage.objects;
-create policy cortes_read on storage.objects for select using(bucket_id='cortes');
-drop policy if exists cortes_admin on storage.objects;
-create policy cortes_admin on storage.objects for all to authenticated using(bucket_id='cortes' and public.es_admin()) with check(bucket_id='cortes' and public.es_admin());
+const PROMOS_DEFAULT = [{titulo:'PADRE + HIJO', descripcion:'2 cortes el mismo dia - Martes a jueves', precio:8500, precio_old:10000, estilo:'white'},{titulo:'CORTE + BARBA', descripcion:'Combo completo - El mas pedido en Azara', precio:7000, precio_old:8000, estilo:'white'},{titulo:'ESTUDIANTES', descripcion:'Primaria y secundaria -15% con libreta', precio:4500, precio_old:0, estilo:'white'},{titulo:'GOLD VIP - 5=6to GRATIS', descripcion:'Se activa sola la tarjeta dorada', precio:0, precio_old:0, estilo:'gold'}];
+async function cargarPromos(){
+ let promos = [];
+ try{const {data,error} = await supabaseClient.from('promos').select('*').order('created_at',{ascending:true}); if(!error && data && data.length>0){promos=data;} else throw 'no table';}catch(e){promos = JSON.parse(localStorage.getItem('moncho_promos')||'null') || PROMOS_DEFAULT;}
+ const cont = document.getElementById('listaPromos'); const adminCont = document.getElementById('adminPromos');
+ let h='', ah='';
+ promos.forEach((p,idx)=>{
+   const isGold = (p.estilo==='gold') || p.titulo.toLowerCase().includes('gold') || p.titulo.toLowerCase().includes('gratis');
+   const cardClass = isGold ? 'promo-card gold' : (p.estilo==='pink' ? 'promo-card pink' : 'promo-card');
+   const priceText = p.precio===0 ? 'GRATIS' : '$'+p.precio;
+   const oldText = p.precio_old ? `<div class="old">$${p.precio_old}</div>` : '';
+   h+=`<div class="${cardClass}"><div style="display:flex;justify-content:space-between"><div><b style="font-family:var(--font-title)">${p.titulo.toUpperCase()}</b><div class="small" style="color:${isGold?'#000':'#666'}">${p.descripcion||''}</div></div><div>${oldText}<div class="price">${priceText}</div></div></div><button onclick="reservarPromo('${p.titulo}')" class="sec" style="margin-top:10px">${p.precio===0?'VER MI TARJETA':'RESERVAR PROMO'}</button></div>`;
+   ah+=`<div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><input value="${p.titulo}" id="pt_${idx}" style="flex:2;background:#f5f5f5;color:#000"><input value="${p.descripcion||''}" id="pd_${idx}" style="flex:3;background:#f5f5f5;color:#000"><input type="number" value="${p.precio}" id="pp_${idx}" style="width:90px;background:#f5f5f5;color:#000"><input type="number" value="${p.precio_old||''}" id="po_${idx}" placeholder="viejo" style="width:80px;background:#f5f5f5;color:#000"><select id="pe_${idx}" style="width:90px;background:#f5f5f5;color:#000"><option value="white" ${p.estilo==='white'?'selected':''}>BLANCA</option><option value="gold" ${p.estilo==='gold'?'selected':''}>DORADA</option><option value="pink" ${p.estilo==='pink'?'selected':''}>ROSA</option></select><button onclick="guardarPromo(${idx})" style="width:50px">OK</button><button onclick="borrarPromo(${idx})" class="sec" style="width:36px">X</button></div>`;
+ });
+ if(cont) cont.innerHTML=h||'<div class="small">Sin promos. Crealas en ADMIN.</div>';
+ if(adminCont) adminCont.innerHTML=ah||'<div class="small">Sin promos aun.</div>';
+}
+async function guardarPromo(idx){
+ let promos = JSON.parse(localStorage.getItem('moncho_promos')||'null') || PROMOS_DEFAULT;
+ try{const {data} = await supabaseClient.from('promos').select('*').order('created_at'); if(data && data.length>0) promos=data;}catch(e){}
+ const p = promos[idx]; if(!p) return;
+ const titulo=document.getElementById('pt_'+idx).value; const desc=document.getElementById('pd_'+idx).value; const precio=parseInt(document.getElementById('pp_'+idx).value)||0; const old=parseInt(document.getElementById('po_'+idx).value)||0; const estilo=document.getElementById('pe_'+idx).value;
+ try{if(p.id){await supabaseClient.from('promos').update({titulo,descripcion:desc,precio,precio_old:old,estilo}).eq('id',p.id);} else{await supabaseClient.from('promos').update({titulo,descripcion:desc,precio,precio_old:old,estilo}).eq('titulo',p.titulo);}}catch(e){}
+ promos[idx]={...p,titulo,descripcion:desc,precio,precio_old:old,estilo}; localStorage.setItem('moncho_promos',JSON.stringify(promos)); cargarPromos();
+}
+async function borrarPromo(idx){
+ if(!confirm('Borrar promo?')) return;
+ let promos = JSON.parse(localStorage.getItem('moncho_promos')||'null') || PROMOS_DEFAULT;
+ try{const {data} = await supabaseClient.from('promos').select('*'); if(data && data.length>0) promos=data;}catch(e){}
+ const p=promos[idx];
+ try{if(p.id){await supabaseClient.from('promos').delete().eq('id',p.id);} else if(p.titulo){await supabaseClient.from('promos').delete().eq('titulo',p.titulo);}}catch(e){}
+ promos.splice(idx,1); localStorage.setItem('moncho_promos',JSON.stringify(promos)); cargarPromos();
+}
+async function crearPromo(){
+ const titulo=document.getElementById('newPromoTitulo').value; const desc=document.getElementById('newPromoDesc').value; const precio=parseInt(document.getElementById('newPromoPrecio').value)||0; const old=parseInt(document.getElementById('newPromoOld').value)||0; const estilo=document.getElementById('newPromoEstilo').value;
+ if(!titulo) return alert('Pone titulo');
+ let promos = JSON.parse(localStorage.getItem('moncho_promos')||'null') || PROMOS_DEFAULT;
+ const nuevo={titulo,descripcion:desc,precio,precio_old:old,estilo};
+ try{const {data} = await supabaseClient.from('promos').insert(nuevo).select().single(); if(data){promos.push(data);} else {promos.push(nuevo);}}catch(e){promos.push(nuevo);}
+ localStorage.setItem('moncho_promos',JSON.stringify(promos));
+ document.getElementById('newPromoTitulo').value=''; document.getElementById('newPromoDesc').value=''; document.getElementById('newPromoPrecio').value=''; document.getElementById('newPromoOld').value='';
+ cargarPromos();
+}
 
--- Datos iniciales. No reemplaza contenido existente.
-insert into servicios(nombre,precio,duracion) select * from (values('Corte clásico',5000,30),('Corte + barba',8000,45),('Fade + diseño',9000,45),('Color + corte',12000,60)) v(nombre,precio,duracion) where not exists(select 1 from servicios s where s.nombre=v.nombre);
-insert into servicios_mujeres(nombre,precio,duracion) select * from (values('Corte mujeres',5000,40),('Brushing',8000,45),('Color',9000,60),('Balayage',12000,90)) v(nombre,precio,duracion) where not exists(select 1 from servicios_mujeres s where s.nombre=v.nombre);
-insert into promos(titulo,descripcion,precio,precio_old,estilo) select * from (values('PADRE + HIJO','Dos generaciones. El mismo estilo.',8500,10000,'dorada'),('CORTE + BARBA','Corte a tu estilo y barba bien prolija.',7000,8000,'blanca'),('ESTUDIANTES','Presentá tu credencial.',4500,5000,'rosa'),('GOLD VIP','5 cortes = 6to GRATIS.',0,0,'dorada')) v(titulo,descripcion,precio,precio_old,estilo) where not exists(select 1 from promos p where p.titulo=v.titulo);
-insert into app_config(id,gold,bg,hero_bg,hero_text,font_title,font_body,radius,logo,logo_span,logo_sub,hero_title,hero_sub) values(1,'#D4AF37','#0A0A0A','#0A0A0A','#ffffff','Anton','Inter','12px','EL MONCHO','AZARA','BARBERÍA DE BARRIO • DESDE 2018 • AZARA','PUEBLO CHICO, CORTE GRANDE.','GOLD 5=GRATIS + VIP • Promos editables por vos • Mujeres • Diseño editable desde ADMIN') on conflict(id) do nothing;
-insert into galeria(titulo,tipo,categoria,url) select * from (values('LOW FADE','FADE','barberia','https://images.hostinger.com/4bd38191-9e3d-4c69-a03b-33a5ac36b94b.png'),('TEXTURA + BARBA','BARBA','barberia','https://images.hostinger.com/72e590cc-fb27-4df5-afc4-3cb6b0c8ee71.png'),('BALAYAGE CARAMELO','COLOR','mujeres','https://images.hostinger.com/872a795c-bcf9-477b-b437-0dc565a3f6b1.png'),('BOB CLÁSICO','CLASICO','mujeres','https://images.hostinger.com/f6807da2-0219-4e1a-8587-f015509b36f3.png')) v(titulo,tipo,categoria,url) where not exists(select 1 from galeria g where g.url=v.url);
--- ÚLTIMO PASO: crear usuario en Supabase Authentication → Users, copiar su UUID.
--- insert into public.admin_users(user_id) values('UUID-DEL-ADMIN') on conflict do nothing;
--- Producción: limitar abuso de reservas con CAPTCHA y rate limiting en una función de servidor.
-`;
-apply();render();load();
-</script></body></html>
+
+let currentFilter='barberia';
+function filterServ(t){currentFilter=t; document.getElementById('f-barberia').style.background=t==='barberia'?'#000':'#1a1a1a'; document.getElementById('f-barberia').style.color=t==='barberia'?'#fff':'#666'; document.getElementById('f-mujeres').style.background=t==='mujeres'?'#000':'#1a1a1a'; document.getElementById('f-mujeres').style.color=t==='mujeres'?'#fff':'#666'; document.getElementById('f-todos').style.background=t==='todos'?'#000':'#1a1a1a'; document.getElementById('f-todos').style.color=t==='todos'?'#fff':'#666'; cargarServicios(); cargarServiciosMujeres(); }
+function reservarServicio(id,nombre){showTab('turnos'); setTimeout(()=>{document.getElementById('servicioId').value=id; document.getElementById('servicios').scrollIntoView({behavior:'smooth'});},300); }
+
+async function cargarServicios(){
+
+const {data}=await supabaseClient.from('servicios').select('*').order('precio');
+if(!data) return;
+let h='', sel='<option value="">Elegi servicio</option>', ah='';
+data.forEach(s=>{h+=`<div class="line"><span><b>${s.nombre.toUpperCase()}</b> <span style="color:#666;font-size:11px">${s.duracion_min}MIN</span></span><b style="color:var(--gold)">$${s.precio}</b></div>`; sel+=`<option value="${s.id}">${s.nombre} - $${s.precio}</option>`; ah+=`<div style="display:flex;gap:6px;margin-bottom:6px"><input value="${s.nombre}" id="n_${s.id}" style="flex:2"><input type="number" value="${s.precio}" id="p_${s.id}" style="flex:1"><input type="number" value="${s.duracion_min}" id="d_${s.id}" style="width:60px"><button onclick="guardarServicio('${s.id}')" style="width:50px">OK</button><button onclick="borrarServicio('${s.id}')" class="sec" style="width:36px">X</button></div>`;});
+const el1=document.getElementById('servicios'); if(el1) el1.innerHTML=h;
+const el2=document.getElementById('servicioId'); if(el2) el2.innerHTML=sel;
+const ad=document.getElementById('adminServicios'); if(ad) ad.innerHTML=ah;
+// NUEVA PESTAÑA SERVICIOS - CLIENTE
+const barberiaList=document.getElementById('listaServiciosBarberia');
+if(barberiaList){
+  let hb='';
+  let barberiaData=data.filter(s=> ! (s.nombre.toLowerCase().includes('color') && s.nombre.toLowerCase().includes('mujer')) && !s.nombre.toLowerCase().includes('alisado') && !s.nombre.toLowerCase().includes('balayage') && !s.nombre.toLowerCase().includes('tintura') || s.nombre.toLowerCase().includes('corte') || s.nombre.toLowerCase().includes('barba') || s.nombre.toLowerCase().includes('fade') || s.nombre.toLowerCase().includes('niño') || s.nombre.toLowerCase().includes('nino'));
+  // si filtro deja pasar todo si es corto
+  if(barberiaData.length<2) barberiaData=data.slice(0,8);
+  barberiaData.forEach(s=>{
+    const isBarber = !(s.nombre.toLowerCase().includes('mujer') && (s.nombre.toLowerCase().includes('color')||s.nombre.toLowerCase().includes('alisado')));
+    if(currentFilter==='mujeres' && isBarber && !s.nombre.toLowerCase().includes('mujer')) return;
+    if(currentFilter==='barberia' && !isBarber && s.nombre.toLowerCase().includes('mujer')) return;
+    hb+=`<div style="background:#fff;color:#000;border-radius:12px;padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border-left:6px solid var(--gold)"><div><b style="font-family:var(--font-title);letter-spacing:0.5px">${s.nombre.toUpperCase()}</b><div style="font-size:11px;color:#666;margin-top:2px">${s.duracion_min} MIN • Barberia de barrio</div></div><div style="text-align:right"><div style="font-family:var(--font-title);font-size:22px">$${s.precio}</div><button onclick="reservarServicio('${s.id}','${s.nombre}')" style="width:auto;padding:8px 14px;font-size:10px;margin-top:6px">ELEGIR</button></div></div>`;
+  });
+  barberiaList.innerHTML=hb||'<div class="small">Agrega servicios desde ADMIN</div>';
+  barberiaList.style.display=(currentFilter==='mujeres')?'none':'block';
+}
+
+}
+async function cargarServiciosMujeres(){
+const {data}=await supabaseClient.from('servicios').select('*').order('precio');
+let data2 = data?.filter(s=> s.nombre.toLowerCase().includes('color') || s.nombre.toLowerCase().includes('alisado') || s.nombre.toLowerCase().includes('mujer') || s.nombre.toLowerCase().includes('tintura') || s.nombre.toLowerCase().includes('balayage') || s.nombre.toLowerCase().includes('flequillo')) || [];
+let h='', ah='';
+(data2||[]).forEach(s=>{h+=`<div class="line"><span><b>${s.nombre.toUpperCase()}</b></span><b style="color:#FF8FAB">$${s.precio}</b></div>`; ah+=`<div style="display:flex;gap:6px;margin-bottom:6px"><input value="${s.nombre}" id="nm_${s.id}" style="flex:2"><input type="number" value="${s.precio}" id="pm_${s.id}" style="flex:1"><input type="number" value="${s.duracion_min}" id="dm_${s.id}" style="width:60px"><button onclick="guardarServicioM('${s.id}')" style="width:50px">OK</button><button onclick="borrarServicio('${s.id}')" class="sec" style="width:36px">X</button></div>`;});
+const el=document.getElementById('serviciosMujeres'); if(el) el.innerHTML=h||'<div class="small">Agrega servicios mujer desde ADMIN</div>';
+const ad=document.getElementById('adminServiciosMujeres'); if(ad) ad.innerHTML=ah;
+const cliM=document.getElementById('listaServiciosMujeresCliente');
+if(cliM){
+  let hm='';
+  (data2||[]).forEach(s=>{
+    if(currentFilter==='barberia') return;
+    hm+=`<div style="background:#fff;color:#000;border-radius:12px;padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border-left:6px solid #FF8FAB"><div><b style="font-family:var(--font-title);letter-spacing:0.5px">${s.nombre.toUpperCase()}</b><div style="font-size:11px;color:#666;margin-top:2px">${s.duracion_min} MIN • El Moncho Mujeres</div></div><div style="text-align:right"><div style="font-family:var(--font-title);font-size:22px;color:#FF2E7A">$${s.precio}</div><button onclick="reservarServicio('${s.id}','${s.nombre}')" class="pink" style="width:auto;padding:8px 14px;font-size:10px;margin-top:6px">ELEGIR</button></div></div>`;
+  });
+  cliM.innerHTML=hm||'<div class="small" style="color:#000">Agrega servicios mujer desde ADMIN - se ven acá</div>';
+  cliM.style.display=(currentFilter==='barberia')?'none':'block';
+}
+
+}
+async function guardarServicio(id){const n=document.getElementById('n_'+id).value; const p=parseInt(document.getElementById('p_'+id).value); const d=parseInt(document.getElementById('d_'+id).value); await supabaseClient.from('servicios').update({nombre:n,precio:p,duracion_min:d}).eq('id',id); cargarServicios(); cargarServiciosMujeres();}
+async function guardarServicioM(id){const n=document.getElementById('nm_'+id).value; const p=parseInt(document.getElementById('pm_'+id).value); const d=parseInt(document.getElementById('dm_'+id).value); await supabaseClient.from('servicios').update({nombre:n,precio:p,duracion_min:d}).eq('id',id); cargarServiciosMujeres(); cargarServicios();}
+async function borrarServicio(id){if(!confirm('Borrar?')) return; await supabaseClient.from('servicios').delete().eq('id',id); cargarServicios(); cargarServiciosMujeres();}
+async function crearServicio(){const n=document.getElementById('newNombre').value; const p=parseInt(document.getElementById('newPrecio').value); const d=parseInt(document.getElementById('newDur').value)||30; if(!n||!p) return alert('Completa'); await supabaseClient.from('servicios').insert({nombre:n,precio:p,duracion_min:d}); document.getElementById('newNombre').value=''; document.getElementById('newPrecio').value=''; cargarServicios();}
+async function crearServicioMujer(){const n=document.getElementById('newNombreM').value; const p=parseInt(document.getElementById('newPrecioM').value); const d=parseInt(document.getElementById('newDurM').value)||60; if(!n||!p) return alert('Completa'); await supabaseClient.from('servicios').insert({nombre:n,precio:p,duracion_min:d}); document.getElementById('newNombreM').value=''; document.getElementById('newPrecioM').value=''; cargarServiciosMujeres(); cargarServicios();}
+
+async function cargarGaleria(){
+const c=document.getElementById('galeria'); const e=document.getElementById('estadoGaleria');
+if(!c) return;
+if(e) e.innerText='CARGANDO...';
+let {data,error}=await supabaseClient.from('galeria').select('*').order('created_at',{ascending:false}).limit(60);
+if(error){data=JSON.parse(localStorage.getItem('moncho_galeria')||'[]').map(x=>({id:x.id||'',titulo:x.titulo,tipo:x.tipo,imagen_url:x.img}));}
+if(!data||data.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">SIN CORTES AUN</div>'; if(e) e.innerText=''; cargarGaleriaAdmin(data||[]); return;}
+const filtrada = data.filter(i=> !['mujer','alisado','tintura','balayage','flequillo','novia','color'].includes((i.tipo||'').toLowerCase()));
+const lista = filtrada.length?filtrada:data;
+// PUBLICO: sin tachito, limpio para clientes
+c.innerHTML=''; lista.forEach(i=>{c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy"><div class="cap"><b>${(i.titulo||'CORTE').toUpperCase()}</b></div></div>`;}); 
+if(e) e.innerText='';
+cargarGaleriaAdmin(data||[]);
+}
+async function cargarGaleriaMujeres(){
+const c=document.getElementById('galeriaMujeres'); const e=document.getElementById('estadoGaleriaMujeres');
+if(!c) return;
+if(e) e.innerText='CARGANDO...';
+let {data,error}=await supabaseClient.from('galeria').select('*').order('created_at',{ascending:false}).limit(60);
+if(error){data=JSON.parse(localStorage.getItem('moncho_galeria_mujer')||'[]').map(x=>({id:x.id||'',titulo:x.titulo,tipo:x.tipo,imagen_url:x.img}));}
+if(!data||data.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">SIN TRABAJOS MUJERES AUN</div>'; if(e) e.innerText=''; cargarGaleriaMujeresAdmin([]); return;}
+const filtrada = data.filter(i=> ['mujer','alisado','color','tintura','balayage','flequillo','novia'].includes((i.tipo||'').toLowerCase()));
+const lista = filtrada.length?filtrada:data.slice(0,20);
+// PUBLICO: sin tachito
+c.innerHTML=''; 
+if(lista.length===0){c.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:#333">Subi trabajos tipo MUJER, COLOR, ALISADO</div>';} else {lista.forEach(i=>{c.innerHTML+=`<div class="foto"><img src="${i.imagen_url||i.img}" loading="lazy"><div class="cap"><b>${(i.titulo||'MUJER').toUpperCase()}</b></div></div>`;});}
+if(e) e.innerText='';
+cargarGaleriaMujeresAdmin(data||[]);
+}
+function cargarGaleriaAdmin(todas){
+ const adminList = document.getElementById('adminGaleria');
+ if(!adminList) return;
+ const barberia = (todas||[]).filter(i=> !['mujer','alisado','color','tintura','balayage','flequillo','novia'].includes((i.tipo||'').toLowerCase()));
+ let h='';
+ barberia.forEach(i=>{
+   h+=`<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;background:#111;padding:8px;border-radius:8px"><img src="${i.imagen_url}" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><div style="flex:1"><div style="font-size:11px;font-weight:800">${(i.titulo||'CORTE').toUpperCase()}</div><div style="font-size:9px;color:#888">${i.tipo||''} • ${i.id?i.id.slice(0,8):''}</div></div><button onclick="borrarFoto('${i.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px">🗑️ BORRAR</button></div>`;
+ });
+ adminList.innerHTML = h || '<div class="small">Sin fotos barberia. Subi desde pestaña CORTES.</div>';
+}
+function cargarGaleriaMujeresAdmin(todas){
+ const adminList = document.getElementById('adminGaleriaMujeres');
+ if(!adminList) return;
+ const mujeres = (todas||[]).filter(i=> ['mujer','alisado','color','tintura','balayage','flequillo','novia'].includes((i.tipo||'').toLowerCase()));
+ let h='';
+ mujeres.forEach(i=>{
+   h+=`<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;background:#111;padding:8px;border-radius:8px"><img src="${i.imagen_url}" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><div style="flex:1"><div style="font-size:11px;font-weight:800">${(i.titulo||'MUJER').toUpperCase()}</div><div style="font-size:9px;color:#888">${i.tipo||''}</div></div><button onclick="borrarFoto('${i.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px">🗑️ BORRAR</button></div>`;
+ });
+ adminList.innerHTML = h || '<div class="small">Sin fotos mujeres. Subi desde pestaña MUJERES.</div>';
+}
+async function borrarFoto(id){
+ if(!id) return alert('Esta foto es local, borra cache del navegador');
+ if(!confirm('¿Borrar esta foto de la galería?')) return;
+ const {error}=await supabaseClient.from('galeria').delete().eq('id',id);
+ if(error){alert('Error: '+error.message); return;}
+ alert('Foto borrada');
+ cargarGaleria(); cargarGaleriaMujeres();
+}
+async function subirCorte(){
+const file=document.getElementById('fileInput').files[0]; const titulo=document.getElementById('tituloCorte').value||'Corte Azara'; const tipo=document.getElementById('tipoCorte').value; if(!file) return alert('Elegi foto'); document.getElementById('uploadStatus').innerText='SUBIENDO...';
+const fn=`azara_${Date.now()}_${file.name.replace(/\s/g,'_')}`; const {error:upErr}=await supabaseClient.storage.from('cortes').upload(fn,file,{upsert:true});
+if(upErr){const r=new FileReader(); r.onload=e=>{const g=JSON.parse(localStorage.getItem('moncho_galeria')||'[]'); g.unshift({titulo,tipo,img:e.target.result}); localStorage.setItem('moncho_galeria',JSON.stringify(g)); document.getElementById('uploadStatus').innerText='GUARDADO'; cargarGaleria();}; r.readAsDataURL(file); return;}
+const {data:urlData}=supabaseClient.storage.from('cortes').getPublicUrl(fn); await supabaseClient.from('galeria').insert({titulo,tipo,imagen_url:urlData.publicUrl}); document.getElementById('uploadStatus').innerText='PUBLICADO PARA TODO EL MUNDO'; document.getElementById('fileInput').value=''; document.getElementById('preview').style.display='none'; cargarGaleria();
+}
+async function subirCorteMujer(){
+const file=document.getElementById('fileInputMujer').files[0]; const titulo=document.getElementById('tituloMujer').value||'Trabajo Mujer'; const tipo=document.getElementById('tipoMujer').value; if(!file) return alert('Elegi foto'); document.getElementById('uploadStatusMujer').innerText='SUBIENDO...';
+const fn=`mujer_${Date.now()}_${file.name.replace(/\s/g,'_')}`; const {error:upErr}=await supabaseClient.storage.from('cortes').upload(fn,file,{upsert:true});
+if(upErr){const r=new FileReader(); r.onload=e=>{const g=JSON.parse(localStorage.getItem('moncho_galeria_mujer')||'[]'); g.unshift({titulo,tipo,img:e.target.result}); localStorage.setItem('moncho_galeria_mujer',JSON.stringify(g)); document.getElementById('uploadStatusMujer').innerText='GUARDADO'; cargarGaleriaMujeres();}; r.readAsDataURL(file); return;}
+const {data:urlData}=supabaseClient.storage.from('cortes').getPublicUrl(fn); await supabaseClient.from('galeria').insert({titulo,tipo,imagen_url:urlData.publicUrl}); document.getElementById('uploadStatusMujer').innerText='PUBLICADO MUJERES'; document.getElementById('fileInputMujer').value=''; document.getElementById('previewMujer').style.display='none'; cargarGaleriaMujeres(); cargarGaleria();
+}
+const WHATSAPP_MONCHO = '5493758408368'; // Azara - tu numero. Si es Apostoles cambia a 5493758413920
+
+async function reservar(){
+ const nombre=document.getElementById('nombre').value.trim();
+ const whatsapp=document.getElementById('whatsapp').value.trim();
+ const fecha=document.getElementById('fecha').value;
+ const hora=document.getElementById('hora').value;
+ const servicioId=document.getElementById('servicioId').value;
+ const servicioNombre=document.getElementById('servicioId').options[document.getElementById('servicioId').selectedIndex]?.text||'Servicio';
+ if(!nombre||!whatsapp||!fecha||!hora||!servicioId) return alert('Completá todo');
+
+ // 1) Verificar disponibilidad REAL en Supabase
+ const {data:ocupado, error:errOcup} = await supabaseClient.from('turnos').select('id').eq('fecha',fecha).eq('hora',hora).limit(1);
+ if(errOcup){ console.warn(errOcup); }
+ if(ocupado && ocupado.length>0){
+   alert('❌ Ese horario YA está reservado, elegí otro');
+   return;
+ }
+
+ // 2) Guardar cliente (upsert por whatsapp)
+ const {data:cli, error:cliErr} = await supabaseClient.from('clientes').upsert({nombre,whatsapp},{onConflict:'whatsapp'}).select().single();
+ if(cliErr){ alert('Error cliente: '+cliErr.message); return; }
+
+ // 3) Guardar turno como confirmado
+ const {error:turnoErr} = await supabaseClient.from('turnos').insert({cliente_id:cli.id,fecha,hora,servicio_id:servicioId,estado:'confirmado'});
+ if(turnoErr){
+   if((turnoErr.message||'').toLowerCase().includes('duplicate') || (turnoErr.message||'').toLowerCase().includes('unique')){
+     alert('❌ Ese horario se acaba de ocupar, elegí otro');
+     return;
+   }
+   alert('Error turno: '+turnoErr.message); return;
+ }
+
+ // 4) Mensaje en la pagina al cliente: turno reservado y disponible
+ let msgBox=document.getElementById('msgReserva');
+ if(!msgBox){
+   msgBox=document.createElement('div');
+   msgBox.id='msgReserva';
+   msgBox.style.cssText='background:#00c851;color:#fff;padding:18px;border-radius:12px;margin-top:12px;font-weight:900;font-size:16px;text-align:center;line-height:1.4;border:3px solid #000';
+   const container=document.getElementById('tab-turnos');
+   if(container) container.querySelector('.card').appendChild(msgBox);
+ }
+ const fechaLinda=fecha.split('-').reverse().join('/');
+ msgBox.style.display='block';
+ msgBox.innerHTML=`✅ ¡TURNO CONFIRMADO!<br>${fechaLinda} - ${hora}hs<br><small style="display:block;margin-top:8px;font-weight:700;font-size:13px">Hola ${nombre}, tu turno está DISPONIBLE y ha sido reservado en El Moncho Azara.<br>Servicio: ${servicioNombre}<br><br>👉 Se abre WhatsApp para avisarle a Moncho. Dale a ENVIAR ▶️</small>`;
+
+ // 5) Mensaje que te llega a TU WhatsApp (5493758408368)
+ const textoParaVos=`*¡NUEVO TURNO CONFIRMADO!* %0A💈 El Moncho Azara%0A👤 ${encodeURIComponent(nombre)}%0A📱 ${encodeURIComponent(whatsapp)}%0A📅 ${fechaLinda}%0A⏰ ${hora}%0A✂️ ${encodeURIComponent(servicioNombre)}%0A%0A_Reservado desde la app_`;
+ window.open(`https://wa.me/${WHATSAPP_MONCHO}?text=${textoParaVos}`,'_blank');
+
+ cargarRegistro(); cargarClientes();
+}
+
+function reservarPromo(promo){const w=prompt('Tu WhatsApp para reservar promo '+promo); if(!w) return; window.open(`https://wa.me/${w.replace(/\D/g,'')}?text=Hola El Moncho, quiero la PROMO ${promo}`,'_blank');}
+async function cargarRegistro(){const {data}=await supabaseClient.from('turnos').select('*, clientes(nombre), servicios(nombre)').order('fecha',{ascending:false}).limit(50); if(!data) return; let h=''; data.forEach(t=>{h+=`<div class="line"><span>${t.fecha} ${t.hora} - ${t.clientes?.nombre||''} - ${t.servicios?.nombre||''}</span><div style="display:flex;gap:6px;align-items:center"><span style="font-size:9px;border:1px solid #333;padding:2px 6px">${t.estado}</span><button onclick="borrarTurno('${t.id}')" style="width:auto;padding:4px 8px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px">X</button></div></div>`;}); document.getElementById('registroCortes').innerHTML=h||'Sin registros';}
+async function borrarTurno(id){if(!confirm('¿Borrar este turno? Va a liberar el horario.')) return; const {error}=await supabaseClient.from('turnos').delete().eq('id',id); if(error){alert('Error: '+error.message); return;} alert('Turno borrado, horario liberado'); cargarRegistro(); cargarClientes();}
+async function cargarClientes(){
+const {data:cl}=await supabaseClient.from('clientes').select('*').order('nombre').limit(100);
+const {data:tu}=await supabaseClient.from('turnos').select('cliente_id');
+let h=''; 
+cl?.forEach(c=>{
+ const cnt=tu?.filter(t=>t.cliente_id===c.id).length||0;
+ const mod = cnt % 5; const progreso = mod === 0 && cnt>0 ? 5 : mod;
+ const isVip = Math.floor(cnt/5)>=1; const gratis = cnt>0 && cnt % 5 === 0;
+ let dots=''; for(let i=1;i<=5;i++){const done=i<=progreso; dots+=`<div class="dot ${done?'done':''}">${done?'✓':i}</div>`;}
+ const vipClass=isVip?'vip':''; const statusText=gratis?'¡GRATIS! 6to corte gratis - Es VIP GOLD':`${progreso}/5 cortes`;
+ const badge=isVip?'<span class="badge-vip">VIP GOLD</span>':'<span class="badge-vip" style="background:var(--gold);color:#000">GOLD</span>';
+ const isAlejandro = c.nombre.toLowerCase().includes('alejandro');
+ const borrarBtn = isAlejandro ? '' : `<button onclick="borrarCliente('${c.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px;margin-left:6px">🗑️ BORRAR</button>`;
+ const isAdmin = localStorage.getItem('admin')==='1';
+ const waClean = c.whatsapp.replace(/\D/g,'');
+ const waMasked = waClean.length>4 ? '•••• ••'+waClean.slice(-4) : '••••';
+ const waDisplay = isAdmin ? `${c.whatsapp} • ${cnt} cortes` : `${waMasked} • ${cnt} cortes`;
+ const nombreDisplay = isAdmin ? c.nombre.toUpperCase() : c.nombre.toUpperCase().split(' ')[0] + ' ' + (c.nombre.split(' ')[1]?.[0] ? c.nombre.split(' ')[1][0]+'.' : '');
+ const btnAction = gratis ? `canjearGratis('${c.id}','${c.nombre.replace(/'/g,"\\'")}','${waClean}')` : `window.open('https://wa.me/${waClean}','_blank')`;
+ const btnUno = isAdmin && cnt>1 ? `<button onclick="dejarEnUno('${c.id}','${c.nombre.replace(/'/g,"\\'")}')" style="width:auto;padding:6px 8px;background:#333;color:#fff;font-size:8px;border-radius:6px;margin-right:4px">1/5</button>` : '';
+ h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${nombreDisplay}</b><div style="display:flex;gap:6px">${badge}${borrarBtn}</div></div><div style="font-size:10px;opacity:0.7">${waDisplay}</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><div style="display:flex;gap:4px">${btnUno}<button onclick="${btnAction}" style="width:auto;padding:6px 12px;font-size:10px" class="sec ${gratis?'':''}" ${gratis?'style="background:var(--gold);color:#000;font-weight:900;border:0"':''}>${gratis?'CANJEAR 🎉':'WA'}</button></div></div></div>`;
+});
+document.getElementById('listaClientes').innerHTML=h||'<div class="small">Sin clientes.</div>';
+}
+async function borrarCliente(clienteId){
+ if(!confirm('¿Seguro que querés BORRAR esta tarjeta de cliente? Se borran también sus turnos.')) return;
+ const {error:errTurnos}=await supabaseClient.from('turnos').delete().eq('cliente_id',clienteId);
+ if(errTurnos){ console.warn(errTurnos); }
+ const {error}=await supabaseClient.from('clientes').delete().eq('id',clienteId);
+ if(error){alert('Error: '+error.message); return;}
+ alert('Cliente borrado');
+ cargarRegistro(); cargarClientes();
+}
+async function canjearGratis(clienteId,nombre,waClean){
+ if(!confirm(`¿Canjear el CORTE GRATIS VIP de ${nombre}?\n\nSe va a reiniciar su tarjeta a 0/5 y se le avisa por WhatsApp.`)) return;
+ // Borrar 5 turnos mas viejos de ese cliente
+ const {data:turnosViejos, error:errFetch} = await supabaseClient.from('turnos').select('id').eq('cliente_id',clienteId).order('fecha',{ascending:true}).limit(5);
+ if(errFetch){ alert('Error buscando turnos: '+errFetch.message); return; }
+ if(turnosViejos && turnosViejos.length>0){
+   const ids=turnosViejos.map(t=>t.id);
+   const {error:errDel}=await supabaseClient.from('turnos').delete().in('id',ids);
+   if(errDel){ alert('Error borrando: '+errDel.message); return; }
+ }
+ alert(`✅ ¡GRATIS CANJEADO para ${nombre}! Tarjeta reiniciada a 0/5`);
+ // Aviso WhatsApp
+ const texto=`*¡CORTE GRATIS VIP CANJEADO!* %0A💈 El Moncho Azara%0A👤 ${encodeURIComponent(nombre)}%0A🎉 Canjeó su 6to corte GRATIS%0A🔄 Tarjeta reiniciada a 0/5%0A%0A_Cliente VIP GOLD_`;
+ window.open(`https://wa.me/${waClean}?text=${texto}`,'_blank');
+ cargarRegistro(); cargarClientes();
+}
+async function dejarEnUno(clienteId, nombre){
+ if(!confirm(`¿Dejar a ${nombre} en 1 solo corte?\n\nSe borran 4 turnos y queda 1/5`)) return;
+ const {data:turnos, error:errFetch} = await supabaseClient.from('turnos').select('id').eq('cliente_id',clienteId).order('fecha',{ascending:false});
+ if(errFetch){ alert(errFetch.message); return; }
+ if(!turnos || turnos.length<=1){ alert('Ya tiene 1 o menos'); return; }
+ const idsBorrar = turnos.slice(0, turnos.length-1).map(t=>t.id); // deja el mas viejo
+ const {error:errDel}=await supabaseClient.from('turnos').delete().in('id',idsBorrar);
+ if(errDel){ alert(errDel.message); return; }
+ alert(`✅ ${nombre} ahora queda en 1/5`);
+ cargarRegistro(); cargarClientes();
+}
+function loginAdmin(){if(document.getElementById('adminPass').value==='moncho2026'){localStorage.setItem('admin','1'); checkAdmin();} else alert('Contraseña incorrecta');}
+function checkAdmin(){if(localStorage.getItem('admin')==='1'){document.getElementById('adminLogin').style.display='none'; document.getElementById('adminPanel').style.display='block'; cargarServicios(); cargarServiciosMujeres(); cargarPromos(); buildFontSelectors(); loadAppConfig();}}
+init();
+</script>
+</body>
+</html>
