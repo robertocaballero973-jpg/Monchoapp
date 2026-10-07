@@ -130,7 +130,14 @@ button.pink{background:#FF8FAB;color:#000}
 
 <div id="tab-turnos" style="display:none">
 <div class="pizarron"><div class="title">PIZARRON DE PRECIOS</div><div id="servicios"></div></div>
-<div class="card"><div class="card-title">RESERVAR TURNO</div><input id="nombre" placeholder="Tu nombre"><input id="whatsapp" placeholder="WhatsApp"><input id="fecha" type="date"><input id="hora" type="time"><select id="servicioId"><option value="">Elegi servicio</option></select><button onclick="reservar()">RESERVAR</button></div>
+<div class="card"><div class="card-title">RESERVAR TURNO</div>
+<input id="nombre" placeholder="Tu nombre"><input id="whatsapp" placeholder="WhatsApp">
+<label for="fecha" class="small">DÍA</label><input id="fecha" type="date">
+<div class="small" style="margin:0 0 10px;color:#999">ATENCIÓN: lunes a viernes 17 a 21 • sábados y domingos 9 a 18</div>
+<label for="servicioId" class="small">SERVICIO</label><select id="servicioId"><option value="">Elegí servicio</option></select>
+<label for="hora" class="small">HORARIOS DISPONIBLES</label><select id="hora" disabled><option value="">Elegí fecha y servicio primero</option></select>
+<div id="horariosStatus" class="small" aria-live="polite" style="margin:-4px 0 10px;color:#aaa"></div>
+<button onclick="reservar()">RESERVAR</button></div>
 <div class="card" style="background:var(--bg)"><div class="card-title">TARJETAS GOLD - 5 CORTES = GRATIS VIP</div><div id="listaClientes"></div></div>
 <div class="card"><div class="card-title">REGISTRO</div><div id="registroCortes" class="small"></div></div>
 </div>
@@ -327,6 +334,14 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredPr
 function instalar(){if(deferredPrompt){deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{deferredPrompt=null; document.getElementById('installBar').style.display='none';});}}
 async function init(){
 supabaseClient=window.supabase.createClient(SB_URL,SB_KEY);
+const fechaInput=document.getElementById('fecha');
+const servicioSelect=document.getElementById('servicioId');
+if(fechaInput){
+ const hoy=new Date();
+ fechaInput.min=new Date(hoy.getTime()-hoy.getTimezoneOffset()*60000).toISOString().slice(0,10);
+ fechaInput.addEventListener('change',cargarHorariosDisponibles);
+}
+if(servicioSelect) servicioSelect.addEventListener('change',cargarHorariosDisponibles);
 buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarRegistro(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
@@ -383,7 +398,7 @@ async function crearPromo(){
 
 let currentFilter='barberia';
 function filterServ(t){currentFilter=t; document.getElementById('f-barberia').style.background=t==='barberia'?'#000':'#1a1a1a'; document.getElementById('f-barberia').style.color=t==='barberia'?'#fff':'#666'; document.getElementById('f-mujeres').style.background=t==='mujeres'?'#000':'#1a1a1a'; document.getElementById('f-mujeres').style.color=t==='mujeres'?'#fff':'#666'; document.getElementById('f-todos').style.background=t==='todos'?'#000':'#1a1a1a'; document.getElementById('f-todos').style.color=t==='todos'?'#fff':'#666'; cargarServicios(); cargarServiciosMujeres(); }
-function reservarServicio(id,nombre){showTab('turnos'); setTimeout(()=>{document.getElementById('servicioId').value=id; document.getElementById('servicios').scrollIntoView({behavior:'smooth'});},300); }
+function reservarServicio(id,nombre){showTab('turnos'); setTimeout(()=>{const sel=document.getElementById('servicioId'); sel.value=id; sel.dispatchEvent(new Event('change')); document.getElementById('servicios').scrollIntoView({behavior:'smooth'});},300); }
 
 async function cargarServicios(){
 
@@ -506,6 +521,68 @@ const fn=`mujer_${Date.now()}_${file.name.replace(/\s/g,'_')}`; const {error:upE
 if(upErr){const r=new FileReader(); r.onload=e=>{const g=JSON.parse(localStorage.getItem('moncho_galeria_mujer')||'[]'); g.unshift({titulo,tipo,img:e.target.result}); localStorage.setItem('moncho_galeria_mujer',JSON.stringify(g)); document.getElementById('uploadStatusMujer').innerText='GUARDADO'; cargarGaleriaMujeres();}; r.readAsDataURL(file); return;}
 const {data:urlData}=supabaseClient.storage.from('cortes').getPublicUrl(fn); await supabaseClient.from('galeria').insert({titulo,tipo,imagen_url:urlData.publicUrl}); document.getElementById('uploadStatusMujer').innerText='PUBLICADO MUJERES'; document.getElementById('fileInputMujer').value=''; document.getElementById('previewMujer').style.display='none'; cargarGaleriaMujeres(); cargarGaleria();
 }
+const PASO_TURNO_MINUTOS = 15;
+let consultaHorariosActual = 0;
+function minutosHora(valor){
+ if(!valor) return NaN;
+ const partes=String(valor).slice(0,5).split(':').map(Number);
+ return partes.length===2 && partes.every(Number.isFinite) ? partes[0]*60+partes[1] : NaN;
+}
+function horaTexto(minutos){return `${String(Math.floor(minutos/60)).padStart(2,'0')}:${String(minutos%60).padStart(2,'0')}`;}
+function diaSemanaLocal(fecha){const [a,m,d]=fecha.split('-').map(Number); return new Date(a,m-1,d).getDay();}
+function turnoEstaActivo(turno){return !['cancelado','cancelada','anulado','anulada','cancelled'].includes(String(turno.estado||'').toLowerCase());}
+async function calcularHorariosDisponibles(fecha,servicioId){
+ const dia=diaSemanaLocal(fecha);
+ const {data:horario,error:errorHorario}=await supabaseClient.from('horarios_atencion').select('abre,cierra,activo').eq('dia_semana',dia).maybeSingle();
+ if(errorHorario) return {ok:false,mensaje:'No se pudieron leer los horarios de atención. Revisá la tabla horarios_atencion en Supabase.'};
+ if(!horario || !horario.activo) return {ok:true,slots:[],mensaje:'La barbería no atiende ese día.'};
+ const {data:servicio,error:errorServicio}=await supabaseClient.from('servicios').select('duracion_min').eq('id',servicioId).maybeSingle();
+ if(errorServicio || !servicio) return {ok:false,mensaje:'No se pudo leer la duración del servicio.'};
+ const duracion=Number(servicio.duracion_min);
+ if(!Number.isFinite(duracion) || duracion<=0) return {ok:false,mensaje:'Ese servicio no tiene una duración válida cargada.'};
+ const {data:turnos,error:errorTurnos}=await supabaseClient.from('turnos').select('hora,estado,servicio_id,servicios(duracion_min)').eq('fecha',fecha);
+ if(errorTurnos) return {ok:false,mensaje:'No se pudieron revisar los turnos ocupados.'};
+ const abre=minutosHora(horario.abre), cierra=minutosHora(horario.cierra);
+ if(!Number.isFinite(abre) || !Number.isFinite(cierra) || cierra<=abre) return {ok:false,mensaje:'El horario de atención guardado no es válido.'};
+ const hoy=new Date();
+ const hoyISO=new Date(hoy.getTime()-hoy.getTimezoneOffset()*60000).toISOString().slice(0,10);
+ const ahora=hoy.getHours()*60+hoy.getMinutes();
+ const primerInicio=fecha===hoyISO ? Math.ceil((ahora+1)/PASO_TURNO_MINUTOS)*PASO_TURNO_MINUTOS : abre;
+ const ocupados=(turnos||[]).filter(turnoEstaActivo).map(t=>{
+   const rel=Array.isArray(t.servicios)?t.servicios[0]:t.servicios;
+   const inicio=minutosHora(t.hora);
+   const largo=Number(rel?.duracion_min)||30;
+   return {inicio,fin:inicio+largo};
+ }).filter(x=>Number.isFinite(x.inicio));
+ const slots=[];
+ for(let inicio=Math.max(abre,primerInicio);inicio+duracion<=cierra;inicio+=PASO_TURNO_MINUTOS){
+   const fin=inicio+duracion;
+   const seSuperpone=ocupados.some(t=>inicio<t.fin && t.inicio<fin);
+   if(!seSuperpone) slots.push(horaTexto(inicio));
+ }
+ return {ok:true,slots,mensaje:slots.length?`${slots.length} horarios disponibles.`:'No quedan horarios libres para ese servicio y fecha.'};
+}
+async function cargarHorariosDisponibles(){
+ const id=++consultaHorariosActual;
+ const select=document.getElementById('hora');
+ const fecha=document.getElementById('fecha')?.value;
+ const servicioId=document.getElementById('servicioId')?.value;
+ const status=document.getElementById('horariosStatus');
+ if(!select) return;
+ select.disabled=true;
+ select.innerHTML='<option value="">Elegí fecha y servicio primero</option>';
+ if(status) status.textContent='';
+ if(!fecha || !servicioId) return;
+ select.innerHTML='<option value="">Buscando horarios libres…</option>';
+ const resultado=await calcularHorariosDisponibles(fecha,servicioId);
+ if(id!==consultaHorariosActual) return;
+ if(!resultado.ok){select.innerHTML='<option value="">No se pudieron cargar los horarios</option>'; if(status) status.textContent=resultado.mensaje; return;}
+ if(!resultado.slots.length){select.innerHTML='<option value="">No hay horarios disponibles</option>'; if(status) status.textContent=resultado.mensaje; return;}
+ select.innerHTML='<option value="">Elegí un horario</option>'+resultado.slots.map(h=>`<option value="${h}">${h}</option>`).join('');
+ select.disabled=false;
+ if(status) status.textContent=resultado.mensaje;
+}
+
 const WHATSAPP_MONCHO = '5493758408368'; // Azara - tu numero. Si es Apostoles cambia a 5493758413920
 
 async function reservar(){
@@ -517,11 +594,13 @@ async function reservar(){
  const servicioNombre=document.getElementById('servicioId').options[document.getElementById('servicioId').selectedIndex]?.text||'Servicio';
  if(!nombre||!whatsapp||!fecha||!hora||!servicioId) return alert('Completá todo');
 
- // 1) Verificar disponibilidad REAL en Supabase
- const {data:ocupado, error:errOcup} = await supabaseClient.from('turnos').select('id').eq('fecha',fecha).eq('hora',hora).limit(1);
- if(errOcup){ console.warn(errOcup); }
- if(ocupado && ocupado.length>0){
-   alert('❌ Ese horario YA está reservado, elegí otro');
+ // Revalidar el rango completo del servicio antes de guardar.
+ // Así también se evitan cruces entre servicios de distinta duración.
+ const disponibilidad=await calcularHorariosDisponibles(fecha,servicioId);
+ if(!disponibilidad.ok){alert(disponibilidad.mensaje); return;}
+ if(!disponibilidad.slots.includes(hora)){
+   alert('Ese horario ya no está disponible o el servicio no entra dentro del horario de atención. Elegí otro.');
+   await cargarHorariosDisponibles();
    return;
  }
 
@@ -557,6 +636,8 @@ async function reservar(){
  window.open(`https://wa.me/${WHATSAPP_MONCHO}?text=${textoParaVos}`,'_blank');
 
  cargarRegistro(); cargarClientes();
+ document.getElementById('hora').value='';
+ await cargarHorariosDisponibles();
 }
 
 function reservarPromo(promo){const w=prompt('Tu WhatsApp para reservar promo '+promo); if(!w) return; window.open(`https://wa.me/${w.replace(/\D/g,'')}?text=Hola El Moncho, quiero la PROMO ${promo}`,'_blank');}
