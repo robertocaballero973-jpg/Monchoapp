@@ -139,7 +139,7 @@ button.pink{background:#FF8FAB;color:#000}
 <div id="horariosStatus" class="small" aria-live="polite" style="margin:-4px 0 10px;color:#aaa"></div>
 <button onclick="reservar()">RESERVAR</button></div>
 <div class="card" style="background:var(--bg)"><div class="card-title">TARJETAS GOLD - 5 CORTES = GRATIS VIP</div><div id="listaClientes"></div></div>
-<div class="card"><div class="card-title">REGISTRO</div><div id="registroCortes" class="small"></div></div>
+
 </div>
 
 <div id="tab-admin" style="display:none">
@@ -242,6 +242,12 @@ button.pink{background:#FF8FAB;color:#000}
 <div id="adminGaleriaMujeres"></div>
 </div>
 
+<div class="admin-block">
+<div class="title">📅 TURNOS RESERVADOS</div>
+<div id="registroCortes" class="small">Ingresá al panel ADMIN para ver las reservas.</div>
+<button class="sec" onclick="cargarRegistro()" style="margin-top:10px;background:#000;color:#fff">ACTUALIZAR TURNOS</button>
+</div>
+
 </div>
 </div>
 
@@ -326,7 +332,7 @@ document.getElementById('tab-'+t).style.display='block';
 if(t==='cortes') cargarGaleria();
 if(t==='mujeres') {cargarGaleriaMujeres(); cargarServiciosMujeres();}
 if(t==='promos') cargarPromos();
-if(t==='turnos'){cargarServicios(); cargarClientes(); cargarRegistro();}
+if(t==='turnos'){cargarServicios(); cargarClientes();}
 if(t==='admin') checkAdmin();
 }
 function previewImg(i,target){const f=i.files[0]; if(!f) return; const r=new FileReader(); r.onload=e=>{document.getElementById(target).src=e.target.result; document.getElementById(target).style.display='block';}; r.readAsDataURL(f);}
@@ -344,9 +350,9 @@ if(fechaInput){
 if(servicioSelect) servicioSelect.addEventListener('change',cargarHorariosDisponibles);
 buildFontSelectors();
 await loadAppConfig();
-cargarServicios(); cargarGaleria(); cargarClientes(); cargarRegistro(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
+cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v5';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v6';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -641,13 +647,40 @@ async function reservar(){
  const textoParaVos=`*¡NUEVO TURNO CONFIRMADO!* %0A💈 El Moncho Azara%0A👤 ${encodeURIComponent(nombre)}%0A📱 ${encodeURIComponent(whatsapp)}%0A📅 ${fechaLinda}%0A⏰ ${hora}%0A✂️ ${encodeURIComponent(servicioNombre)}%0A%0A_Reservado desde la app_`;
  window.open(`https://wa.me/${WHATSAPP_MONCHO}?text=${textoParaVos}`,'_blank');
 
- cargarRegistro(); cargarClientes();
+ cargarClientes();
  document.getElementById('hora').value='';
  await cargarHorariosDisponibles();
 }
 
 function reservarPromo(promo){const w=prompt('Tu WhatsApp para reservar promo '+promo); if(!w) return; window.open(`https://wa.me/${w.replace(/\D/g,'')}?text=Hola El Moncho, quiero la PROMO ${promo}`,'_blank');}
-async function cargarRegistro(){const {data}=await supabaseClient.from('turnos').select('*, clientes(nombre), servicios(nombre)').order('fecha',{ascending:false}).limit(50); if(!data) return; let h=''; data.forEach(t=>{h+=`<div class="line"><span>${t.fecha} ${t.hora} - ${t.clientes?.nombre||''} - ${t.servicios?.nombre||''}</span><div style="display:flex;gap:6px;align-items:center"><span style="font-size:9px;border:1px solid #333;padding:2px 6px">${t.estado}</span><button onclick="borrarTurno('${t.id}')" style="width:auto;padding:4px 8px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px">X</button></div></div>`;}); document.getElementById('registroCortes').innerHTML=h||'Sin registros';}
+function escaparTextoRegistro(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function cargarRegistro(){
+ const cont=document.getElementById('registroCortes');
+ if(!cont) return;
+ if(localStorage.getItem('admin')!=='1'){cont.textContent='Ingresá al panel ADMIN para ver las reservas.'; return;}
+ cont.textContent='Cargando turnos...';
+ const {data:turnos,error:errorTurnos}=await supabaseClient.from('turnos').select('id,cliente_id,servicio_id,fecha,hora,estado').order('fecha',{ascending:false}).order('hora',{ascending:true}).limit(100);
+ if(errorTurnos){console.warn(errorTurnos);cont.textContent='No se pudieron cargar los turnos. Revisá los permisos de Supabase.';return;}
+ if(!turnos || !turnos.length){cont.textContent='Todavía no hay reservas.';return;}
+ const idsClientes=[...new Set(turnos.map(t=>t.cliente_id).filter(Boolean))];
+ const idsServicios=[...new Set(turnos.map(t=>t.servicio_id).filter(Boolean))];
+ let clientes=[],servicios=[];
+ if(idsClientes.length){const r=await supabaseClient.from('clientes').select('id,nombre').in('id',idsClientes);if(r.error) console.warn(r.error);else clientes=r.data||[];}
+ if(idsServicios.length){const r=await supabaseClient.from('servicios').select('id,nombre').in('id',idsServicios);if(r.error) console.warn(r.error);else servicios=r.data||[];}
+ const nombresClientes=new Map(clientes.map(c=>[String(c.id),c.nombre]));
+ const nombresServicios=new Map(servicios.map(s=>[String(s.id),s.nombre]));
+ let h='';
+ turnos.forEach(t=>{
+   const nombre=escaparTextoRegistro(nombresClientes.get(String(t.cliente_id))||'Cliente');
+   const servicio=escaparTextoRegistro(nombresServicios.get(String(t.servicio_id))||'Servicio');
+   const fecha=escaparTextoRegistro(t.fecha||'');
+   const hora=escaparTextoRegistro(String(t.hora||'').slice(0,5));
+   const estado=escaparTextoRegistro(t.estado||'');
+   const id=escaparTextoRegistro(t.id||'');
+   h+=`<div class="line"><span><b>${fecha} ${hora}</b> - ${nombre} - ${servicio}</span><div style="display:flex;gap:6px;align-items:center"><span style="font-size:9px;border:1px solid #333;padding:2px 6px">${estado}</span><button onclick="borrarTurno('${id}')" style="width:auto;padding:4px 8px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px">X</button></div></div>`;
+ });
+ cont.innerHTML=h;
+}
 async function borrarTurno(id){if(!confirm('¿Borrar este turno? Va a liberar el horario.')) return; const {error}=await supabaseClient.from('turnos').delete().eq('id',id); if(error){alert('Error: '+error.message); return;} alert('Turno borrado, horario liberado'); cargarRegistro(); cargarClientes();}
 async function cargarClientes(){
 const {data:cl}=await supabaseClient.from('clientes').select('*').order('nombre').limit(100);
@@ -710,7 +743,7 @@ async function dejarEnUno(clienteId, nombre){
  cargarRegistro(); cargarClientes();
 }
 function loginAdmin(){if(document.getElementById('adminPass').value==='moncho2026'){localStorage.setItem('admin','1'); checkAdmin();} else alert('Contraseña incorrecta');}
-function checkAdmin(){if(localStorage.getItem('admin')==='1'){document.getElementById('adminLogin').style.display='none'; document.getElementById('adminPanel').style.display='block'; cargarServicios(); cargarServiciosMujeres(); cargarPromos(); buildFontSelectors(); loadAppConfig();}}
+function checkAdmin(){if(localStorage.getItem('admin')==='1'){document.getElementById('adminLogin').style.display='none'; document.getElementById('adminPanel').style.display='block'; cargarServicios(); cargarServiciosMujeres(); cargarPromos(); buildFontSelectors(); loadAppConfig(); cargarRegistro();}}
 init();
 </script>
 </body>
