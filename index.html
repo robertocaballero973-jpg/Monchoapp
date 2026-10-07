@@ -346,7 +346,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarRegistro(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`self.addEventListener('install',e=>{e.waitUntil(caches.open('moncho-design-v4').then(c=>c.addAll(['./'])) )}); self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))})`;
+ const sw=`const C='moncho-design-v5';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -540,8 +540,15 @@ async function calcularHorariosDisponibles(fecha,servicioId){
  if(errorServicio || !servicio) return {ok:false,mensaje:'No se pudo leer la duración del servicio.'};
  const duracion=Number(servicio.duracion_min);
  if(!Number.isFinite(duracion) || duracion<=0) return {ok:false,mensaje:'Ese servicio no tiene una duración válida cargada.'};
- const {data:turnos,error:errorTurnos}=await supabaseClient.from('turnos').select('hora,estado,servicio_id,servicios(duracion_min)').eq('fecha',fecha);
+ const {data:turnos,error:errorTurnos}=await supabaseClient.from('turnos').select('hora,estado,servicio_id').eq('fecha',fecha);
  if(errorTurnos) return {ok:false,mensaje:'No se pudieron revisar los turnos ocupados.'};
+ const idsServicios=[...new Set((turnos||[]).filter(turnoEstaActivo).map(t=>t.servicio_id).filter(Boolean))];
+ const duraciones={};
+ if(idsServicios.length){
+   const {data:servicios,error:errorServicios}=await supabaseClient.from('servicios').select('id,duracion_min').in('id',idsServicios);
+   if(errorServicios) return {ok:false,mensaje:'No se pudieron leer las duraciones de los servicios ocupados.'};
+   (servicios||[]).forEach(s=>{duraciones[String(s.id)]=Number(s.duracion_min)||30;});
+ }
  const abre=minutosHora(horario.abre), cierra=minutosHora(horario.cierra);
  if(!Number.isFinite(abre) || !Number.isFinite(cierra) || cierra<=abre) return {ok:false,mensaje:'El horario de atención guardado no es válido.'};
  const hoy=new Date();
@@ -549,9 +556,8 @@ async function calcularHorariosDisponibles(fecha,servicioId){
  const ahora=hoy.getHours()*60+hoy.getMinutes();
  const primerInicio=fecha===hoyISO ? Math.ceil((ahora+1)/PASO_TURNO_MINUTOS)*PASO_TURNO_MINUTOS : abre;
  const ocupados=(turnos||[]).filter(turnoEstaActivo).map(t=>{
-   const rel=Array.isArray(t.servicios)?t.servicios[0]:t.servicios;
    const inicio=minutosHora(t.hora);
-   const largo=Number(rel?.duracion_min)||30;
+   const largo=duraciones[String(t.servicio_id)]||30;
    return {inicio,fin:inicio+largo};
  }).filter(x=>Number.isFinite(x.inicio));
  const slots=[];
