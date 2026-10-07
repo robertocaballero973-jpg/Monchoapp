@@ -88,15 +88,7 @@ button.pink{background:#FF8FAB;color:#000}
 
 <div id="tab-cortes">
 <div class="card" style="padding:0;border:0"><div id="galeria" class="galeria"></div><div id="estadoGaleria" class="small" style="padding:12px;text-align:center"></div></div>
-<div class="card">
-<div class="card-title">SUBIR CORTE</div>
-<img id="preview" class="preview">
-<input type="file" id="fileInput" accept="image/*" onchange="previewImg(this,'preview')">
-<input id="tituloCorte" placeholder="Titulo del corte">
-<select id="tipoCorte"><option value="fade">FADE</option><option value="clasico">CLASICO</option><option value="barba">BARBA</option><option value="nino">NIÑO</option><option value="color">COLOR</option></select>
-<button onclick="subirCorte()">PUBLICAR</button>
-<div id="uploadStatus" class="small" style="color:var(--gold);margin-top:8px"></div>
-</div>
+
 </div>
 
 
@@ -116,15 +108,7 @@ button.pink{background:#FF8FAB;color:#000}
 <div id="tab-mujeres" style="display:none">
 <div class="hero pink" style="padding:20px"><h1>EL MONCHO<br>MUJERES</h1><p>Corte, color, alisado, flequillo. Mismo barrio, misma tijera.</p></div>
 <div class="card" style="padding:0;border:0"><div id="galeriaMujeres" class="galeria"></div><div id="estadoGaleriaMujeres" class="small" style="padding:12px;text-align:center"></div></div>
-<div class="card">
-<div class="card-title">SUBIR TRABAJO MUJERES</div>
-<img id="previewMujer" class="preview">
-<input type="file" id="fileInputMujer" accept="image/*" onchange="previewImg(this,'previewMujer')">
-<input id="tituloMujer" placeholder="Ej: Balayage rubio, Alisado keratina">
-<select id="tipoMujer"><option value="mujer">CORTE MUJER</option><option value="color">COLOR</option><option value="alisado">ALISADO</option><option value="flequillo">FLEQUILLO</option><option value="novia">NOVIA / FIESTA</option></select>
-<button onclick="subirCorteMujer()" class="pink">PUBLICAR MUJERES</button>
-<div id="uploadStatusMujer" class="small" style="color:#FF8FAB;margin-top:8px"></div>
-</div>
+
 <div class="card" style="background:#fff;color:#000"><div class="card-title" style="color:#000">PRECIOS MUJERES</div><div id="serviciosMujeres"></div></div>
 </div>
 
@@ -145,6 +129,37 @@ button.pink{background:#FF8FAB;color:#000}
 <div id="tab-admin" style="display:none">
 <div class="card" id="adminLogin"><div class="card-title">ADMIN</div><input id="adminPass" type="password" placeholder="Contraseña"><button onclick="loginAdmin()">ENTRAR</button></div>
 <div id="adminPanel" style="display:none">
+<div class="admin-block" style="background:#141414;color:#fff;border:1px solid #393126">
+<div class="title">🔒 CARGA DE FOTOS · SOLO CUENTA AUTORIZADA</div>
+<div id="fotoAdminLogin">
+<div class="small" style="color:#ccc;margin-bottom:8px">Ingresá con tu usuario de Supabase Auth para subir o borrar fotos.</div>
+<input id="fotoAdminEmail" type="email" autocomplete="username" value="robertocaballero973@gmail.com" placeholder="Correo administrador">
+<input id="fotoAdminPassword" type="password" autocomplete="current-password" placeholder="Contraseña de Supabase Auth">
+<button onclick="iniciarSesionFotos()" style="background:var(--gold);color:#000">ENTRAR A CARGA DE FOTOS</button>
+<div id="fotoAuthStatus" class="small" style="margin-top:8px;color:#ccc"></div>
+</div>
+<div id="adminUploadControls" style="display:none">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px"><span class="small" style="color:#bbb">Sesión autorizada para cargar fotos.</span><button onclick="cerrarSesionFotos()" class="sec" style="width:auto;padding:7px 10px">CERRAR SESIÓN</button></div>
+<div class="card">
+<div class="card-title">SUBIR CORTE</div>
+<img id="preview" class="preview">
+<input type="file" id="fileInput" accept="image/*" onchange="previewImg(this,'preview')">
+<input id="tituloCorte" placeholder="Título del corte">
+<select id="tipoCorte"><option value="fade">FADE</option><option value="clasico">CLÁSICO</option><option value="barba">BARBA</option><option value="nino">NIÑO</option><option value="color">COLOR</option></select>
+<button onclick="subirCorte()">PUBLICAR</button>
+<div id="uploadStatus" class="small" style="color:var(--gold);margin-top:8px"></div>
+</div>
+<div class="card">
+<div class="card-title">SUBIR TRABAJO MUJERES</div>
+<img id="previewMujer" class="preview">
+<input type="file" id="fileInputMujer" accept="image/*" onchange="previewImg(this,'previewMujer')">
+<input id="tituloMujer" placeholder="Ej: Balayage rubio, alisado">
+<select id="tipoMujer"><option value="mujer">CORTE MUJER</option><option value="color">COLOR</option><option value="alisado">ALISADO</option><option value="flequillo">FLEQUILLO</option><option value="novia">NOVIA / FIESTA</option></select>
+<button onclick="subirCorteMujer()" class="pink">PUBLICAR MUJERES</button>
+<div id="uploadStatusMujer" class="small" style="color:#FF8FAB;margin-top:8px"></div>
+</div>
+</div>
+</div>
 
 <div class="admin-block" style="background:#111;color:#fff;border:1px solid #222">
 <div class="title" style="color:#fff">🎨 EDITAR MI APP - DISEÑO, COLORES, FUENTES</div>
@@ -254,7 +269,8 @@ button.pink{background:#FF8FAB;color:#000}
 <script>
 const SB_URL='https://qimbsyapqyckqbcdmhqv.supabase.co';
 const SB_KEY='sb_publishable_MFGovY05C3Q3wzfhIVWoeg_NChUts7c';
-let supabaseClient, deferredPrompt=null;
+const FOTO_ADMIN_EMAIL='robertocaballero973@gmail.com';
+let supabaseClient, deferredPrompt=null, fotoAdminAutenticado=false;
 let currentConfig = {gold:'#D4AF37', bg:'#0A0A0A', hero_bg:'#D4AF37', hero_text:'#000', font_title:"'Anton',sans-serif", font_body:"'Inter',sans-serif", radius:'14px', logo:'EL MONCHO', logo_span:'AZARA', logo_sub:'BARBERIA DE BARRIO • DESDE 2018 • AZARA', hero_title:'PUEBLO CHICO,<br>CORTE GRANDE.', hero_sub:'GOLD 5=GRATIS + VIP • Promos editables por vos • Mujeres • Diseño editable desde ADMIN'};
 
 const FONTS_TITLE = ["'Anton',sans-serif","'Bebas Neue',sans-serif","'Oswald',sans-serif","'Montserrat',sans-serif","'Poppins',sans-serif","'Archivo Black',sans-serif","'Alfa Slab One',cursive","'Righteous',cursive","'Staatliches',cursive","'Teko',sans-serif","'Bangers',cursive","'Permanent Marker',cursive","'Fjalla One',sans-serif","'Playfair Display',serif","'Inter',sans-serif","'Roboto',sans-serif","'Oswald',sans-serif","'Montserrat',sans-serif","'Bebas Neue',sans-serif","'Anton',sans-serif"];
@@ -340,6 +356,7 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredPr
 function instalar(){if(deferredPrompt){deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{deferredPrompt=null; document.getElementById('installBar').style.display='none';});}}
 async function init(){
 supabaseClient=window.supabase.createClient(SB_URL,SB_KEY);
+await refrescarAccesoFotos();
 const fechaInput=document.getElementById('fecha');
 const servicioSelect=document.getElementById('servicioId');
 if(fechaInput){
@@ -352,7 +369,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v6';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v7';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -495,7 +512,7 @@ function cargarGaleriaAdmin(todas){
  barberia.forEach(i=>{
    h+=`<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;background:#111;padding:8px;border-radius:8px"><img src="${i.imagen_url}" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><div style="flex:1"><div style="font-size:11px;font-weight:800">${(i.titulo||'CORTE').toUpperCase()}</div><div style="font-size:9px;color:#888">${i.tipo||''} • ${i.id?i.id.slice(0,8):''}</div></div><button onclick="borrarFoto('${i.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px">🗑️ BORRAR</button></div>`;
  });
- adminList.innerHTML = h || '<div class="small">Sin fotos barberia. Subi desde pestaña CORTES.</div>';
+ adminList.innerHTML = h || '<div class="small">Sin fotos de barbería. Subí desde ADMIN.</div>';
 }
 function cargarGaleriaMujeresAdmin(todas){
  const adminList = document.getElementById('adminGaleriaMujeres');
@@ -505,9 +522,10 @@ function cargarGaleriaMujeresAdmin(todas){
  mujeres.forEach(i=>{
    h+=`<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;background:#111;padding:8px;border-radius:8px"><img src="${i.imagen_url}" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><div style="flex:1"><div style="font-size:11px;font-weight:800">${(i.titulo||'MUJER').toUpperCase()}</div><div style="font-size:9px;color:#888">${i.tipo||''}</div></div><button onclick="borrarFoto('${i.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:10px;border-radius:6px">🗑️ BORRAR</button></div>`;
  });
- adminList.innerHTML = h || '<div class="small">Sin fotos mujeres. Subi desde pestaña MUJERES.</div>';
+ adminList.innerHTML = h || '<div class="small">Sin fotos de mujeres. Subí desde ADMIN.</div>';
 }
 async function borrarFoto(id){
+ if(!await exigirAdminFotos()) return;
  if(!id) return alert('Esta foto es local, borra cache del navegador');
  if(!confirm('¿Borrar esta foto de la galería?')) return;
  const {error}=await supabaseClient.from('galeria').delete().eq('id',id);
@@ -515,17 +533,73 @@ async function borrarFoto(id){
  alert('Foto borrada');
  cargarGaleria(); cargarGaleriaMujeres();
 }
+async function refrescarAccesoFotos(){
+ if(!supabaseClient) return false;
+ const {data,error}=await supabaseClient.auth.getSession();
+ const email=data?.session?.user?.email?.toLowerCase()||'';
+ fotoAdminAutenticado=!error && email===FOTO_ADMIN_EMAIL.toLowerCase();
+ const login=document.getElementById('fotoAdminLogin');
+ const controls=document.getElementById('adminUploadControls');
+ if(login) login.style.display=fotoAdminAutenticado?'none':'block';
+ if(controls) controls.style.display=fotoAdminAutenticado?'block':'none';
+ return fotoAdminAutenticado;
+}
+async function exigirAdminFotos(){
+ const ok=await refrescarAccesoFotos();
+ if(!ok) alert('Iniciá sesión con el usuario autorizado para gestionar fotos.');
+ return ok;
+}
+async function iniciarSesionFotos(){
+ const email=(document.getElementById('fotoAdminEmail').value||'').trim().toLowerCase();
+ const password=document.getElementById('fotoAdminPassword').value||'';
+ const status=document.getElementById('fotoAuthStatus');
+ if(email!==FOTO_ADMIN_EMAIL.toLowerCase()){if(status) status.textContent='Ese correo no está autorizado para gestionar fotos.';return;}
+ if(!password){if(status) status.textContent='Ingresá tu contraseña de Supabase Auth.';return;}
+ if(status) status.textContent='Verificando acceso...';
+ const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+ if(error){if(status) status.textContent='No se pudo iniciar sesión. Revisá que ese usuario exista en Supabase Auth y que la contraseña sea correcta.';return;}
+ document.getElementById('fotoAdminPassword').value='';
+ if(await refrescarAccesoFotos()){if(status) status.textContent='';alert('Sesión segura iniciada. Ya podés gestionar fotos.');}
+ else{await supabaseClient.auth.signOut();if(status) status.textContent='La sesión no corresponde al correo autorizado.';}
+}
+async function cerrarSesionFotos(){
+ await supabaseClient.auth.signOut();
+ fotoAdminAutenticado=false;
+ await refrescarAccesoFotos();
+}
 async function subirCorte(){
-const file=document.getElementById('fileInput').files[0]; const titulo=document.getElementById('tituloCorte').value||'Corte Azara'; const tipo=document.getElementById('tipoCorte').value; if(!file) return alert('Elegi foto'); document.getElementById('uploadStatus').innerText='SUBIENDO...';
-const fn=`azara_${Date.now()}_${file.name.replace(/\s/g,'_')}`; const {error:upErr}=await supabaseClient.storage.from('cortes').upload(fn,file,{upsert:true});
-if(upErr){const r=new FileReader(); r.onload=e=>{const g=JSON.parse(localStorage.getItem('moncho_galeria')||'[]'); g.unshift({titulo,tipo,img:e.target.result}); localStorage.setItem('moncho_galeria',JSON.stringify(g)); document.getElementById('uploadStatus').innerText='GUARDADO'; cargarGaleria();}; r.readAsDataURL(file); return;}
-const {data:urlData}=supabaseClient.storage.from('cortes').getPublicUrl(fn); await supabaseClient.from('galeria').insert({titulo,tipo,imagen_url:urlData.publicUrl}); document.getElementById('uploadStatus').innerText='PUBLICADO PARA TODO EL MUNDO'; document.getElementById('fileInput').value=''; document.getElementById('preview').style.display='none'; cargarGaleria();
+ if(!await exigirAdminFotos()) return;
+ const file=document.getElementById('fileInput').files[0];
+ const titulo=document.getElementById('tituloCorte').value||'Corte Azara';
+ const tipo=document.getElementById('tipoCorte').value;
+ if(!file) return alert('Elegí una foto');
+ document.getElementById('uploadStatus').innerText='SUBIENDO...';
+ const fn=`azara_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+ const {error:upErr}=await supabaseClient.storage.from('cortes').upload(fn,file,{upsert:false});
+ if(upErr){document.getElementById('uploadStatus').innerText='No se pudo subir la foto.';alert('Error al subir: '+upErr.message);return;}
+ const {data:urlData}=supabaseClient.storage.from('cortes').getPublicUrl(fn);
+ const {error:rowErr}=await supabaseClient.from('galeria').insert({titulo,tipo,imagen_url:urlData.publicUrl});
+ if(rowErr){await supabaseClient.storage.from('cortes').remove([fn]);document.getElementById('uploadStatus').innerText='No se pudo publicar la foto.';alert('Error al guardar la galería: '+rowErr.message);return;}
+ document.getElementById('uploadStatus').innerText='PUBLICADO PARA TODO EL MUNDO';
+ document.getElementById('fileInput').value='';document.getElementById('preview').style.display='none';
+ cargarGaleria();
 }
 async function subirCorteMujer(){
-const file=document.getElementById('fileInputMujer').files[0]; const titulo=document.getElementById('tituloMujer').value||'Trabajo Mujer'; const tipo=document.getElementById('tipoMujer').value; if(!file) return alert('Elegi foto'); document.getElementById('uploadStatusMujer').innerText='SUBIENDO...';
-const fn=`mujer_${Date.now()}_${file.name.replace(/\s/g,'_')}`; const {error:upErr}=await supabaseClient.storage.from('cortes').upload(fn,file,{upsert:true});
-if(upErr){const r=new FileReader(); r.onload=e=>{const g=JSON.parse(localStorage.getItem('moncho_galeria_mujer')||'[]'); g.unshift({titulo,tipo,img:e.target.result}); localStorage.setItem('moncho_galeria_mujer',JSON.stringify(g)); document.getElementById('uploadStatusMujer').innerText='GUARDADO'; cargarGaleriaMujeres();}; r.readAsDataURL(file); return;}
-const {data:urlData}=supabaseClient.storage.from('cortes').getPublicUrl(fn); await supabaseClient.from('galeria').insert({titulo,tipo,imagen_url:urlData.publicUrl}); document.getElementById('uploadStatusMujer').innerText='PUBLICADO MUJERES'; document.getElementById('fileInputMujer').value=''; document.getElementById('previewMujer').style.display='none'; cargarGaleriaMujeres(); cargarGaleria();
+ if(!await exigirAdminFotos()) return;
+ const file=document.getElementById('fileInputMujer').files[0];
+ const titulo=document.getElementById('tituloMujer').value||'Trabajo Mujer';
+ const tipo=document.getElementById('tipoMujer').value;
+ if(!file) return alert('Elegí una foto');
+ document.getElementById('uploadStatusMujer').innerText='SUBIENDO...';
+ const fn=`mujer_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+ const {error:upErr}=await supabaseClient.storage.from('cortes').upload(fn,file,{upsert:false});
+ if(upErr){document.getElementById('uploadStatusMujer').innerText='No se pudo subir la foto.';alert('Error al subir: '+upErr.message);return;}
+ const {data:urlData}=supabaseClient.storage.from('cortes').getPublicUrl(fn);
+ const {error:rowErr}=await supabaseClient.from('galeria').insert({titulo,tipo,imagen_url:urlData.publicUrl});
+ if(rowErr){await supabaseClient.storage.from('cortes').remove([fn]);document.getElementById('uploadStatusMujer').innerText='No se pudo publicar la foto.';alert('Error al guardar la galería: '+rowErr.message);return;}
+ document.getElementById('uploadStatusMujer').innerText='PUBLICADO MUJERES';
+ document.getElementById('fileInputMujer').value='';document.getElementById('previewMujer').style.display='none';
+ cargarGaleriaMujeres();cargarGaleria();
 }
 const PASO_TURNO_MINUTOS = 15;
 let consultaHorariosActual = 0;
