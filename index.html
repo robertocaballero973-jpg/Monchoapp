@@ -230,7 +230,7 @@ button.pink{background:#FF8FAB;color:#000}
 <button onclick="saveAppConfig()" style="background:var(--gold);color:#000;margin-top:12px">💾 GUARDAR TODO DISEÑO PARA TODO EL MUNDO</button>
 <button onclick="resetDesign()" class="sec" style="margin-top:8px">RESET A ORIGINAL</button>
 <div class="small" style="margin-top:8px;color:#666" id="designStatus"></div>
-<div class="small" style="margin-top:12px;color:#888">SQL para que quede online (correlo 1 vez):<br><code style="font-size:9px;word-break:break-all">CREATE TABLE IF NOT EXISTS app_config (id int PRIMARY KEY DEFAULT 1, gold text, bg text, hero_bg text, hero_text text, font_title text, font_body text, radius text, logo text, logo_span text, logo_sub text, hero_title text, hero_sub text, updated_at timestamp DEFAULT now()); ALTER TABLE app_config ENABLE ROW LEVEL SECURITY; DROP POLICY IF EXISTS "public all app_config" ON app_config; CREATE POLICY "public all app_config" ON app_config FOR ALL USING (true) WITH CHECK (true);</code></div>
+
 </div>
 
 <div class="admin-block">
@@ -369,7 +369,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v7';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v8';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -559,7 +559,11 @@ async function iniciarSesionFotos(){
  const {error}=await supabaseClient.auth.signInWithPassword({email,password});
  if(error){if(status) status.textContent='No se pudo iniciar sesión. Revisá que ese usuario exista en Supabase Auth y que la contraseña sea correcta.';return;}
  document.getElementById('fotoAdminPassword').value='';
- if(await refrescarAccesoFotos()){if(status) status.textContent='';alert('Sesión segura iniciada. Ya podés gestionar fotos.');}
+ if(await refrescarAccesoFotos()){
+ if(status) status.textContent='';
+ alert('Sesión segura iniciada. Ya podés gestionar fotos y datos administrativos.');
+ cargarRegistro();cargarClientes();
+}
  else{await supabaseClient.auth.signOut();if(status) status.textContent='La sesión no corresponde al correo autorizado.';}
 }
 async function cerrarSesionFotos(){
@@ -690,18 +694,23 @@ async function reservar(){
    return;
  }
 
- // 2) Guardar cliente (upsert por whatsapp)
- const {data:cli, error:cliErr} = await supabaseClient.from('clientes').upsert({nombre,whatsapp},{onConflict:'whatsapp'}).select().single();
- if(cliErr){ alert('Error cliente: '+cliErr.message); return; }
-
- // 3) Guardar turno como confirmado
- const {error:turnoErr} = await supabaseClient.from('turnos').insert({cliente_id:cli.id,fecha,hora,servicio_id:servicioId,estado:'confirmado'});
- if(turnoErr){
-   if((turnoErr.message||'').toLowerCase().includes('duplicate') || (turnoErr.message||'').toLowerCase().includes('unique')){
-     alert('❌ Ese horario se acaba de ocupar, elegí otro');
+ // La función segura valida servicio, horario y solapamientos en Supabase.
+ const {error:reservaErr} = await supabaseClient.rpc('reservar_turno', {
+   p_nombre:nombre,
+   p_whatsapp:whatsapp,
+   p_fecha:fecha,
+   p_hora:hora,
+   p_servicio_id:servicioId
+ });
+ if(reservaErr){
+   const errMsg=(reservaErr.message||'').toLowerCase();
+   if(errMsg.includes('horario_ocupado') || errMsg.includes('horario ocupado')){
+     alert('Ese horario acaba de ocuparse. Elegí otro.');
+     await cargarHorariosDisponibles();
      return;
    }
-   alert('Error turno: '+turnoErr.message); return;
+   alert('No se pudo confirmar el turno: '+reservaErr.message);
+   return;
  }
 
  // 4) Mensaje en la pagina al cliente: turno reservado y disponible
@@ -732,6 +741,7 @@ async function cargarRegistro(){
  const cont=document.getElementById('registroCortes');
  if(!cont) return;
  if(localStorage.getItem('admin')!=='1'){cont.textContent='Ingresá al panel ADMIN para ver las reservas.'; return;}
+ if(!await refrescarAccesoFotos()){cont.textContent='Iniciá sesión en Carga de fotos con tu cuenta Supabase para ver los datos privados.';return;}
  cont.textContent='Cargando turnos...';
  const {data:turnos,error:errorTurnos}=await supabaseClient.from('turnos').select('id,cliente_id,servicio_id,fecha,hora,estado').order('fecha',{ascending:false}).order('hora',{ascending:true}).limit(100);
  if(errorTurnos){console.warn(errorTurnos);cont.textContent='No se pudieron cargar los turnos. Revisá los permisos de Supabase.';return;}
@@ -757,8 +767,15 @@ async function cargarRegistro(){
 }
 async function borrarTurno(id){if(!confirm('¿Borrar este turno? Va a liberar el horario.')) return; const {error}=await supabaseClient.from('turnos').delete().eq('id',id); if(error){alert('Error: '+error.message); return;} alert('Turno borrado, horario liberado'); cargarRegistro(); cargarClientes();}
 async function cargarClientes(){
-const {data:cl}=await supabaseClient.from('clientes').select('*').order('nombre').limit(100);
-const {data:tu}=await supabaseClient.from('turnos').select('cliente_id');
+const list=document.getElementById('listaClientes');
+if(!list) return;
+if(localStorage.getItem('admin')!=='1' || !await refrescarAccesoFotos()){
+ list.innerHTML='<div class="small">El progreso individual de la tarjeta Gold se consulta desde ADMIN.</div>';
+ return;
+}
+const {data:cl,error:clErr}=await supabaseClient.from('clientes').select('*').order('nombre').limit(100);
+const {data:tu,error:tuErr}=await supabaseClient.from('turnos').select('cliente_id');
+if(clErr||tuErr){list.innerHTML='<div class="small">No se pudieron cargar las tarjetas. Iniciá sesión como administrador.</div>';return;}
 let h=''; 
 cl?.forEach(c=>{
  const cnt=tu?.filter(t=>t.cliente_id===c.id).length||0;
@@ -778,7 +795,7 @@ cl?.forEach(c=>{
  const btnUno = isAdmin && cnt>1 ? `<button onclick="dejarEnUno('${c.id}','${c.nombre.replace(/'/g,"\\'")}')" style="width:auto;padding:6px 8px;background:#333;color:#fff;font-size:8px;border-radius:6px;margin-right:4px">1/5</button>` : '';
  h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${nombreDisplay}</b><div style="display:flex;gap:6px">${badge}${borrarBtn}</div></div><div style="font-size:10px;opacity:0.7">${waDisplay}</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><div style="display:flex;gap:4px">${btnUno}<button onclick="${btnAction}" style="width:auto;padding:6px 12px;font-size:10px" class="sec ${gratis?'':''}" ${gratis?'style="background:var(--gold);color:#000;font-weight:900;border:0"':''}>${gratis?'CANJEAR 🎉':'WA'}</button></div></div></div>`;
 });
-document.getElementById('listaClientes').innerHTML=h||'<div class="small">Sin clientes.</div>';
+list.innerHTML=h||'<div class="small">Sin clientes.</div>';
 }
 async function borrarCliente(clienteId){
  if(!confirm('¿Seguro que querés BORRAR esta tarjeta de cliente? Se borran también sus turnos.')) return;
