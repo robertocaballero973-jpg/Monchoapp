@@ -127,19 +127,12 @@ button.pink{background:#FF8FAB;color:#000}
 </div>
 
 <div id="tab-admin" style="display:none">
-<div class="card" id="adminLogin"><div class="card-title">ADMIN</div><input id="adminPass" type="password" placeholder="Contraseña"><button onclick="loginAdmin()">ENTRAR</button></div>
+<div class="card" id="adminLogin"><div class="card-title">ADMIN · ACCESO SEGURO</div><div class="small" style="margin-bottom:8px;color:#bbb">Ingresá con tu cuenta autorizada de Supabase.</div><input id="adminEmail" type="email" autocomplete="username" value="robertocaballero973@gmail.com" placeholder="Correo administrador"><input id="adminPass" type="password" autocomplete="current-password" placeholder="Contraseña de Supabase Auth"><button onclick="loginAdmin()">ENTRAR</button><div id="adminAuthStatus" class="small" style="margin-top:8px;color:var(--gold)"></div></div>
 <div id="adminPanel" style="display:none">
 <div class="admin-block" style="background:#141414;color:#fff;border:1px solid #393126">
-<div class="title">🔒 CARGA DE FOTOS · SOLO CUENTA AUTORIZADA</div>
-<div id="fotoAdminLogin">
-<div class="small" style="color:#ccc;margin-bottom:8px">Ingresá con tu usuario de Supabase Auth para subir o borrar fotos.</div>
-<input id="fotoAdminEmail" type="email" autocomplete="username" value="robertocaballero973@gmail.com" placeholder="Correo administrador">
-<input id="fotoAdminPassword" type="password" autocomplete="current-password" placeholder="Contraseña de Supabase Auth">
-<button onclick="iniciarSesionFotos()" style="background:var(--gold);color:#000">ENTRAR A CARGA DE FOTOS</button>
-<div id="fotoAuthStatus" class="small" style="margin-top:8px;color:#ccc"></div>
-</div>
-<div id="adminUploadControls" style="display:none">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px"><span class="small" style="color:#bbb">Sesión autorizada para cargar fotos.</span><button onclick="cerrarSesionFotos()" class="sec" style="width:auto;padding:7px 10px">CERRAR SESIÓN</button></div>
+<div class="title">🔒 PANEL ADMIN · CUENTA AUTORIZADA</div>
+<div id="adminUploadControls" style="display:block">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px"><span class="small" style="color:#bbb">Sesión administrativa segura.</span><button onclick="cerrarSesionAdmin()" class="sec" style="width:auto;padding:7px 10px">CERRAR SESIÓN</button></div>
 <div class="card">
 <div class="card-title">SUBIR CORTE</div>
 <img id="preview" class="preview">
@@ -269,8 +262,9 @@ button.pink{background:#FF8FAB;color:#000}
 <script>
 const SB_URL='https://qimbsyapqyckqbcdmhqv.supabase.co';
 const SB_KEY='sb_publishable_MFGovY05C3Q3wzfhIVWoeg_NChUts7c';
-const FOTO_ADMIN_EMAIL='robertocaballero973@gmail.com';
-let supabaseClient, deferredPrompt=null, fotoAdminAutenticado=false;
+const ADMIN_EMAIL='robertocaballero973@gmail.com';
+const ADMIN_UID='e7f4ff2c-71e4-4178-a99f-fe04b6c87102';
+let supabaseClient, deferredPrompt=null, adminAutenticado=false;
 let currentConfig = {gold:'#D4AF37', bg:'#0A0A0A', hero_bg:'#D4AF37', hero_text:'#000', font_title:"'Anton',sans-serif", font_body:"'Inter',sans-serif", radius:'14px', logo:'EL MONCHO', logo_span:'AZARA', logo_sub:'BARBERIA DE BARRIO • DESDE 2018 • AZARA', hero_title:'PUEBLO CHICO,<br>CORTE GRANDE.', hero_sub:'GOLD 5=GRATIS + VIP • Promos editables por vos • Mujeres • Diseño editable desde ADMIN'};
 
 const FONTS_TITLE = ["'Anton',sans-serif","'Bebas Neue',sans-serif","'Oswald',sans-serif","'Montserrat',sans-serif","'Poppins',sans-serif","'Archivo Black',sans-serif","'Alfa Slab One',cursive","'Righteous',cursive","'Staatliches',cursive","'Teko',sans-serif","'Bangers',cursive","'Permanent Marker',cursive","'Fjalla One',sans-serif","'Playfair Display',serif","'Inter',sans-serif","'Roboto',sans-serif","'Oswald',sans-serif","'Montserrat',sans-serif","'Bebas Neue',sans-serif","'Anton',sans-serif"];
@@ -329,7 +323,7 @@ async function saveAppConfig(){
    if(error) throw error;
    document.getElementById('designStatus').innerText='✅ GUARDADO - TODO EL MUNDO VE EL NUEVO DISEÑO AL RECARGAR';
  }catch(e){
-   document.getElementById('designStatus').innerText='⚠️ Guardado local (corre el SQL de app_config en Supabase para que sea global). Error: '+e.message;
+   document.getElementById('designStatus').innerText='⚠️ No se pudo guardar. Revisá la sesión autorizada y los permisos de Supabase. Error: '+e.message;
  }
 }
 function resetDesign(){
@@ -369,7 +363,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v8';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v9';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -536,39 +530,26 @@ async function borrarFoto(id){
 async function refrescarAccesoFotos(){
  if(!supabaseClient) return false;
  const {data,error}=await supabaseClient.auth.getSession();
- const email=data?.session?.user?.email?.toLowerCase()||'';
- fotoAdminAutenticado=!error && email===FOTO_ADMIN_EMAIL.toLowerCase();
- const login=document.getElementById('fotoAdminLogin');
+ const user=data?.session?.user;
+ adminAutenticado=!error && user?.id===ADMIN_UID && user?.email?.toLowerCase()===ADMIN_EMAIL.toLowerCase();
+ const login=document.getElementById('adminLogin');
+ const panel=document.getElementById('adminPanel');
  const controls=document.getElementById('adminUploadControls');
- if(login) login.style.display=fotoAdminAutenticado?'none':'block';
- if(controls) controls.style.display=fotoAdminAutenticado?'block':'none';
- return fotoAdminAutenticado;
+ if(login) login.style.display=adminAutenticado?'none':'block';
+ if(panel) panel.style.display=adminAutenticado?'block':'none';
+ if(controls) controls.style.display=adminAutenticado?'block':'none';
+ return adminAutenticado;
 }
 async function exigirAdminFotos(){
  const ok=await refrescarAccesoFotos();
- if(!ok) alert('Iniciá sesión con el usuario autorizado para gestionar fotos.');
+ if(!ok) alert('Iniciá sesión en ADMIN con la cuenta Supabase autorizada.');
  return ok;
 }
-async function iniciarSesionFotos(){
- const email=(document.getElementById('fotoAdminEmail').value||'').trim().toLowerCase();
- const password=document.getElementById('fotoAdminPassword').value||'';
- const status=document.getElementById('fotoAuthStatus');
- if(email!==FOTO_ADMIN_EMAIL.toLowerCase()){if(status) status.textContent='Ese correo no está autorizado para gestionar fotos.';return;}
- if(!password){if(status) status.textContent='Ingresá tu contraseña de Supabase Auth.';return;}
- if(status) status.textContent='Verificando acceso...';
- const {error}=await supabaseClient.auth.signInWithPassword({email,password});
- if(error){if(status) status.textContent='No se pudo iniciar sesión. Revisá que ese usuario exista en Supabase Auth y que la contraseña sea correcta.';return;}
- document.getElementById('fotoAdminPassword').value='';
- if(await refrescarAccesoFotos()){
- if(status) status.textContent='';
- alert('Sesión segura iniciada. Ya podés gestionar fotos y datos administrativos.');
- cargarRegistro();cargarClientes();
-}
- else{await supabaseClient.auth.signOut();if(status) status.textContent='La sesión no corresponde al correo autorizado.';}
-}
-async function cerrarSesionFotos(){
+async function cerrarSesionAdmin(){
  await supabaseClient.auth.signOut();
- fotoAdminAutenticado=false;
+ adminAutenticado=false;
+ localStorage.removeItem('admin');
+ document.getElementById('adminPass').value='';
  await refrescarAccesoFotos();
 }
 async function subirCorte(){
@@ -740,8 +721,7 @@ function escaparTextoRegistro(v){return String(v??'').replace(/[&<>"']/g,c=>({'&
 async function cargarRegistro(){
  const cont=document.getElementById('registroCortes');
  if(!cont) return;
- if(localStorage.getItem('admin')!=='1'){cont.textContent='Ingresá al panel ADMIN para ver las reservas.'; return;}
- if(!await refrescarAccesoFotos()){cont.textContent='Iniciá sesión en Carga de fotos con tu cuenta Supabase para ver los datos privados.';return;}
+ if(!await refrescarAccesoFotos()){cont.textContent='Iniciá sesión en ADMIN para ver los datos privados.';return;}
  cont.textContent='Cargando turnos...';
  const {data:turnos,error:errorTurnos}=await supabaseClient.from('turnos').select('id,cliente_id,servicio_id,fecha,hora,estado').order('fecha',{ascending:false}).order('hora',{ascending:true}).limit(100);
  if(errorTurnos){console.warn(errorTurnos);cont.textContent='No se pudieron cargar los turnos. Revisá los permisos de Supabase.';return;}
@@ -769,7 +749,7 @@ async function borrarTurno(id){if(!confirm('¿Borrar este turno? Va a liberar el
 async function cargarClientes(){
 const list=document.getElementById('listaClientes');
 if(!list) return;
-if(localStorage.getItem('admin')!=='1' || !await refrescarAccesoFotos()){
+if(!await refrescarAccesoFotos()){
  list.innerHTML='<div class="small">El progreso individual de la tarjeta Gold se consulta desde ADMIN.</div>';
  return;
 }
@@ -786,7 +766,7 @@ cl?.forEach(c=>{
  const badge=isVip?'<span class="badge-vip">VIP GOLD</span>':'<span class="badge-vip" style="background:var(--gold);color:#000">GOLD</span>';
  const isAlejandro = c.nombre.toLowerCase().includes('alejandro');
  const borrarBtn = isAlejandro ? '' : `<button onclick="borrarCliente('${c.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px;margin-left:6px">🗑️ BORRAR</button>`;
- const isAdmin = localStorage.getItem('admin')==='1';
+ const isAdmin = adminAutenticado;
  const waClean = c.whatsapp.replace(/\D/g,'');
  const waMasked = waClean.length>4 ? '•••• ••'+waClean.slice(-4) : '••••';
  const waDisplay = isAdmin ? `${c.whatsapp} • ${cnt} cortes` : `${waMasked} • ${cnt} cortes`;
@@ -833,8 +813,30 @@ async function dejarEnUno(clienteId, nombre){
  alert(`✅ ${nombre} ahora queda en 1/5`);
  cargarRegistro(); cargarClientes();
 }
-function loginAdmin(){if(document.getElementById('adminPass').value==='moncho2026'){localStorage.setItem('admin','1'); checkAdmin();} else alert('Contraseña incorrecta');}
-function checkAdmin(){if(localStorage.getItem('admin')==='1'){document.getElementById('adminLogin').style.display='none'; document.getElementById('adminPanel').style.display='block'; cargarServicios(); cargarServiciosMujeres(); cargarPromos(); buildFontSelectors(); loadAppConfig(); cargarRegistro();}}
+async function loginAdmin(){
+ const email=(document.getElementById('adminEmail').value||'').trim().toLowerCase();
+ const password=document.getElementById('adminPass').value||'';
+ const status=document.getElementById('adminAuthStatus');
+ if(email!==ADMIN_EMAIL.toLowerCase()){if(status) status.textContent='Ese correo no está autorizado.';return;}
+ if(!password){if(status) status.textContent='Ingresá tu contraseña de Supabase Auth.';return;}
+ if(status) status.textContent='Verificando acceso...';
+ const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+ if(error){if(status) status.textContent='No se pudo iniciar sesión. Revisá la contraseña de Supabase Auth.';return;}
+ if(data?.user?.id!==ADMIN_UID){await supabaseClient.auth.signOut();if(status) status.textContent='Esta cuenta no está autorizada.';await refrescarAccesoFotos();return;}
+ document.getElementById('adminPass').value='';
+ if(status) status.textContent='';
+ await checkAdmin();
+}
+async function checkAdmin(){
+ if(!await refrescarAccesoFotos()) return;
+ cargarServicios();
+ cargarServiciosMujeres();
+ cargarPromos();
+ buildFontSelectors();
+ await loadAppConfig();
+ cargarRegistro();
+ cargarClientes();
+}
 init();
 </script>
 </body>
