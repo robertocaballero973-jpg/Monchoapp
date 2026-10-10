@@ -82,6 +82,25 @@ button.pink{background:#FF8FAB;color:#000}
 .fin-close-result{font-size:12px;line-height:1.8;margin-top:8px}
 .fin-actions{display:flex;gap:6px;flex-wrap:wrap}.fin-actions button{width:auto;padding:6px 9px;font-family:var(--font-body);font-size:10px;letter-spacing:0}
 @media(max-width:380px){.finance-grid,.fin-form-grid{grid-template-columns:1fr}}
+
+.admin-shortcuts{background:#141414;border:1px solid #383128;border-radius:12px;padding:12px;margin:10px 0 14px;color:#fff}
+.admin-shortcuts-title{font-size:10px;letter-spacing:1.4px;font-weight:900;color:#bbb;margin-bottom:9px}
+.admin-shortcut-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.admin-shortcut-grid button{font-family:var(--font-body);font-size:10px;letter-spacing:.2px;padding:10px 6px;background:#252525;color:#fff;border:1px solid #444}
+.admin-shortcut-grid button:first-child{background:var(--gold);color:#000;border-color:var(--gold)}
+.admin-accordion{display:block;background:#fff;color:#111;border:1px solid #d6d6d6;border-radius:12px;margin:10px 0;overflow:hidden;scroll-margin-top:12px}
+.admin-accordion>summary{list-style:none;cursor:pointer;user-select:none;background:#161616;color:#fff;padding:15px 14px;font-weight:900;font-size:12px;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.admin-accordion>summary::-webkit-details-marker{display:none}
+.admin-accordion>summary:after{content:'+';font-size:20px;line-height:1;color:var(--gold)}
+.admin-accordion[open]>summary{background:var(--gold);color:#111}
+.admin-accordion[open]>summary:after{content:'−';color:#111}
+.admin-accordion-body{padding:10px;background:#f7f7f7}
+.admin-accordion-body>.admin-block{margin:0 0 10px}
+.admin-accordion-body>.admin-block:last-child{margin-bottom:0}
+.admin-accordion-body>.admin-block[style*="background:#111"]{background:#111!important}
+.admin-accordion-body>.admin-block[style*="#1a0a14"]{background:#1a0a14!important}
+.admin-accordion-body>.admin-block>.title{margin-bottom:9px}
+@media(max-width:380px){.admin-shortcut-grid button{font-size:9px;padding:9px 4px}.admin-accordion>summary{font-size:11px}}
 </style>
 </head>
 <body>
@@ -151,7 +170,7 @@ button.pink{background:#FF8FAB;color:#000}
 <div class="title">🔒 PANEL ADMIN · CUENTA AUTORIZADA</div>
 <div id="adminUploadControls" style="display:block">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px"><span class="small" style="color:#bbb">Sesión administrativa segura.</span><button onclick="cerrarSesionAdmin()" class="sec" style="width:auto;padding:7px 10px">CERRAR SESIÓN</button></div>
-<div class="card">
+<details class="admin-accordion" id="adminSubirTrabajos"><summary>📷 Subir trabajos a la galería</summary><div class="admin-accordion-body"><div class="card">
 <div class="card-title">SUBIR CORTE</div>
 <img id="preview" class="preview">
 <input type="file" id="fileInput" accept="image/*" onchange="previewImg(this,'preview')">
@@ -168,11 +187,55 @@ button.pink{background:#FF8FAB;color:#000}
 <select id="tipoMujer"><option value="mujer">CORTE MUJER</option><option value="color">COLOR</option><option value="alisado">ALISADO</option><option value="flequillo">FLEQUILLO</option><option value="novia">NOVIA / FIESTA</option></select>
 <button onclick="subirCorteMujer()" class="pink">PUBLICAR MUJERES</button>
 <div id="uploadStatusMujer" class="small" style="color:#FF8FAB;margin-top:8px"></div>
-</div>
+</div></div></details>
 </div>
 </div>
 
-<div class="admin-block" style="background:#111;color:#fff;border:1px solid #222">
+<div class="admin-shortcuts"><div class="admin-shortcuts-title">ACCESO RÁPIDO · ADMIN</div><div class="admin-shortcut-grid"><button onclick="abrirSeccionAdmin('adminFinanzas')">💰 Finanzas</button><button onclick="abrirSeccionAdmin('adminTurnos')">📅 Turnos</button><button onclick="abrirSeccionAdmin('adminComercial')">✂️ Servicios y promos</button><button onclick="abrirSeccionAdmin('adminGalerias')">📸 Galerías</button><button onclick="abrirSeccionAdmin('adminDiseno')">🎨 Diseño</button></div></div><details class="admin-accordion" id="adminFinanzas" open><summary>💰 Finanzas · caja y movimientos</summary><div class="admin-accordion-body"><div class="admin-block" id="monchoFinanzas">
+<div class="title">💰 FINANZAS · CAJA Y MOVIMIENTOS</div>
+<div class="small">Registro manual de ingresos y gastos. No procesa pagos. Solo visible con tu sesión ADMIN.</div>
+<div class="fin-subtitle">Resumen del período</div>
+<div class="fin-form-grid">
+ <div class="fin-field"><label for="finDesde">Desde</label><input id="finDesde" type="date"></div>
+ <div class="fin-field"><label for="finHasta">Hasta</label><input id="finHasta" type="date"></div>
+</div>
+<button class="sec" onclick="cargarFinanzas()" style="margin:0 0 8px;background:#000;color:#fff">ACTUALIZAR RESUMEN</button>
+<div id="finResumen" class="finance-grid"></div>
+<div id="finEstado" class="fin-status" aria-live="polite"></div>
+
+<div class="fin-subtitle">Registrar ingreso o gasto</div>
+<div class="fin-form-grid">
+ <div class="fin-field"><label for="finTipo">Tipo</label><select id="finTipo" onchange="actualizarCategoriasCaja()"><option value="ingreso">Ingreso</option><option value="gasto">Gasto</option><option value="aporte">Aporte de capital</option><option value="retiro">Retiro del dueño</option></select></div>
+ <div class="fin-field"><label for="finFecha">Fecha</label><input id="finFecha" type="date"></div>
+ <div class="fin-field"><label for="finCategoria">Categoría</label><select id="finCategoria"></select></div>
+ <div class="fin-field"><label for="finMedio">Medio de pago</label><select id="finMedio"><option value="efectivo">Efectivo</option><option value="transferencia">Transferencia / QR</option><option value="tarjeta">Débito / crédito</option><option value="otro">Otro</option></select></div>
+ <div class="fin-field" style="grid-column:1/-1"><label for="finConcepto">Concepto</label><input id="finConcepto" maxlength="120" placeholder="Ej.: Corte, venta de producto, compra de insumos"></div>
+ <div class="fin-field"><label for="finImporte">Importe ($)</label><input id="finImporte" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0"></div>
+ <div class="fin-field"><label for="finTurno">Vincular turno (opcional)</label><select id="finTurno" onchange="seleccionarTurnoFinanzas()"><option value="">Sin turno vinculado</option></select></div>
+ <div class="fin-field" style="grid-column:1/-1"><label for="finNota">Nota (opcional)</label><textarea id="finNota" rows="2" maxlength="400" placeholder="Detalle para recordar"></textarea></div>
+</div>
+<div class="fin-actions"><button id="finGuardarBtn" onclick="guardarMovimientoCaja()" style="background:#000;color:#fff">GUARDAR MOVIMIENTO</button><button id="finCancelarEdicion" class="sec" onclick="cancelarEdicionCaja()" style="display:none">CANCELAR EDICIÓN</button></div>
+<div id="finFormularioEstado" class="fin-status" aria-live="polite"></div>
+
+<div class="fin-subtitle">Apertura y cierre de efectivo</div>
+<div class="small">El esperado suma apertura, ingresos y aportes en efectivo; resta gastos y retiros. Comparalo con el efectivo contado.</div>
+<div class="fin-close-box">
+ <div class="fin-form-grid">
+  <div class="fin-field"><label for="finCierreFecha">Día</label><input id="finCierreFecha" type="date" onchange="cargarCierreCaja()"></div>
+  <div class="fin-field"><label for="finApertura">Efectivo de apertura ($)</label><input id="finApertura" type="number" min="0" step="0.01" inputmode="decimal" value="0" oninput="actualizarResumenCierreCaja()"></div>
+  <div class="fin-field"><label for="finContado">Efectivo contado al cierre ($)</label><input id="finContado" type="number" min="0" step="0.01" inputmode="decimal" value="0" oninput="actualizarResumenCierreCaja()"></div>
+  <div class="fin-field"><label for="finCierreNota">Nota de cierre</label><input id="finCierreNota" maxlength="250" placeholder="Opcional"></div>
+ </div>
+ <div id="finCierreResultado" class="fin-close-result"></div>
+ <button class="sec" onclick="guardarCierreCaja()" style="margin-top:8px;background:#000;color:#fff">GUARDAR CIERRE DEL DÍA</button>
+ <div id="finCierreEstado" class="fin-status" aria-live="polite"></div>
+</div>
+
+<div class="fin-subtitle">Movimientos del período</div>
+<div class="finance-table-wrap"><table class="finance-table"><thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Categoría</th><th>Medio</th><th>Importe</th><th>Turno</th><th>Acciones</th></tr></thead><tbody id="finMovimientosBody"><tr><td colspan="8">Cargando...</td></tr></tbody></table></div>
+<div class="small" style="margin-top:8px">Los cierres y movimientos se guardan en Supabase con acceso restringido a tu cuenta administradora.</div>
+</div></div></details>
+<details class="admin-accordion" id="adminDiseno"><summary>🎨 Diseño, letras y colores</summary><div class="admin-accordion-body"><div class="admin-block" style="background:#111;color:#fff;border:1px solid #222">
 <div class="title" style="color:#fff">🎨 EDITAR MI APP - DISEÑO, COLORES, FUENTES</div>
 <div class="small" style="color:#aaa;margin-bottom:12px">Todo lo que cambies acá se guarda en Supabase y se actualiza para TODO EL MUNDO al toque, sin subir a Vercel.</div>
 
@@ -242,9 +305,9 @@ button.pink{background:#FF8FAB;color:#000}
 <button onclick="resetDesign()" class="sec" style="margin-top:8px">RESET A ORIGINAL</button>
 <div class="small" style="margin-top:8px;color:#666" id="designStatus"></div>
 
-</div>
+</div></div></details>
 
-<div class="admin-block">
+<details class="admin-accordion" id="adminComercial"><summary>✂️ Servicios y promociones</summary><div class="admin-accordion-body"><div class="admin-block">
 <div class="title">🔥 PROMOS - EDITABLES 100% POR VOS</div>
 <div id="adminPromos"></div>
 <div style="border-top:1px solid #eee;margin-top:12px;padding-top:12px">
@@ -256,9 +319,9 @@ button.pink{background:#FF8FAB;color:#000}
 </div>
 
 <div class="admin-block"><div class="title">PRECIOS BARBERIA</div><div id="adminServicios"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="newNombre" placeholder="Nuevo servicio"><input id="newPrecio" type="number" placeholder="$" style="width:90px"><input id="newDur" type="number" placeholder="min" style="width:70px"></div><button onclick="crearServicio()" class="sec" style="margin-top:8px;background:#000;color:#fff">CREAR</button></div>
-<div class="admin-block"><div class="title">PRECIOS MUJERES</div><div id="adminServiciosMujeres"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="newNombreM" placeholder="Nuevo servicio mujer"><input id="newPrecioM" type="number" placeholder="$" style="width:90px"><input id="newDurM" type="number" placeholder="min" style="width:70px"></div><button onclick="crearServicioMujer()" class="sec" style="margin-top:8px;background:#000;color:#fff">CREAR MUJERES</button></div>
+<div class="admin-block"><div class="title">PRECIOS MUJERES</div><div id="adminServiciosMujeres"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="newNombreM" placeholder="Nuevo servicio mujer"><input id="newPrecioM" type="number" placeholder="$" style="width:90px"><input id="newDurM" type="number" placeholder="min" style="width:70px"></div><button onclick="crearServicioMujer()" class="sec" style="margin-top:8px;background:#000;color:#fff">CREAR MUJERES</button></div></div></details>
 
-<div class="admin-block" style="background:#111;color:#fff;border:1px solid #222">
+<details class="admin-accordion" id="adminGalerias"><summary>📸 Galería · publicar y borrar trabajos</summary><div class="admin-accordion-body"><div class="admin-block" style="background:#111;color:#fff;border:1px solid #222">
 <div class="title" style="color:#fff">📸 GALERIA - BORRAR FOTOS BARBERIA</div>
 <div id="adminGaleria"></div>
 </div>
@@ -266,58 +329,15 @@ button.pink{background:#FF8FAB;color:#000}
 <div class="admin-block" style="background:#1a0a14;color:#fff;border:1px solid #332">
 <div class="title" style="color:#FF8FAB">📸 GALERIA - BORRAR FOTOS MUJERES</div>
 <div id="adminGaleriaMujeres"></div>
-</div>
+</div></div></details>
 
-<div class="admin-block">
+<details class="admin-accordion" id="adminTurnos"><summary>📅 Turnos reservados</summary><div class="admin-accordion-body"><div class="admin-block">
 <div class="title">📅 TURNOS RESERVADOS</div>
 <div id="registroCortes" class="small">Ingresá al panel ADMIN para ver las reservas.</div>
 <button class="sec" onclick="cargarRegistro()" style="margin-top:10px;background:#000;color:#fff">ACTUALIZAR TURNOS</button>
-</div>
+</div></div></details>
 
-<div class="admin-block" id="monchoFinanzas">
-<div class="title">💰 FINANZAS · CAJA Y MOVIMIENTOS</div>
-<div class="small">Registro manual de ingresos y gastos. No procesa pagos. Solo visible con tu sesión ADMIN.</div>
-<div class="fin-subtitle">Resumen del período</div>
-<div class="fin-form-grid">
- <div class="fin-field"><label for="finDesde">Desde</label><input id="finDesde" type="date"></div>
- <div class="fin-field"><label for="finHasta">Hasta</label><input id="finHasta" type="date"></div>
-</div>
-<button class="sec" onclick="cargarFinanzas()" style="margin:0 0 8px;background:#000;color:#fff">ACTUALIZAR RESUMEN</button>
-<div id="finResumen" class="finance-grid"></div>
-<div id="finEstado" class="fin-status" aria-live="polite"></div>
 
-<div class="fin-subtitle">Registrar ingreso o gasto</div>
-<div class="fin-form-grid">
- <div class="fin-field"><label for="finTipo">Tipo</label><select id="finTipo" onchange="actualizarCategoriasCaja()"><option value="ingreso">Ingreso</option><option value="gasto">Gasto</option><option value="aporte">Aporte de capital</option><option value="retiro">Retiro del dueño</option></select></div>
- <div class="fin-field"><label for="finFecha">Fecha</label><input id="finFecha" type="date"></div>
- <div class="fin-field"><label for="finCategoria">Categoría</label><select id="finCategoria"></select></div>
- <div class="fin-field"><label for="finMedio">Medio de pago</label><select id="finMedio"><option value="efectivo">Efectivo</option><option value="transferencia">Transferencia / QR</option><option value="tarjeta">Débito / crédito</option><option value="otro">Otro</option></select></div>
- <div class="fin-field" style="grid-column:1/-1"><label for="finConcepto">Concepto</label><input id="finConcepto" maxlength="120" placeholder="Ej.: Corte, venta de producto, compra de insumos"></div>
- <div class="fin-field"><label for="finImporte">Importe ($)</label><input id="finImporte" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0"></div>
- <div class="fin-field"><label for="finTurno">Vincular turno (opcional)</label><select id="finTurno" onchange="seleccionarTurnoFinanzas()"><option value="">Sin turno vinculado</option></select></div>
- <div class="fin-field" style="grid-column:1/-1"><label for="finNota">Nota (opcional)</label><textarea id="finNota" rows="2" maxlength="400" placeholder="Detalle para recordar"></textarea></div>
-</div>
-<div class="fin-actions"><button id="finGuardarBtn" onclick="guardarMovimientoCaja()" style="background:#000;color:#fff">GUARDAR MOVIMIENTO</button><button id="finCancelarEdicion" class="sec" onclick="cancelarEdicionCaja()" style="display:none">CANCELAR EDICIÓN</button></div>
-<div id="finFormularioEstado" class="fin-status" aria-live="polite"></div>
-
-<div class="fin-subtitle">Apertura y cierre de efectivo</div>
-<div class="small">El esperado suma apertura, ingresos y aportes en efectivo; resta gastos y retiros. Comparalo con el efectivo contado.</div>
-<div class="fin-close-box">
- <div class="fin-form-grid">
-  <div class="fin-field"><label for="finCierreFecha">Día</label><input id="finCierreFecha" type="date" onchange="cargarCierreCaja()"></div>
-  <div class="fin-field"><label for="finApertura">Efectivo de apertura ($)</label><input id="finApertura" type="number" min="0" step="0.01" inputmode="decimal" value="0" oninput="actualizarResumenCierreCaja()"></div>
-  <div class="fin-field"><label for="finContado">Efectivo contado al cierre ($)</label><input id="finContado" type="number" min="0" step="0.01" inputmode="decimal" value="0" oninput="actualizarResumenCierreCaja()"></div>
-  <div class="fin-field"><label for="finCierreNota">Nota de cierre</label><input id="finCierreNota" maxlength="250" placeholder="Opcional"></div>
- </div>
- <div id="finCierreResultado" class="fin-close-result"></div>
- <button class="sec" onclick="guardarCierreCaja()" style="margin-top:8px;background:#000;color:#fff">GUARDAR CIERRE DEL DÍA</button>
- <div id="finCierreEstado" class="fin-status" aria-live="polite"></div>
-</div>
-
-<div class="fin-subtitle">Movimientos del período</div>
-<div class="finance-table-wrap"><table class="finance-table"><thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Categoría</th><th>Medio</th><th>Importe</th><th>Turno</th><th>Acciones</th></tr></thead><tbody id="finMovimientosBody"><tr><td colspan="8">Cargando...</td></tr></tbody></table></div>
-<div class="small" style="margin-top:8px">Los cierres y movimientos se guardan en Supabase con acceso restringido a tu cuenta administradora.</div>
-</div>
 
 
 </div>
@@ -409,6 +429,7 @@ if(t==='promos') cargarPromos();
 if(t==='turnos'){cargarServicios(); cargarClientes();}
 if(t==='admin') checkAdmin();
 }
+function abrirSeccionAdmin(id){const seccion=document.getElementById(id);if(!seccion)return;seccion.open=true;seccion.scrollIntoView({behavior:'smooth',block:'start'});}
 function previewImg(i,target){const f=i.files[0]; if(!f) return; const r=new FileReader(); r.onload=e=>{document.getElementById(target).src=e.target.result; document.getElementById(target).style.display='block';}; r.readAsDataURL(f);}
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredPrompt=e; document.getElementById('installBar').style.display='flex';});
 function instalar(){if(deferredPrompt){deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{deferredPrompt=null; document.getElementById('installBar').style.display='none';});}}
@@ -427,7 +448,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v10';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v11';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -822,7 +843,7 @@ function actualizarCategoriasCaja(){
  const tipo=document.getElementById('finTipo')?.value||'ingreso';
  const sel=document.getElementById('finCategoria');if(!sel)return;
  const anterior=sel.value;
- const opciones=tipo==='gasto'?[['insumos','Insumos'],['alquiler','Alquiler'],['servicios','Servicios e impuestos'],['mantenimiento','Mantenimiento'],['otros','Otros']]:tipo==='retiro'?[['dueño','Retiro del dueño'],['reintegro','Reintegro'],['otros','Otros']]:tipo==='aporte'?[['capital','Aporte de capital'],['apertura','Aporte para caja'],['otros','Otros']]:[['servicio','Servicios de barbería'],['productos','Venta de productos'],['seña','Señas'],['otros','Otros']];
+ const opciones=tipo==='gasto'?[['insumos','Insumos y productos'],['alquiler','Alquiler'],['servicios','Luz, agua e internet'],['impuestos','Impuestos'],['mantenimiento','Herramientas y mantenimiento'],['comisiones','Comisiones'],['otros','Otros']]:tipo==='retiro'?[['dueño','Retiro del dueño'],['reintegro','Reintegro'],['otros','Otros']]:tipo==='aporte'?[['capital','Aporte de capital'],['apertura','Aporte para caja'],['otros','Otros']]:[['servicio','Servicios de barbería'],['productos','Venta de productos'],['seña','Señas'],['propinas','Propinas'],['otros','Otros']];
  sel.innerHTML=opciones.map(o=>'<option value="'+o[0]+'">'+o[1]+'</option>').join('');
  if(opciones.some(o=>o[0]===anterior))sel.value=anterior;
 }
@@ -860,9 +881,14 @@ async function cargarFinanzas(){
  if(desde&&hasta&&desde>hasta){estado.textContent='La fecha inicial no puede ser posterior a la final.';return;}
  estado.textContent='Cargando movimientos...';
  try{
-  const {data,error}=await supabaseClient.from('caja_movimientos').select('*').gte('fecha',desde).lte('fecha',hasta).order('fecha',{ascending:false}).order('created_at',{ascending:false}).limit(1000);
+  let data=[],error=null,offset=0,lote=[];
+  do{
+   const respuesta=await supabaseClient.from('caja_movimientos').select('*').gte('fecha',desde).lte('fecha',hasta).order('fecha',{ascending:false}).order('created_at',{ascending:false}).order('id',{ascending:false}).range(offset,offset+999);
+   if(respuesta.error){error=respuesta.error;break;}
+   lote=respuesta.data||[];data=data.concat(lote);offset+=lote.length;
+  }while(lote.length===1000);
   if(error){estado.textContent='No se cargó la caja. Primero ejecutá el SQL de Finanzas; después volvé a actualizar.';document.getElementById('finResumen').innerHTML='';document.getElementById('finMovimientosBody').innerHTML='<tr><td colspan="8">Sin datos: falta configurar o revisar permisos.</td></tr>';console.warn(error);return;}
-  finanzasMovimientos=data||[];renderFinanzas();estado.textContent='Período actualizado. Se muestran solo movimientos guardados.';
+  finanzasMovimientos=data;renderFinanzas();estado.textContent='Período actualizado. Se muestran solo movimientos guardados.';
   await Promise.all([cargarTurnosFinanzas(),cargarCierreCaja()]);renderFinanzas();
  }catch(e){estado.textContent='No se pudo consultar Finanzas. Revisá la conexión y las tablas.';console.warn(e);}
 }
