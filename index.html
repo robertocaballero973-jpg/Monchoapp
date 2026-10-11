@@ -101,6 +101,17 @@ button.pink{background:#FF8FAB;color:#000}
 .admin-accordion-body>.admin-block[style*="#1a0a14"]{background:#1a0a14!important}
 .admin-accordion-body>.admin-block>.title{margin-bottom:9px}
 @media(max-width:380px){.admin-shortcut-grid button{font-size:9px;padding:9px 4px}.admin-accordion>summary{font-size:11px}}
+
+.gold-manual-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.gold-manual-form .wide{grid-column:1/-1}
+.gold-manual-form label{display:block;font-size:10px;font-weight:800;color:#555;margin-bottom:4px}
+.gold-manual-note{background:#fff7df;border:1px solid #ead69c;border-radius:9px;padding:10px;color:#4c3b0e;font-size:11px;line-height:1.5;margin:10px 0}
+.gold-manual-table{width:100%;min-width:600px;border-collapse:collapse;font-size:10px;background:#fff}
+.gold-manual-table th,.gold-manual-table td{padding:8px 6px;text-align:left;border-bottom:1px solid #e5e5e5;vertical-align:top}
+.gold-manual-table th{background:#111;color:#fff}
+.gold-manual-table-wrap{overflow-x:auto;border:1px solid #ddd;border-radius:8px;margin-top:8px}
+.gold-manual-table button{width:auto;padding:5px 7px;font-size:9px;background:#922;color:#fff}
+@media(max-width:380px){.gold-manual-form{grid-template-columns:1fr}.gold-manual-form .wide{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -191,7 +202,7 @@ button.pink{background:#FF8FAB;color:#000}
 </div>
 </div>
 
-<div class="admin-shortcuts"><div class="admin-shortcuts-title">ACCESO RÁPIDO · ADMIN</div><div class="admin-shortcut-grid"><button onclick="abrirSeccionAdmin('adminFinanzas')">💰 Finanzas</button><button onclick="abrirSeccionAdmin('adminTurnos')">📅 Turnos</button><button onclick="abrirSeccionAdmin('adminComercial')">✂️ Servicios y promos</button><button onclick="abrirSeccionAdmin('adminGalerias')">📸 Galerías</button><button onclick="abrirSeccionAdmin('adminDiseno')">🎨 Diseño</button></div></div><details class="admin-accordion" id="adminFinanzas" open><summary>💰 Finanzas · caja y movimientos</summary><div class="admin-accordion-body"><div class="admin-block" id="monchoFinanzas">
+<div class="admin-shortcuts"><div class="admin-shortcuts-title">ACCESO RÁPIDO · ADMIN</div><div class="admin-shortcut-grid"><button onclick="abrirSeccionAdmin('adminFinanzas')">💰 Finanzas</button><button onclick="abrirSeccionAdmin('adminTurnos')">📅 Turnos</button><button onclick="abrirSeccionAdmin('adminTarjetas')">🏅 Tarjetas Gold</button><button onclick="abrirSeccionAdmin('adminComercial')">✂️ Servicios y promos</button><button onclick="abrirSeccionAdmin('adminGalerias')">📸 Galerías</button><button onclick="abrirSeccionAdmin('adminDiseno')">🎨 Diseño</button></div></div><details class="admin-accordion" id="adminFinanzas" open><summary>💰 Finanzas · caja y movimientos</summary><div class="admin-accordion-body"><div class="admin-block" id="monchoFinanzas">
 <div class="title">💰 FINANZAS · CAJA Y MOVIMIENTOS</div>
 <div class="small">Registro manual de ingresos y gastos. No procesa pagos. Solo visible con tu sesión ADMIN.</div>
 <div class="fin-subtitle">Resumen del período</div>
@@ -337,6 +348,31 @@ button.pink{background:#FF8FAB;color:#000}
 <button class="sec" onclick="cargarRegistro()" style="margin-top:10px;background:#000;color:#fff">ACTUALIZAR TURNOS</button>
 </div></div></details>
 
+<details class="admin-accordion" id="adminTarjetas"><summary>🏅 Tarjetas Gold · visitas sin reserva</summary><div class="admin-accordion-body">
+ <div class="admin-block">
+  <div class="title">REGISTRAR CORTE MANUAL</div>
+  <div class="small">Para clientes habituales que vinieron sin reservar en la app. No crea un turno ni bloquea horarios; suma visitas a la tarjeta Gold.</div>
+  <div class="gold-manual-note">Si el cliente ya tiene turnos registrados en la app, cargá solo los cortes que faltan. Podés sumar hasta 5 visitas anteriores de una vez.</div>
+  <div class="gold-manual-form">
+   <div class="wide"><label for="goldClienteExistente">Elegir cliente existente (opcional)</label><select id="goldClienteExistente" onchange="seleccionarClienteGoldManual()"><option value="">Cliente nuevo o completar abajo</option></select></div>
+   <div><label for="goldNombre">Nombre</label><input id="goldNombre" maxlength="100" placeholder="Nombre del cliente"></div>
+   <div><label for="goldWhatsapp">WhatsApp</label><input id="goldWhatsapp" inputmode="tel" maxlength="25" placeholder="Ej.: 5493758400000"></div>
+   <div><label for="goldManualFecha">Fecha de visita</label><input id="goldManualFecha" type="date"></div>
+   <div><label for="goldManualServicio">Servicio</label><input id="goldManualServicio" maxlength="100" value="Corte" placeholder="Corte, barba, etc."></div>
+   <div><label for="goldManualCantidad">Cortes a sumar (1 a 5)</label><input id="goldManualCantidad" type="number" min="1" max="5" step="1" value="1"></div>
+   <div class="wide"><label for="goldManualNota">Nota opcional</label><input id="goldManualNota" maxlength="250" placeholder="Ej.: carga inicial de visitas habituales"></div>
+  </div>
+  <button class="sec" onclick="registrarCortesManualGold()" style="margin-top:8px;background:#000;color:#fff">SUMAR A TARJETA GOLD</button>
+  <div id="goldCortesEstado" class="fin-status" aria-live="polite"></div>
+ </div>
+ <div class="admin-block">
+  <div class="title">ÚLTIMOS CORTES MANUALES</div>
+  <div class="gold-manual-table-wrap"><table class="gold-manual-table"><thead><tr><th>Fecha</th><th>Cliente</th><th>Servicio</th><th>Nota</th><th>Acción</th></tr></thead><tbody id="goldManualRows"><tr><td colspan="5">Cargando...</td></tr></tbody></table></div>
+  <div class="small" style="margin-top:8px">Al canjear un corte gratis, se descuentan los 5 cortes más antiguos, sean manuales o de turnos de la app.</div>
+ </div>
+</div></details>
+
+
 
 
 
@@ -448,7 +484,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v11';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v12';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -951,36 +987,115 @@ async function guardarCierreCaja(){
  status.textContent=error?'No se guardó el cierre. Revisá la configuración SQL y tu sesión ADMIN.':'Cierre guardado.';if(error)console.warn(error);
 }
 
-async function cargarClientes(){
-const list=document.getElementById('listaClientes');
-if(!list) return;
-if(!await refrescarAccesoFotos()){
- list.innerHTML='<div class="small">El progreso individual de la tarjeta Gold se consulta desde ADMIN.</div>';
- return;
+let clientesGoldCache=[];
+let cortesManualesGoldCache=[];
+async function leerPaginadoGold(tabla,columnas,ordenes){
+ let todos=[],offset=0;
+ while(true){
+  let q=supabaseClient.from(tabla).select(columnas);
+  (ordenes||[]).forEach(o=>{q=q.order(o.col,{ascending:o.asc!==false});});
+  const {data,error}=await q.range(offset,offset+999);
+  if(error)return {data:null,error};
+  const lote=data||[];todos=todos.concat(lote);offset+=lote.length;
+  if(lote.length<1000)break;
+ }
+ return {data:todos,error:null};
 }
-const {data:cl,error:clErr}=await supabaseClient.from('clientes').select('*').order('nombre').limit(100);
-const {data:tu,error:tuErr}=await supabaseClient.from('turnos').select('cliente_id');
-if(clErr||tuErr){list.innerHTML='<div class="small">No se pudieron cargar las tarjetas. Iniciá sesión como administrador.</div>';return;}
-let h=''; 
-cl?.forEach(c=>{
- const cnt=tu?.filter(t=>t.cliente_id===c.id).length||0;
- const mod = cnt % 5; const progreso = mod === 0 && cnt>0 ? 5 : mod;
- const isVip = Math.floor(cnt/5)>=1; const gratis = cnt>0 && cnt % 5 === 0;
- let dots=''; for(let i=1;i<=5;i++){const done=i<=progreso; dots+=`<div class="dot ${done?'done':''}">${done?'✓':i}</div>`;}
- const vipClass=isVip?'vip':''; const statusText=gratis?'¡GRATIS! 6to corte gratis - Es VIP GOLD':`${progreso}/5 cortes`;
- const badge=isVip?'<span class="badge-vip">VIP GOLD</span>':'<span class="badge-vip" style="background:var(--gold);color:#000">GOLD</span>';
- const isAlejandro = c.nombre.toLowerCase().includes('alejandro');
- const borrarBtn = isAlejandro ? '' : `<button onclick="borrarCliente('${c.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px;margin-left:6px">🗑️ BORRAR</button>`;
- const isAdmin = adminAutenticado;
- const waClean = c.whatsapp.replace(/\D/g,'');
- const waMasked = waClean.length>4 ? '•••• ••'+waClean.slice(-4) : '••••';
- const waDisplay = isAdmin ? `${c.whatsapp} • ${cnt} cortes` : `${waMasked} • ${cnt} cortes`;
- const nombreDisplay = isAdmin ? c.nombre.toUpperCase() : c.nombre.toUpperCase().split(' ')[0] + ' ' + (c.nombre.split(' ')[1]?.[0] ? c.nombre.split(' ')[1][0]+'.' : '');
- const btnAction = gratis ? `canjearGratis('${c.id}','${c.nombre.replace(/'/g,"\\'")}','${waClean}')` : `window.open('https://wa.me/${waClean}','_blank')`;
- const btnUno = isAdmin && cnt>1 ? `<button onclick="dejarEnUno('${c.id}','${c.nombre.replace(/'/g,"\\'")}')" style="width:auto;padding:6px 8px;background:#333;color:#fff;font-size:8px;border-radius:6px;margin-right:4px">1/5</button>` : '';
- h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${nombreDisplay}</b><div style="display:flex;gap:6px">${badge}${borrarBtn}</div></div><div style="font-size:10px;opacity:0.7">${waDisplay}</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><div style="display:flex;gap:4px">${btnUno}<button onclick="${btnAction}" style="width:auto;padding:6px 12px;font-size:10px" class="sec ${gratis?'':''}" ${gratis?'style="background:var(--gold);color:#000;font-weight:900;border:0"':''}>${gratis?'CANJEAR 🎉':'WA'}</button></div></div></div>`;
-});
-list.innerHTML=h||'<div class="small">Sin clientes.</div>';
+function poblarSelectorGold(clientes){
+ const sel=document.getElementById('goldClienteExistente');if(!sel)return;
+ const actual=sel.value;sel.innerHTML='<option value="">Cliente nuevo o completar abajo</option>'+clientes.map(c=>'<option value="'+escaparTextoRegistro(c.id)+'">'+escaparTextoRegistro(c.nombre+' · '+c.whatsapp)+'</option>').join('');
+ if(clientes.some(c=>String(c.id)===actual))sel.value=actual;
+}
+function fechaLocalCaja(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);}
+async function cargarClientes(){
+ const list=document.getElementById('listaClientes');
+ if(!list)return;
+ if(!await refrescarAccesoFotos()){
+  list.innerHTML='<div class="small">El progreso individual de la tarjeta Gold se consulta desde ADMIN.</div>';
+  return;
+ }
+ const {data:cl,error:clErr}=await supabaseClient.from('clientes').select('id,nombre,whatsapp').order('nombre').limit(500);
+ const turnosRes=await leerPaginadoGold('turnos','id,cliente_id,fecha,hora,estado',[{col:'fecha',asc:true},{col:'hora',asc:true},{col:'id',asc:true}]);
+ const manualRes=await leerPaginadoGold('cortes_manuales','id,cliente_id,fecha,servicio,nota,created_at',[{col:'fecha',asc:true},{col:'created_at',asc:true},{col:'id',asc:true}]);
+ if(clErr||turnosRes.error){list.innerHTML='<div class="small">No se pudieron cargar las tarjetas. Iniciá sesión como administrador.</div>';return;}
+ clientesGoldCache=cl||[];const goldDate=document.getElementById('goldManualFecha');if(goldDate&&!goldDate.value)goldDate.value=fechaLocalCaja();
+ cortesManualesGoldCache=manualRes.data||[];
+ poblarSelectorGold(clientesGoldCache);
+ const manualStatus=document.getElementById('goldCortesEstado');
+ if(manualStatus&&manualRes.error)manualStatus.textContent='Para habilitar los cortes manuales, primero ejecutá el SQL de Tarjetas Gold.';
+ const turnos=turnosRes.data||[],manual=cortesManualesGoldCache;
+ let h='';
+ clientesGoldCache.forEach(c=>{
+  const cntTurnos=turnos.filter(t=>String(t.cliente_id)===String(c.id)).length;
+  const cntManual=manual.filter(m=>String(m.cliente_id)===String(c.id)).length;
+  const cnt=cntTurnos+cntManual;
+  const mod=cnt%5,progreso=mod===0&&cnt>0?5:mod,isVip=Math.floor(cnt/5)>=1,gratis=cnt>=5;
+  let dots='';for(let i=1;i<=5;i++){const done=i<=progreso;dots+=`<div class="dot ${done?'done':''}">${done?'✓':i}</div>`;}
+  const vipClass=isVip?'vip':'',statusText=gratis?'¡TENÉS UN CORTE GRATIS! · '+progreso+'/5 para el próximo':`${progreso}/5 cortes`;
+  const badge=isVip?'<span class="badge-vip">VIP GOLD</span>':'<span class="badge-vip" style="background:var(--gold);color:#000">GOLD</span>';
+  const isAlejandro=c.nombre.toLowerCase().includes('alejandro');
+  const borrarBtn=isAlejandro?'':`<button onclick="borrarCliente('${c.id}')" style="width:auto;padding:6px 10px;background:#ff3333;color:#fff;font-size:9px;border-radius:6px;margin-left:6px">🗑️ BORRAR</button>`;
+  const waClean=(c.whatsapp||'').replace(/\D/g,''),waMasked=waClean.length>4?'•••• ••'+waClean.slice(-4):'••••';
+  const waDisplay=`${c.whatsapp||''} • ${cnt} cortes${cntManual?' ('+cntManual+' manuales)':''}`;
+  const nombreDisplay=(c.nombre||'Cliente').toUpperCase();
+  const btnAction=gratis?`canjearGratis('${c.id}','${(c.nombre||'').replace(/'/g,"\\'")}','${waClean}')`:`window.open('https://wa.me/${waClean}','_blank')`;
+  const btnUno=cnt>1?`<button onclick="dejarEnUno('${c.id}','${(c.nombre||'').replace(/'/g,"\\'")}')" style="width:auto;padding:6px 8px;background:#333;color:#fff;font-size:8px;border-radius:6px;margin-right:4px">1/5</button>`:'';
+  h+=`<div class="gold-card ${vipClass}"><div style="display:flex;justify-content:space-between"><b>${nombreDisplay}</b><div style="display:flex;gap:6px">${badge}${borrarBtn}</div></div><div style="font-size:10px;opacity:0.7">${waDisplay}</div><div class="dots">${dots}</div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:800">${statusText}</span><div style="display:flex;gap:4px">${btnUno}<button onclick="${btnAction}" style="width:auto;padding:6px 12px;font-size:10px" class="sec">${gratis?'CANJEAR 🎉':'WA'}</button></div></div></div>`;
+ });
+ list.innerHTML=h||'<div class="small">Sin clientes.</div>';
+ renderListaCortesManuales(manual,clientesGoldCache,manualRes.error);
+}
+function seleccionarClienteGoldManual(){
+ const id=document.getElementById('goldClienteExistente').value;
+ const c=clientesGoldCache.find(x=>String(x.id)===String(id));if(!c)return;
+ document.getElementById('goldNombre').value=c.nombre||'';document.getElementById('goldWhatsapp').value=c.whatsapp||'';
+}
+function renderListaCortesManuales(rows,clientes,error){
+ const body=document.getElementById('goldManualRows');if(!body)return;
+ if(error){body.innerHTML='<tr><td colspan="5">Falta ejecutar el SQL de Tarjetas Gold.</td></tr>';return;}
+ const names=new Map((clientes||[]).map(c=>[String(c.id),c.nombre]));
+ const latest=(rows||[]).slice().sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha))||String(b.created_at).localeCompare(String(a.created_at))).slice(0,80);
+ if(!latest.length){body.innerHTML='<tr><td colspan="5">Todavía no hay cortes manuales cargados.</td></tr>';return;}
+ body.innerHTML=latest.map(m=>'<tr><td>'+escaparTextoRegistro(m.fecha||'')+'</td><td>'+escaparTextoRegistro(names.get(String(m.cliente_id))||'Cliente')+'</td><td>'+escaparTextoRegistro(m.servicio||'Corte')+'</td><td>'+escaparTextoRegistro(m.nota||'')+'</td><td><button onclick="borrarCorteManualGold(\''+String(m.id).replace(/[^a-zA-Z0-9-]/g,'')+'\')">BORRAR</button></td></tr>').join('');
+}
+async function registrarCortesManualGold(){
+ if(!await exigirAdminFotos())return;
+ const estado=document.getElementById('goldCortesEstado');
+ const seleccionado=document.getElementById('goldClienteExistente').value;
+ const nombre=(document.getElementById('goldNombre').value||'').trim();
+ const whatsapp=(document.getElementById('goldWhatsapp').value||'').replace(/\D/g,'');
+ const fecha=document.getElementById('goldManualFecha').value;
+ const servicio=(document.getElementById('goldManualServicio').value||'Corte').trim();
+ const cantidad=Number(document.getElementById('goldManualCantidad').value);
+ const nota=(document.getElementById('goldManualNota').value||'').trim();
+ if(!fecha||!servicio||!Number.isInteger(cantidad)||cantidad<1||cantidad>5){estado.textContent='Completá fecha y servicio; sumá de 1 a 5 cortes.';return;}
+ let cliente=null,clienteNuevo=false;
+ if(seleccionado){cliente=clientesGoldCache.find(c=>String(c.id)===String(seleccionado));if(!cliente){estado.textContent='No encontré ese cliente; actualizá la lista.';return;}}
+ else{
+  if(nombre.length<2||nombre.length>100||whatsapp.length<8||whatsapp.length>15){estado.textContent='Para un cliente nuevo, completá nombre y WhatsApp válido.';return;}
+  const {data:existente,error:busquedaError}=await supabaseClient.from('clientes').select('id,nombre,whatsapp').eq('whatsapp',whatsapp).maybeSingle();
+  if(busquedaError){estado.textContent='No se pudo revisar el WhatsApp del cliente.';console.warn(busquedaError);return;}
+  if(existente)cliente=existente;
+  else{
+   const {data:nuevo,error:insertError}=await supabaseClient.from('clientes').insert({nombre,whatsapp}).select('id,nombre,whatsapp').single();
+   if(insertError){estado.textContent='No se pudo crear el cliente; revisá si el WhatsApp ya existe.';console.warn(insertError);return;}
+   cliente=nuevo;clienteNuevo=true;
+  }
+ }
+ const detalle=cantidad>1?('Carga manual de '+cantidad+' cortes. '+nota).trim():nota;
+ const rows=Array.from({length:cantidad},()=>({cliente_id:cliente.id,fecha,servicio,nota:detalle}));
+ estado.textContent='Guardando cortes manuales...';
+ const {error}=await supabaseClient.from('cortes_manuales').insert(rows);
+ if(error){if(clienteNuevo)await supabaseClient.from('clientes').delete().eq('id',cliente.id);estado.textContent='No se guardó. Ejecutá el SQL de Tarjetas Gold y revisá la sesión ADMIN.';console.warn(error);return;}
+ estado.textContent='Se sumaron '+cantidad+' corte(s) a la tarjeta de '+cliente.nombre+'. No se creó ningún turno.';
+ document.getElementById('goldClienteExistente').value='';document.getElementById('goldNombre').value='';document.getElementById('goldWhatsapp').value='';document.getElementById('goldManualFecha').value=fechaLocalCaja();document.getElementById('goldManualServicio').value='Corte';document.getElementById('goldManualCantidad').value='1';document.getElementById('goldManualNota').value='';
+ await cargarClientes();
+}
+async function borrarCorteManualGold(id){
+ if(!confirm('¿Borrar este corte manual? Se descontará de la tarjeta Gold.'))return;
+ const {error}=await supabaseClient.from('cortes_manuales').delete().eq('id',id);
+ if(error){alert('No se pudo borrar el corte manual.');console.warn(error);return;}
+ await cargarClientes();
 }
 async function borrarCliente(clienteId){
  if(!confirm('¿Seguro que querés BORRAR esta tarjeta de cliente? Se borran también sus turnos.')) return;
@@ -991,32 +1106,39 @@ async function borrarCliente(clienteId){
  alert('Cliente borrado');
  cargarRegistro(); cargarClientes();
 }
-async function canjearGratis(clienteId,nombre,waClean){
- if(!confirm(`¿Canjear el CORTE GRATIS VIP de ${nombre}?\n\nSe va a reiniciar su tarjeta a 0/5 y se le avisa por WhatsApp.`)) return;
- // Borrar 5 turnos mas viejos de ese cliente
- const {data:turnosViejos, error:errFetch} = await supabaseClient.from('turnos').select('id').eq('cliente_id',clienteId).order('fecha',{ascending:true}).limit(5);
- if(errFetch){ alert('Error buscando turnos: '+errFetch.message); return; }
- if(turnosViejos && turnosViejos.length>0){
-   const ids=turnosViejos.map(t=>t.id);
-   const {error:errDel}=await supabaseClient.from('turnos').delete().in('id',ids);
-   if(errDel){ alert('Error borrando: '+errDel.message); return; }
- }
- alert(`✅ ¡GRATIS CANJEADO para ${nombre}! Tarjeta reiniciada a 0/5`);
- // Aviso WhatsApp
- const texto=`*¡CORTE GRATIS VIP CANJEADO!* %0A💈 El Moncho Azara%0A👤 ${encodeURIComponent(nombre)}%0A🎉 Canjeó su 6to corte GRATIS%0A🔄 Tarjeta reiniciada a 0/5%0A%0A_Cliente VIP GOLD_`;
- window.open(`https://wa.me/${waClean}?text=${texto}`,'_blank');
- cargarRegistro(); cargarClientes();
+async function obtenerCortesClienteGold(clienteId){
+ const [t,m]=await Promise.all([
+  leerPaginadoGold('turnos','id,cliente_id,fecha,hora,estado',[{col:'fecha',asc:true},{col:'hora',asc:true},{col:'id',asc:true}]),
+  leerPaginadoGold('cortes_manuales','id,cliente_id,fecha,created_at',[{col:'fecha',asc:true},{col:'created_at',asc:true},{col:'id',asc:true}])
+ ]);
+ if(t.error)return {error:t.error};if(m.error)return {error:m.error};
+ const all=[...(t.data||[]).filter(x=>String(x.cliente_id)===String(clienteId)).map(x=>({...x,origen:'turno'})),...(m.data||[]).filter(x=>String(x.cliente_id)===String(clienteId)).map(x=>({...x,origen:'manual'}))];
+ all.sort((a,b)=>String(a.fecha||'').localeCompare(String(b.fecha||''))||String(a.id).localeCompare(String(b.id)));
+ return {data:all};
 }
-async function dejarEnUno(clienteId, nombre){
- if(!confirm(`¿Dejar a ${nombre} en 1 solo corte?\n\nSe borran 4 turnos y queda 1/5`)) return;
- const {data:turnos, error:errFetch} = await supabaseClient.from('turnos').select('id').eq('cliente_id',clienteId).order('fecha',{ascending:false});
- if(errFetch){ alert(errFetch.message); return; }
- if(!turnos || turnos.length<=1){ alert('Ya tiene 1 o menos'); return; }
- const idsBorrar = turnos.slice(0, turnos.length-1).map(t=>t.id); // deja el mas viejo
- const {error:errDel}=await supabaseClient.from('turnos').delete().in('id',idsBorrar);
- if(errDel){ alert(errDel.message); return; }
- alert(`✅ ${nombre} ahora queda en 1/5`);
- cargarRegistro(); cargarClientes();
+async function borrarCreditosGold(clienteId,creditos){
+ const idsTurnos=creditos.filter(x=>x.origen==='turno').map(x=>x.id),idsManual=creditos.filter(x=>x.origen==='manual').map(x=>x.id);
+ if(idsTurnos.length){const {error}=await supabaseClient.from('turnos').delete().in('id',idsTurnos);if(error)return error;}
+ if(idsManual.length){const {error}=await supabaseClient.from('cortes_manuales').delete().in('id',idsManual);if(error)return error;}
+ return null;
+}
+async function canjearGratis(clienteId,nombre,waClean){
+ if(!confirm(`¿Canjear el corte gratis de ${nombre}?\n\nSe descontarán sus 5 cortes más antiguos; los cortes adicionales quedarán en la tarjeta.`))return;
+ const {data,error}=await obtenerCortesClienteGold(clienteId);if(error){alert('No se pudieron buscar los cortes: '+error.message);return;}
+ const consumir=(data||[]).slice(0,5);if(consumir.length<5){alert('No hay 5 cortes disponibles para canjear.');return;}
+ const err=await borrarCreditosGold(clienteId,consumir);if(err){alert('No se pudieron descontar los cortes: '+err.message);return;}
+ alert(`✅ ¡Corte gratis canjeado para ${nombre}! Se descontaron 5 cortes.`);
+ const texto=`*¡CORTE GRATIS VIP CANJEADO!* %0A💈 El Moncho Azara%0A👤 ${encodeURIComponent(nombre)}%0A🎉 Canjeó su 6to corte GRATIS%0A🔄 Tarjeta actualizada%0A%0A_Cliente VIP GOLD_`;
+ window.open(`https://wa.me/${waClean}?text=${texto}`,'_blank');
+ cargarRegistro();cargarClientes();
+}
+async function dejarEnUno(clienteId,nombre){
+ if(!confirm(`¿Dejar a ${nombre} en 1 solo corte?\n\nSe descontarán todos los créditos menos el más reciente.`))return;
+ const {data,error}=await obtenerCortesClienteGold(clienteId);if(error){alert(error.message);return;}
+ if(!data||data.length<=1){alert('Ya tiene 1 o menos.');return;}
+ const aBorrar=data.slice(0,data.length-1),err=await borrarCreditosGold(clienteId,aBorrar);
+ if(err){alert('No se pudieron actualizar los cortes: '+err.message);return;}
+ alert(`✅ ${nombre} ahora queda en 1/5`);cargarRegistro();cargarClientes();
 }
 async function loginAdmin(){
  const email=(document.getElementById('adminEmail').value||'').trim().toLowerCase();
