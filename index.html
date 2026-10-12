@@ -320,7 +320,7 @@ button.pink{background:#FF8FAB;color:#000}
 
 <details class="admin-accordion" id="adminComercial"><summary>✂️ Servicios y promociones</summary><div class="admin-accordion-body"><div class="admin-block">
 <div class="title">🔥 PROMOS - EDITABLES 100% POR VOS</div>
-<div id="adminPromos"></div>
+<div id="adminPromos"></div><div id="promoSyncStatus" class="small" style="margin-top:8px;color:#087443" aria-live="polite"></div>
 <div style="border-top:1px solid #eee;margin-top:12px;padding-top:12px">
 <input id="newPromoTitulo" placeholder="Titulo promo">
 <input id="newPromoDesc" placeholder="Descripcion">
@@ -484,55 +484,85 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v12';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v13';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
 
 const PROMOS_DEFAULT = [{titulo:'PADRE + HIJO', descripcion:'2 cortes el mismo dia - Martes a jueves', precio:8500, precio_old:10000, estilo:'white'},{titulo:'CORTE + BARBA', descripcion:'Combo completo - El mas pedido en Azara', precio:7000, precio_old:8000, estilo:'white'},{titulo:'ESTUDIANTES', descripcion:'Primaria y secundaria -15% con libreta', precio:4500, precio_old:0, estilo:'white'},{titulo:'GOLD VIP - 5=6to GRATIS', descripcion:'Se activa sola la tarjeta dorada', precio:0, precio_old:0, estilo:'gold'}];
+function escaparTextoPromo(value){return String(value==null?'':value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function filaPromo(p){return {titulo:String(p.titulo||'').trim(),descripcion:String(p.descripcion||''),precio:Number(p.precio)||0,precio_old:Number(p.precio_old)||0,estilo:['white','gold','pink'].includes(p.estilo)?p.estilo:'white'};}
 async function cargarPromos(){
- let promos = [];
- try{const {data,error} = await supabaseClient.from('promos').select('*').order('created_at',{ascending:true}); if(!error && data && data.length>0){promos=data;} else throw 'no table';}catch(e){promos = JSON.parse(localStorage.getItem('moncho_promos')||'null') || PROMOS_DEFAULT;}
- const cont = document.getElementById('listaPromos'); const adminCont = document.getElementById('adminPromos');
- let h='', ah='';
- promos.forEach((p,idx)=>{
-   const isGold = (p.estilo==='gold') || p.titulo.toLowerCase().includes('gold') || p.titulo.toLowerCase().includes('gratis');
-   const cardClass = isGold ? 'promo-card gold' : (p.estilo==='pink' ? 'promo-card pink' : 'promo-card');
-   const priceText = p.precio===0 ? 'GRATIS' : '$'+p.precio;
-   const oldText = p.precio_old ? `<div class="old">$${p.precio_old}</div>` : '';
-   h+=`<div class="${cardClass}"><div style="display:flex;justify-content:space-between"><div><b style="font-family:var(--font-title)">${p.titulo.toUpperCase()}</b><div class="small" style="color:${isGold?'#000':'#666'}">${p.descripcion||''}</div></div><div>${oldText}<div class="price">${priceText}</div></div></div><button onclick="reservarPromo('${p.titulo}')" class="sec" style="margin-top:10px">${p.precio===0?'VER MI TARJETA':'RESERVAR PROMO'}</button></div>`;
-   ah+=`<div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><input value="${p.titulo}" id="pt_${idx}" style="flex:2;background:#f5f5f5;color:#000"><input value="${p.descripcion||''}" id="pd_${idx}" style="flex:3;background:#f5f5f5;color:#000"><input type="number" value="${p.precio}" id="pp_${idx}" style="width:90px;background:#f5f5f5;color:#000"><input type="number" value="${p.precio_old||''}" id="po_${idx}" placeholder="viejo" style="width:80px;background:#f5f5f5;color:#000"><select id="pe_${idx}" style="width:90px;background:#f5f5f5;color:#000"><option value="white" ${p.estilo==='white'?'selected':''}>BLANCA</option><option value="gold" ${p.estilo==='gold'?'selected':''}>DORADA</option><option value="pink" ${p.estilo==='pink'?'selected':''}>ROSA</option></select><button onclick="guardarPromo(${idx})" style="width:50px">OK</button><button onclick="borrarPromo(${idx})" class="sec" style="width:36px">X</button></div>`;
+ const cont=document.getElementById('listaPromos'),adminCont=document.getElementById('adminPromos'),sync=document.getElementById('promoSyncStatus');
+ let promos=null,dbError=null;
+ try{
+  const result=await supabaseClient.from('promos').select('*').order('created_at',{ascending:true});
+  dbError=result.error||null;const rows=result.data||[];
+  if(!dbError&&rows.length){promos=rows;if(adminAutenticado){localStorage.setItem('moncho_promos',JSON.stringify(rows));if(sync)sync.textContent='Promos sincronizadas con Supabase.';}}
+ }catch(e){dbError=e;}
+ if(!promos){
+  const cached=JSON.parse(localStorage.getItem('moncho_promos')||'null');
+  promos=Array.isArray(cached)&&cached.length?cached:PROMOS_DEFAULT;
+  if(adminAutenticado&&!dbError){
+   const seedRows=promos.map(filaPromo).filter(p=>p.titulo.length>0);
+   const {data:seeded,error:seedError}=await supabaseClient.from('promos').insert(seedRows).select();
+   if(!seedError&&seeded&&seeded.length){promos=seeded;localStorage.setItem('moncho_promos',JSON.stringify(seeded));if(sync)sync.textContent='Listo: copié a Supabase las promos guardadas en este teléfono.';}
+   else if(sync){sync.textContent='No se pudieron pasar las promos a Supabase. Revisá el SQL y tu sesión ADMIN.';console.warn(seedError);}
+  }else if(adminAutenticado&&dbError&&sync){sync.textContent='No pude leer Supabase. Revisá la conexión y las columnas de promos.';console.warn(dbError);}
+ }
+ let h='',ah='';
+ (promos||[]).forEach((p,idx)=>{
+  const titulo=escaparTextoPromo(p.titulo||'Promo'),descripcion=escaparTextoPromo(p.descripcion||''),precio=Number(p.precio)||0,precioOld=Number(p.precio_old)||0;
+  const estilo=['white','gold','pink'].includes(p.estilo)?p.estilo:'white';
+  const isGold=estilo==='gold'||String(p.titulo||'').toLowerCase().includes('gold')||String(p.titulo||'').toLowerCase().includes('gratis');
+  const cardClass=isGold?'promo-card gold':(estilo==='pink'?'promo-card pink':'promo-card');
+  const priceText=precio===0?'GRATIS':'$'+precio,oldText=precioOld?`<div class="old">$${precioOld}</div>`:'';
+  h+=`<div class="${cardClass}"><div style="display:flex;justify-content:space-between"><div><b style="font-family:var(--font-title)">${titulo.toUpperCase()}</b><div class="small" style="color:${isGold?'#000':'#666'}">${descripcion}</div></div><div>${oldText}<div class="price">${priceText}</div></div></div><button onclick="reservarPromo('${titulo.replace(/'/g,"\\'")}')" class="sec" style="margin-top:10px">${precio===0?'VER MI TARJETA':'RESERVAR PROMO'}</button></div>`;
+  ah+=`<div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><input value="${titulo}" id="pt_${idx}" style="flex:2;background:#f5f5f5;color:#000"><input value="${descripcion}" id="pd_${idx}" style="flex:3;background:#f5f5f5;color:#000"><input type="number" value="${precio}" id="pp_${idx}" style="width:90px;background:#f5f5f5;color:#000"><input type="number" value="${precioOld||''}" id="po_${idx}" placeholder="viejo" style="width:80px;background:#f5f5f5;color:#000"><select id="pe_${idx}" style="width:90px;background:#f5f5f5;color:#000"><option value="white" ${estilo==='white'?'selected':''}>BLANCA</option><option value="gold" ${estilo==='gold'?'selected':''}>DORADA</option><option value="pink" ${estilo==='pink'?'selected':''}>ROSA</option></select><button onclick="guardarPromo(${idx})" style="width:50px">OK</button><button onclick="borrarPromo(${idx})" class="sec" style="width:36px">X</button></div>`;
  });
- if(cont) cont.innerHTML=h||'<div class="small">Sin promos. Crealas en ADMIN.</div>';
- if(adminCont) adminCont.innerHTML=ah||'<div class="small">Sin promos aun.</div>';
+ if(cont)cont.innerHTML=h||'<div class="small">Sin promos. Crealas en ADMIN.</div>';
+ if(adminCont)adminCont.innerHTML=ah||'<div class="small">Sin promos aun.</div>';
 }
 async function guardarPromo(idx){
- let promos = JSON.parse(localStorage.getItem('moncho_promos')||'null') || PROMOS_DEFAULT;
- try{const {data} = await supabaseClient.from('promos').select('*').order('created_at'); if(data && data.length>0) promos=data;}catch(e){}
- const p = promos[idx]; if(!p) return;
- const titulo=document.getElementById('pt_'+idx).value; const desc=document.getElementById('pd_'+idx).value; const precio=parseInt(document.getElementById('pp_'+idx).value)||0; const old=parseInt(document.getElementById('po_'+idx).value)||0; const estilo=document.getElementById('pe_'+idx).value;
- try{if(p.id){await supabaseClient.from('promos').update({titulo,descripcion:desc,precio,precio_old:old,estilo}).eq('id',p.id);} else{await supabaseClient.from('promos').update({titulo,descripcion:desc,precio,precio_old:old,estilo}).eq('titulo',p.titulo);}}catch(e){}
- promos[idx]={...p,titulo,descripcion:desc,precio,precio_old:old,estilo}; localStorage.setItem('moncho_promos',JSON.stringify(promos)); cargarPromos();
+ if(!adminAutenticado){alert('Iniciá sesión ADMIN para guardar promociones.');return;}
+ const titulo=(document.getElementById('pt_'+idx).value||'').trim();
+ const descripcion=(document.getElementById('pd_'+idx).value||'').trim();
+ const precio=Math.max(0,parseInt(document.getElementById('pp_'+idx).value,10)||0);
+ const precio_old=Math.max(0,parseInt(document.getElementById('po_'+idx).value,10)||0);
+ const estilo=['white','gold','pink'].includes(document.getElementById('pe_'+idx).value)?document.getElementById('pe_'+idx).value:'white';
+ if(!titulo){alert('Poné un título para la promo.');return;}
+ const {data:rows,error:readError}=await supabaseClient.from('promos').select('*').order('created_at',{ascending:true});
+ if(readError){alert('No pude leer las promos de Supabase. Ejecutá la migración y probá otra vez.');console.warn(readError);return;}
+ const promos=(rows&&rows.length)?rows:(JSON.parse(localStorage.getItem('moncho_promos')||'null')||PROMOS_DEFAULT);
+ const p=promos[idx];if(!p){alert('No encontré esa promo; actualizá la lista.');return;}
+ const values={titulo,descripcion,precio,precio_old,estilo};
+ let result;
+ if(p.id)result=await supabaseClient.from('promos').update(values).eq('id',p.id).select().single();
+ else result=await supabaseClient.from('promos').insert(values).select().single();
+ if(result.error||!result.data){alert('No se guardó en Supabase. Revisá la sesión y el SQL de promos.');console.warn(result.error);return;}
+ await cargarPromos();const status=document.getElementById('promoSyncStatus');if(status)status.textContent='Promo guardada en Supabase; ya se comparte en la web.';
 }
 async function borrarPromo(idx){
- if(!confirm('Borrar promo?')) return;
- let promos = JSON.parse(localStorage.getItem('moncho_promos')||'null') || PROMOS_DEFAULT;
- try{const {data} = await supabaseClient.from('promos').select('*'); if(data && data.length>0) promos=data;}catch(e){}
- const p=promos[idx];
- try{if(p.id){await supabaseClient.from('promos').delete().eq('id',p.id);} else if(p.titulo){await supabaseClient.from('promos').delete().eq('titulo',p.titulo);}}catch(e){}
- promos.splice(idx,1); localStorage.setItem('moncho_promos',JSON.stringify(promos)); cargarPromos();
+ if(!adminAutenticado){alert('Iniciá sesión ADMIN para borrar promociones.');return;}
+ if(!confirm('¿Borrar esta promo para todos los visitantes?'))return;
+ const {data:rows,error:readError}=await supabaseClient.from('promos').select('*').order('created_at',{ascending:true});
+ if(readError){alert('No pude leer las promos en Supabase.');return;}
+ const p=(rows||[])[idx];if(!p||!p.id){alert('No encontré la promo compartida; actualizá la lista.');return;}
+ const {error}=await supabaseClient.from('promos').delete().eq('id',p.id);
+ if(error){alert('No se pudo borrar en Supabase.');console.warn(error);return;}
+ await cargarPromos();const status=document.getElementById('promoSyncStatus');if(status)status.textContent='Promo borrada de Supabase.';
 }
 async function crearPromo(){
- const titulo=document.getElementById('newPromoTitulo').value; const desc=document.getElementById('newPromoDesc').value; const precio=parseInt(document.getElementById('newPromoPrecio').value)||0; const old=parseInt(document.getElementById('newPromoOld').value)||0; const estilo=document.getElementById('newPromoEstilo').value;
- if(!titulo) return alert('Pone titulo');
- let promos = JSON.parse(localStorage.getItem('moncho_promos')||'null') || PROMOS_DEFAULT;
- const nuevo={titulo,descripcion:desc,precio,precio_old:old,estilo};
- try{const {data} = await supabaseClient.from('promos').insert(nuevo).select().single(); if(data){promos.push(data);} else {promos.push(nuevo);}}catch(e){promos.push(nuevo);}
- localStorage.setItem('moncho_promos',JSON.stringify(promos));
- document.getElementById('newPromoTitulo').value=''; document.getElementById('newPromoDesc').value=''; document.getElementById('newPromoPrecio').value=''; document.getElementById('newPromoOld').value='';
- cargarPromos();
+ if(!adminAutenticado){alert('Iniciá sesión ADMIN para crear promociones.');return;}
+ const titulo=(document.getElementById('newPromoTitulo').value||'').trim(),descripcion=(document.getElementById('newPromoDesc').value||'').trim();
+ const precio=Math.max(0,parseInt(document.getElementById('newPromoPrecio').value,10)||0),precio_old=Math.max(0,parseInt(document.getElementById('newPromoOld').value,10)||0);
+ const estilo=['white','gold','pink'].includes(document.getElementById('newPromoEstilo').value)?document.getElementById('newPromoEstilo').value:'white';
+ if(!titulo){alert('Poné un título para la promo.');return;}
+ const {data,error}=await supabaseClient.from('promos').insert({titulo,descripcion,precio,precio_old,estilo}).select().single();
+ if(error||!data){alert('No se creó la promo en Supabase. Revisá la migración y tu sesión ADMIN.');console.warn(error);return;}
+ document.getElementById('newPromoTitulo').value='';document.getElementById('newPromoDesc').value='';document.getElementById('newPromoPrecio').value='';document.getElementById('newPromoOld').value='';
+ await cargarPromos();const status=document.getElementById('promoSyncStatus');if(status)status.textContent='Promo creada y compartida desde Supabase.';
 }
-
 
 let currentFilter='barberia';
 function filterServ(t){currentFilter=t; document.getElementById('f-barberia').style.background=t==='barberia'?'#000':'#1a1a1a'; document.getElementById('f-barberia').style.color=t==='barberia'?'#fff':'#666'; document.getElementById('f-mujeres').style.background=t==='mujeres'?'#000':'#1a1a1a'; document.getElementById('f-mujeres').style.color=t==='mujeres'?'#fff':'#666'; document.getElementById('f-todos').style.background=t==='todos'?'#000':'#1a1a1a'; document.getElementById('f-todos').style.color=t==='todos'?'#fff':'#666'; cargarServicios(); cargarServiciosMujeres(); }
