@@ -484,7 +484,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v15';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v16';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -612,44 +612,38 @@ function filterServ(t){currentFilter=t; document.getElementById('f-barberia').st
 function reservarServicio(id,nombre){if(promoSeleccionada)quitarPromoSeleccionada();showTab('turnos'); setTimeout(async()=>{await cargarServicios();const sel=document.getElementById('servicioId');sel.value=id;sel.disabled=false;sel.dispatchEvent(new Event('change'));document.getElementById('servicios').scrollIntoView({behavior:'smooth'});},350); }
 
 async function cargarServicios(){
-
-const {data:allServices}=await supabaseClient.from('servicios').select('*').order('precio');
-if(!allServices) return;
-const data=allServices.filter(s=>!s.es_promo);
-let h='', sel='<option value="">Elegi servicio</option>', ah='';
-data.forEach(s=>{h+=`<div class="line"><span><b>${s.nombre.toUpperCase()}</b> <span style="color:#666;font-size:11px">${s.duracion_min}MIN</span></span><b style="color:var(--gold)">$${s.precio}</b></div>`; sel+=`<option value="${s.id}">${s.nombre} - $${s.precio}</option>`; ah+=`<div style="display:flex;gap:6px;margin-bottom:6px"><input value="${s.nombre}" id="n_${s.id}" style="flex:2"><input type="number" value="${s.precio}" id="p_${s.id}" style="flex:1"><input type="number" value="${s.duracion_min}" id="d_${s.id}" style="width:60px"><button onclick="guardarServicio('${s.id}')" style="width:50px">OK</button><button onclick="borrarServicio('${s.id}')" class="sec" style="width:36px">X</button></div>`;});
-const el1=document.getElementById('servicios'); if(el1) el1.innerHTML=h;
-const el2=document.getElementById('servicioId');
-if(el2){
- el2.innerHTML=sel;
- if(promoSeleccionada&&promoSeleccionada.servicio_id){
-  const promoValue=String(promoSeleccionada.servicio_id);
-  if(!Array.from(el2.options).some(o=>o.value===promoValue)){const op=document.createElement('option');op.value=promoValue;op.textContent='PROMO: '+promoSeleccionada.titulo+' · $'+Number(promoSeleccionada.precio).toLocaleString('es-AR');op.dataset.promo='true';el2.add(op);}
-  el2.value=promoValue;el2.disabled=true;
- }else el2.disabled=false;
-}
-const ad=document.getElementById('adminServicios'); if(ad) ad.innerHTML=ah;
-// NUEVA PESTAÑA SERVICIOS - CLIENTE
-const barberiaList=document.getElementById('listaServiciosBarberia');
-if(barberiaList){
+ const {data:allServices}=await supabaseClient.from('servicios').select('*').order('precio');
+ if(!allServices)return;
+ const data=allServices.filter(s=>!s.es_promo);
+ const barberiaData=data.filter(s=>(s.categoria||'barberia')==='barberia');
+ let h='',sel='<option value="">Elegi servicio</option>',ah='';
+ data.forEach(s=>{
+  h+=`<div class="line"><span><b>${s.nombre.toUpperCase()}</b> <span style="color:#666;font-size:11px">${s.duracion_min}MIN</span></span><b style="color:var(--gold)">$${s.precio}</b></div>`;
+  sel+=`<option value="${s.id}">${s.nombre} - $${s.precio}</option>`;
+ });
+ barberiaData.forEach(s=>{ah+=`<div style="display:flex;gap:6px;margin-bottom:6px"><input value="${s.nombre}" id="n_${s.id}" style="flex:2"><input type="number" value="${s.precio}" id="p_${s.id}" style="flex:1"><input type="number" value="${s.duracion_min}" id="d_${s.id}" style="width:60px"><button onclick="guardarServicio('${s.id}')" style="width:50px">OK</button><button onclick="borrarServicio('${s.id}')" class="sec" style="width:36px">X</button></div>`;});
+ const el1=document.getElementById('servicios');if(el1)el1.innerHTML=h;
+ const el2=document.getElementById('servicioId');
+ if(el2){
+  el2.innerHTML=sel;
+  if(promoSeleccionada&&promoSeleccionada.servicio_id){
+   const promoValue=String(promoSeleccionada.servicio_id);
+   if(!Array.from(el2.options).some(o=>o.value===promoValue)){const op=document.createElement('option');op.value=promoValue;op.textContent='PROMO: '+promoSeleccionada.titulo+' · $'+Number(promoSeleccionada.precio).toLocaleString('es-AR');op.dataset.promo='true';el2.add(op);}
+   el2.value=promoValue;el2.disabled=true;
+  }else el2.disabled=false;
+ }
+ const ad=document.getElementById('adminServicios');if(ad)ad.innerHTML=ah;
+ const barberiaList=document.getElementById('listaServiciosBarberia');
+ if(barberiaList){
   let hb='';
-  let barberiaData=data.filter(s=> ! (s.nombre.toLowerCase().includes('color') && s.nombre.toLowerCase().includes('mujer')) && !s.nombre.toLowerCase().includes('alisado') && !s.nombre.toLowerCase().includes('balayage') && !s.nombre.toLowerCase().includes('tintura') || s.nombre.toLowerCase().includes('corte') || s.nombre.toLowerCase().includes('barba') || s.nombre.toLowerCase().includes('fade') || s.nombre.toLowerCase().includes('niño') || s.nombre.toLowerCase().includes('nino'));
-  // si filtro deja pasar todo si es corto
-  if(barberiaData.length<2) barberiaData=data.slice(0,8);
-  barberiaData.forEach(s=>{
-    const isBarber = !(s.nombre.toLowerCase().includes('mujer') && (s.nombre.toLowerCase().includes('color')||s.nombre.toLowerCase().includes('alisado')));
-    if(currentFilter==='mujeres' && isBarber && !s.nombre.toLowerCase().includes('mujer')) return;
-    if(currentFilter==='barberia' && !isBarber && s.nombre.toLowerCase().includes('mujer')) return;
-    hb+=`<div style="background:#fff;color:#000;border-radius:12px;padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border-left:6px solid var(--gold)"><div><b style="font-family:var(--font-title);letter-spacing:0.5px">${s.nombre.toUpperCase()}</b><div style="font-size:11px;color:#666;margin-top:2px">${s.duracion_min} MIN • Barberia de barrio</div></div><div style="text-align:right"><div style="font-family:var(--font-title);font-size:22px">$${s.precio}</div><button onclick="reservarServicio('${s.id}','${s.nombre}')" style="width:auto;padding:8px 14px;font-size:10px;margin-top:6px">ELEGIR</button></div></div>`;
-  });
-  barberiaList.innerHTML=hb||'<div class="small">Agrega servicios desde ADMIN</div>';
+  barberiaData.forEach(s=>{hb+=`<div style="background:#fff;color:#000;border-radius:12px;padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border-left:6px solid var(--gold)"><div><b style="font-family:var(--font-title);letter-spacing:0.5px">${s.nombre.toUpperCase()}</b><div style="font-size:11px;color:#666;margin-top:2px">${s.duracion_min} MIN • Barberia de barrio</div></div><div style="text-align:right"><div style="font-family:var(--font-title);font-size:22px">$${s.precio}</div><button onclick="reservarServicio('${s.id}','${s.nombre}')" style="width:auto;padding:8px 14px;font-size:10px;margin-top:6px">ELEGIR</button></div></div>`;});
+  barberiaList.innerHTML=hb||'<div class="small">Agrega servicios de barbería desde ADMIN</div>';
   barberiaList.style.display=(currentFilter==='mujeres')?'none':'block';
-}
-
+ }
 }
 async function cargarServiciosMujeres(){
 const {data}=await supabaseClient.from('servicios').select('*').order('precio');
-let data2 = data?.filter(s=> !s.es_promo && (s.nombre.toLowerCase().includes('color') || s.nombre.toLowerCase().includes('alisado') || s.nombre.toLowerCase().includes('mujer') || s.nombre.toLowerCase().includes('tintura') || s.nombre.toLowerCase().includes('balayage') || s.nombre.toLowerCase().includes('flequillo'))) || [];
+const data2=(data||[]).filter(s=>!s.es_promo&&s.categoria==='mujeres');
 let h='', ah='';
 (data2||[]).forEach(s=>{h+=`<div class="line"><span><b>${s.nombre.toUpperCase()}</b></span><b style="color:#FF8FAB">$${s.precio}</b></div>`; ah+=`<div style="display:flex;gap:6px;margin-bottom:6px"><input value="${s.nombre}" id="nm_${s.id}" style="flex:2"><input type="number" value="${s.precio}" id="pm_${s.id}" style="flex:1"><input type="number" value="${s.duracion_min}" id="dm_${s.id}" style="width:60px"><button onclick="guardarServicioM('${s.id}')" style="width:50px">OK</button><button onclick="borrarServicio('${s.id}')" class="sec" style="width:36px">X</button></div>`;});
 const el=document.getElementById('serviciosMujeres'); if(el) el.innerHTML=h||'<div class="small">Agrega servicios mujer desde ADMIN</div>';
@@ -666,11 +660,11 @@ if(cliM){
 }
 
 }
-async function guardarServicio(id){const n=document.getElementById('n_'+id).value; const p=parseInt(document.getElementById('p_'+id).value); const d=parseInt(document.getElementById('d_'+id).value); await supabaseClient.from('servicios').update({nombre:n,precio:p,duracion_min:d}).eq('id',id); cargarServicios(); cargarServiciosMujeres();}
-async function guardarServicioM(id){const n=document.getElementById('nm_'+id).value; const p=parseInt(document.getElementById('pm_'+id).value); const d=parseInt(document.getElementById('dm_'+id).value); await supabaseClient.from('servicios').update({nombre:n,precio:p,duracion_min:d}).eq('id',id); cargarServiciosMujeres(); cargarServicios();}
+async function guardarServicio(id){const n=document.getElementById('n_'+id).value; const p=parseInt(document.getElementById('p_'+id).value); const d=parseInt(document.getElementById('d_'+id).value); await supabaseClient.from('servicios').update({nombre:n,precio:p,duracion_min:d,categoria:'barberia'}).eq('id',id); cargarServicios(); cargarServiciosMujeres();}
+async function guardarServicioM(id){const n=document.getElementById('nm_'+id).value; const p=parseInt(document.getElementById('pm_'+id).value); const d=parseInt(document.getElementById('dm_'+id).value); await supabaseClient.from('servicios').update({nombre:n,precio:p,duracion_min:d,categoria:'mujeres'}).eq('id',id); cargarServiciosMujeres(); cargarServicios();}
 async function borrarServicio(id){if(!confirm('Borrar?')) return; await supabaseClient.from('servicios').delete().eq('id',id); cargarServicios(); cargarServiciosMujeres();}
-async function crearServicio(){const n=document.getElementById('newNombre').value; const p=parseInt(document.getElementById('newPrecio').value); const d=parseInt(document.getElementById('newDur').value)||30; if(!n||!p) return alert('Completa'); await supabaseClient.from('servicios').insert({nombre:n,precio:p,duracion_min:d}); document.getElementById('newNombre').value=''; document.getElementById('newPrecio').value=''; cargarServicios();}
-async function crearServicioMujer(){const n=document.getElementById('newNombreM').value; const p=parseInt(document.getElementById('newPrecioM').value); const d=parseInt(document.getElementById('newDurM').value)||60; if(!n||!p) return alert('Completa'); await supabaseClient.from('servicios').insert({nombre:n,precio:p,duracion_min:d}); document.getElementById('newNombreM').value=''; document.getElementById('newPrecioM').value=''; cargarServiciosMujeres(); cargarServicios();}
+async function crearServicio(){const n=document.getElementById('newNombre').value; const p=parseInt(document.getElementById('newPrecio').value); const d=parseInt(document.getElementById('newDur').value)||30; if(!n||!p) return alert('Completa'); await supabaseClient.from('servicios').insert({nombre:n,precio:p,duracion_min:d,categoria:'barberia'}); document.getElementById('newNombre').value=''; document.getElementById('newPrecio').value=''; cargarServicios();}
+async function crearServicioMujer(){const n=document.getElementById('newNombreM').value; const p=parseInt(document.getElementById('newPrecioM').value); const d=parseInt(document.getElementById('newDurM').value)||60; if(!n||!p) return alert('Completa'); await supabaseClient.from('servicios').insert({nombre:n,precio:p,duracion_min:d,categoria:'mujeres'}); document.getElementById('newNombreM').value=''; document.getElementById('newPrecioM').value=''; cargarServiciosMujeres(); cargarServicios();}
 
 async function cargarGaleria(){
 const c=document.getElementById('galeria'); const e=document.getElementById('estadoGaleria');
