@@ -162,7 +162,7 @@ button.pink{background:#FF8FAB;color:#000}
 
 <div id="tab-turnos" style="display:none">
 <div class="pizarron"><div class="title">PIZARRON DE PRECIOS</div><div id="servicios"></div></div>
-<div class="card"><div class="card-title">RESERVAR TURNO</div>
+<div class="card"><div class="card-title">RESERVAR TURNO</div><div id="promoSelectedBox" style="display:none;background:#f3c76a;color:#111;padding:12px;border-radius:10px;margin:0 0 12px"><b id="promoSelectedTitle"></b><div id="promoSelectedDetail" class="small" style="color:#333;margin-top:4px"></div><button onclick="quitarPromoSeleccionada()" class="sec" style="margin-top:7px;background:#222;color:#fff">CAMBIAR SERVICIO</button></div>
 <input id="nombre" placeholder="Tu nombre"><input id="whatsapp" placeholder="WhatsApp">
 <label for="fecha" class="small">DÍA</label><input id="fecha" type="date">
 <div class="small" style="margin:0 0 10px;color:#999">ATENCIÓN: lunes a viernes 17 a 21 • sábados y domingos 9 a 18</div>
@@ -324,7 +324,7 @@ button.pink{background:#FF8FAB;color:#000}
 <div style="border-top:1px solid #eee;margin-top:12px;padding-top:12px">
 <input id="newPromoTitulo" placeholder="Titulo promo">
 <input id="newPromoDesc" placeholder="Descripcion">
-<div style="display:flex;gap:8px"><input id="newPromoPrecio" type="number" placeholder="Precio $"><input id="newPromoOld" type="number" placeholder="Viejo"><select id="newPromoEstilo" style="flex:1"><option value="gold">DORADA</option><option value="white">BLANCA</option><option value="pink">ROSA</option></select></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><input id="newPromoPrecio" type="number" placeholder="Precio $"><input id="newPromoOld" type="number" placeholder="Viejo"><input id="newPromoDuracion" type="number" min="5" max="480" placeholder="Duración min"><select id="newPromoEstilo" style="flex:1"><option value="gold">DORADA</option><option value="white">BLANCA</option><option value="pink">ROSA</option></select></div>
 <button onclick="crearPromo()" style="margin-top:8px;background:#000;color:#fff">CREAR PROMO</button>
 </div>
 </div>
@@ -484,12 +484,14 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v13';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v14';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
 
 const PROMOS_DEFAULT = [{titulo:'PADRE + HIJO', descripcion:'2 cortes el mismo dia - Martes a jueves', precio:8500, precio_old:10000, estilo:'white'},{titulo:'CORTE + BARBA', descripcion:'Combo completo - El mas pedido en Azara', precio:7000, precio_old:8000, estilo:'white'},{titulo:'ESTUDIANTES', descripcion:'Primaria y secundaria -15% con libreta', precio:4500, precio_old:0, estilo:'white'},{titulo:'GOLD VIP - 5=6to GRATIS', descripcion:'Se activa sola la tarjeta dorada', precio:0, precio_old:0, estilo:'gold'}];
+let promosActuales=[];
+let promoSeleccionada=null;
 function escaparTextoPromo(value){return String(value==null?'':value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
 function filaPromo(p){return {titulo:String(p.titulo||'').trim(),descripcion:String(p.descripcion||''),precio:Number(p.precio)||0,precio_old:Number(p.precio_old)||0,estilo:['white','gold','pink'].includes(p.estilo)?p.estilo:'white'};}
 async function cargarPromos(){
@@ -506,72 +508,113 @@ async function cargarPromos(){
   if(adminAutenticado&&!dbError){
    const seedRows=promos.map(filaPromo).filter(p=>p.titulo.length>0);
    const {data:seeded,error:seedError}=await supabaseClient.from('promos').insert(seedRows).select();
-   if(!seedError&&seeded&&seeded.length){promos=seeded;localStorage.setItem('moncho_promos',JSON.stringify(seeded));if(sync)sync.textContent='Listo: copié a Supabase las promos guardadas en este teléfono.';}
+   if(!seedError&&seeded&&seeded.length){promos=seeded;localStorage.setItem('moncho_promos',JSON.stringify(seeded));if(sync)sync.textContent='Listo: copié a Supabase las promos guardadas en este teléfono. Configurá su duración para habilitar reservas.';}
    else if(sync){sync.textContent='No se pudieron pasar las promos a Supabase. Revisá el SQL y tu sesión ADMIN.';console.warn(seedError);}
   }else if(adminAutenticado&&dbError&&sync){sync.textContent='No pude leer Supabase. Revisá la conexión y las columnas de promos.';console.warn(dbError);}
  }
+ promosActuales=promos||[];
+ const ids=[...new Set(promosActuales.map(p=>p.servicio_id).filter(Boolean).map(String))];
+ let servicioMap=new Map();
+ if(ids.length){const {data:services,error}=await supabaseClient.from('servicios').select('id,nombre,precio,duracion_min,es_promo').in('id',ids);if(!error)servicioMap=new Map((services||[]).map(s=>[String(s.id),s]));else console.warn(error);}
  let h='',ah='';
- (promos||[]).forEach((p,idx)=>{
+ promosActuales.forEach((p,idx)=>{
   const titulo=escaparTextoPromo(p.titulo||'Promo'),descripcion=escaparTextoPromo(p.descripcion||''),precio=Number(p.precio)||0,precioOld=Number(p.precio_old)||0;
   const estilo=['white','gold','pink'].includes(p.estilo)?p.estilo:'white';
+  const servicio=servicioMap.get(String(p.servicio_id||''));
+  const duracion=servicio?(Number(servicio.duracion_min)||0):0;
+  p.duracion_min=duracion;
   const isGold=estilo==='gold'||String(p.titulo||'').toLowerCase().includes('gold')||String(p.titulo||'').toLowerCase().includes('gratis');
   const cardClass=isGold?'promo-card gold':(estilo==='pink'?'promo-card pink':'promo-card');
   const priceText=precio===0?'GRATIS':'$'+precio,oldText=precioOld?`<div class="old">$${precioOld}</div>`:'';
-  h+=`<div class="${cardClass}"><div style="display:flex;justify-content:space-between"><div><b style="font-family:var(--font-title)">${titulo.toUpperCase()}</b><div class="small" style="color:${isGold?'#000':'#666'}">${descripcion}</div></div><div>${oldText}<div class="price">${priceText}</div></div></div><button onclick="reservarPromo('${titulo.replace(/'/g,"\\'")}')" class="sec" style="margin-top:10px">${precio===0?'VER MI TARJETA':'RESERVAR PROMO'}</button></div>`;
-  ah+=`<div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><input value="${titulo}" id="pt_${idx}" style="flex:2;background:#f5f5f5;color:#000"><input value="${descripcion}" id="pd_${idx}" style="flex:3;background:#f5f5f5;color:#000"><input type="number" value="${precio}" id="pp_${idx}" style="width:90px;background:#f5f5f5;color:#000"><input type="number" value="${precioOld||''}" id="po_${idx}" placeholder="viejo" style="width:80px;background:#f5f5f5;color:#000"><select id="pe_${idx}" style="width:90px;background:#f5f5f5;color:#000"><option value="white" ${estilo==='white'?'selected':''}>BLANCA</option><option value="gold" ${estilo==='gold'?'selected':''}>DORADA</option><option value="pink" ${estilo==='pink'?'selected':''}>ROSA</option></select><button onclick="guardarPromo(${idx})" style="width:50px">OK</button><button onclick="borrarPromo(${idx})" class="sec" style="width:36px">X</button></div>`;
+  const promoId=String(p.id||'').replace(/[^a-zA-Z0-9-]/g,'');
+  const cta='RESERVAR TURNO';
+  h+=`<div class="${cardClass}"><div style="display:flex;justify-content:space-between"><div><b style="font-family:var(--font-title)">${titulo.toUpperCase()}</b><div class="small" style="color:${isGold?'#000':'#666'}">${descripcion}</div></div><div>${oldText}<div class="price">${priceText}</div></div></div><button onclick="reservarPromo('${promoId}')" class="sec" style="margin-top:10px">${cta}</button></div>`;
+  ah+=`<div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center"><input value="${titulo}" id="pt_${idx}" style="flex:2;min-width:120px;background:#f5f5f5;color:#000"><input value="${descripcion}" id="pd_${idx}" style="flex:3;min-width:140px;background:#f5f5f5;color:#000"><input type="number" value="${precio}" id="pp_${idx}" style="width:90px;background:#f5f5f5;color:#000"><input type="number" value="${precioOld||''}" id="po_${idx}" placeholder="viejo" style="width:80px;background:#f5f5f5;color:#000"><input type="number" min="5" max="480" value="${duracion||''}" id="pmin_${idx}" placeholder="min" title="Tiempo que bloquea la agenda" style="width:74px;background:#f5f5f5;color:#000"><select id="pe_${idx}" style="width:90px;background:#f5f5f5;color:#000"><option value="white" ${estilo==='white'?'selected':''}>BLANCA</option><option value="gold" ${estilo==='gold'?'selected':''}>DORADA</option><option value="pink" ${estilo==='pink'?'selected':''}>ROSA</option></select><button onclick="guardarPromo(${idx})" style="width:50px">OK</button><button onclick="borrarPromo(${idx})" class="sec" style="width:36px">X</button></div>`;
  });
  if(cont)cont.innerHTML=h||'<div class="small">Sin promos. Crealas en ADMIN.</div>';
  if(adminCont)adminCont.innerHTML=ah||'<div class="small">Sin promos aun.</div>';
 }
+async function crearServicioPromo(titulo,precio,duracion){
+ const {data,error}=await supabaseClient.from('servicios').insert({nombre:'PROMO: '+titulo,precio,duracion_min:duracion,es_promo:true}).select('id').single();
+ return {data,error};
+}
 async function guardarPromo(idx){
  if(!adminAutenticado){alert('Iniciá sesión ADMIN para guardar promociones.');return;}
- const titulo=(document.getElementById('pt_'+idx).value||'').trim();
- const descripcion=(document.getElementById('pd_'+idx).value||'').trim();
- const precio=Math.max(0,parseInt(document.getElementById('pp_'+idx).value,10)||0);
- const precio_old=Math.max(0,parseInt(document.getElementById('po_'+idx).value,10)||0);
+ const titulo=(document.getElementById('pt_'+idx).value||'').trim(),descripcion=(document.getElementById('pd_'+idx).value||'').trim();
+ const precio=Math.max(0,parseInt(document.getElementById('pp_'+idx).value,10)||0),precio_old=Math.max(0,parseInt(document.getElementById('po_'+idx).value,10)||0),duracion=parseInt(document.getElementById('pmin_'+idx).value,10);
  const estilo=['white','gold','pink'].includes(document.getElementById('pe_'+idx).value)?document.getElementById('pe_'+idx).value:'white';
- if(!titulo){alert('Poné un título para la promo.');return;}
- const {data:rows,error:readError}=await supabaseClient.from('promos').select('*').order('created_at',{ascending:true});
- if(readError){alert('No pude leer las promos de Supabase. Ejecutá la migración y probá otra vez.');console.warn(readError);return;}
- const promos=(rows&&rows.length)?rows:(JSON.parse(localStorage.getItem('moncho_promos')||'null')||PROMOS_DEFAULT);
- const p=promos[idx];if(!p){alert('No encontré esa promo; actualizá la lista.');return;}
- const values={titulo,descripcion,precio,precio_old,estilo};
- let result;
- if(p.id)result=await supabaseClient.from('promos').update(values).eq('id',p.id).select().single();
- else result=await supabaseClient.from('promos').insert(values).select().single();
- if(result.error||!result.data){alert('No se guardó en Supabase. Revisá la sesión y el SQL de promos.');console.warn(result.error);return;}
- await cargarPromos();const status=document.getElementById('promoSyncStatus');if(status)status.textContent='Promo guardada en Supabase; ya se comparte en la web.';
+ if(!titulo||!Number.isInteger(duracion)||duracion<5||duracion>480){alert('Completá el título y una duración entre 5 y 480 minutos.');return;}
+ const p=promosActuales[idx];if(!p||!p.id){alert('No encontré la promo. Actualizá la lista y probá de nuevo.');return;}
+ let servicioId=p.servicio_id;
+ if(servicioId){
+  const {error}=await supabaseClient.from('servicios').update({nombre:'PROMO: '+titulo,precio,duracion_min:duracion,es_promo:true}).eq('id',servicioId);
+  if(error){alert('No se pudo actualizar el tiempo y precio de reserva. Revisá la migración.');console.warn(error);return;}
+ }else{
+  const {data:servicio,error}=await crearServicioPromo(titulo,precio,duracion);
+  if(error||!servicio){alert('No se pudo preparar esta promo para reservas. Revisá la migración.');console.warn(error);return;}
+  servicioId=servicio.id;
+ }
+ const values={titulo,descripcion,precio,precio_old,estilo,servicio_id:servicioId};
+ const {error}=await supabaseClient.from('promos').update(values).eq('id',p.id);
+ if(error){alert('No se guardó la promo.');console.warn(error);return;}
+ await cargarPromos();const status=document.getElementById('promoSyncStatus');if(status)status.textContent='Promo guardada y habilitada para reservar en Turnos ('+duracion+' min).';
 }
 async function borrarPromo(idx){
  if(!adminAutenticado){alert('Iniciá sesión ADMIN para borrar promociones.');return;}
  if(!confirm('¿Borrar esta promo para todos los visitantes?'))return;
- const {data:rows,error:readError}=await supabaseClient.from('promos').select('*').order('created_at',{ascending:true});
- if(readError){alert('No pude leer las promos en Supabase.');return;}
- const p=(rows||[])[idx];if(!p||!p.id){alert('No encontré la promo compartida; actualizá la lista.');return;}
+ const p=promosActuales[idx];if(!p||!p.id){alert('No encontré la promo compartida; actualizá la lista.');return;}
  const {error}=await supabaseClient.from('promos').delete().eq('id',p.id);
  if(error){alert('No se pudo borrar en Supabase.');console.warn(error);return;}
- await cargarPromos();const status=document.getElementById('promoSyncStatus');if(status)status.textContent='Promo borrada de Supabase.';
+ // Se conserva el servicio oculto si ya hubo reservas para no romper el historial.
+ await cargarPromos();const status=document.getElementById('promoSyncStatus');if(status)status.textContent='Promo borrada de la página pública.';
 }
 async function crearPromo(){
  if(!adminAutenticado){alert('Iniciá sesión ADMIN para crear promociones.');return;}
  const titulo=(document.getElementById('newPromoTitulo').value||'').trim(),descripcion=(document.getElementById('newPromoDesc').value||'').trim();
- const precio=Math.max(0,parseInt(document.getElementById('newPromoPrecio').value,10)||0),precio_old=Math.max(0,parseInt(document.getElementById('newPromoOld').value,10)||0);
+ const precio=Math.max(0,parseInt(document.getElementById('newPromoPrecio').value,10)||0),precio_old=Math.max(0,parseInt(document.getElementById('newPromoOld').value,10)||0),duracion=parseInt(document.getElementById('newPromoDuracion').value,10);
  const estilo=['white','gold','pink'].includes(document.getElementById('newPromoEstilo').value)?document.getElementById('newPromoEstilo').value:'white';
  if(!titulo){alert('Poné un título para la promo.');return;}
- const {data,error}=await supabaseClient.from('promos').insert({titulo,descripcion,precio,precio_old,estilo}).select().single();
- if(error||!data){alert('No se creó la promo en Supabase. Revisá la migración y tu sesión ADMIN.');console.warn(error);return;}
- document.getElementById('newPromoTitulo').value='';document.getElementById('newPromoDesc').value='';document.getElementById('newPromoPrecio').value='';document.getElementById('newPromoOld').value='';
- await cargarPromos();const status=document.getElementById('promoSyncStatus');if(status)status.textContent='Promo creada y compartida desde Supabase.';
+ if(!Number.isInteger(duracion)||duracion<5||duracion>480){alert('Indicá cuánto tiempo ocupa la promo en la agenda (5 a 480 minutos).');return;}
+ const {data:servicio,error:serviceError}=await crearServicioPromo(titulo,precio,duracion);
+ if(serviceError||!servicio){alert('No se pudo preparar la duración de la promo.');console.warn(serviceError);return;}
+ const {data,error}=await supabaseClient.from('promos').insert({titulo,descripcion,precio,precio_old,estilo,servicio_id:servicio.id}).select().single();
+ if(error||!data){await supabaseClient.from('servicios').delete().eq('id',servicio.id);alert('No se creó la promo en Supabase.');console.warn(error);return;}
+ document.getElementById('newPromoTitulo').value='';document.getElementById('newPromoDesc').value='';document.getElementById('newPromoPrecio').value='';document.getElementById('newPromoOld').value='';document.getElementById('newPromoDuracion').value='';
+ await cargarPromos();const status=document.getElementById('promoSyncStatus');if(status)status.textContent='Promo creada y lista para reservar en Turnos ('+duracion+' min).';
+}
+function reservarPromo(id){
+ const promo=promosActuales.find(p=>String(p.id)===String(id));
+ if(!promo){alert('No pude cargar esta promo. Actualizá la página e intentá de nuevo.');return;}
+ if(!promo.servicio_id||!Number(promo.duracion_min)){alert('Esta promo todavía no tiene duración configurada para reservar. Avisale a El Moncho.');return;}
+ promoSeleccionada=promo;showTab('turnos');
+ setTimeout(()=>{
+  const sel=document.getElementById('servicioId');if(!sel)return;
+  const serviceValue=String(promo.servicio_id);
+  if(!Array.from(sel.options).some(o=>o.value===serviceValue)){const op=document.createElement('option');op.value=serviceValue;op.textContent='PROMO: '+promo.titulo+' · $'+Number(promo.precio).toLocaleString('es-AR');op.dataset.promo='true';sel.add(op);}
+  sel.value=serviceValue;sel.disabled=true;
+  const box=document.getElementById('promoSelectedBox');if(box)box.style.display='block';
+  const title=document.getElementById('promoSelectedTitle'),detail=document.getElementById('promoSelectedDetail');
+  if(title)title.textContent='PROMO SELECCIONADA: '+promo.titulo;
+  if(detail)detail.textContent='Precio: $'+Number(promo.precio).toLocaleString('es-AR')+' · Duración estimada: '+promo.duracion_min+' min. Elegí día y horario disponible.';
+  cargarHorariosDisponibles();
+  const name=document.getElementById('nombre');if(name)name.scrollIntoView({behavior:'smooth',block:'center'});
+ },350);
+}
+function quitarPromoSeleccionada(){
+ promoSeleccionada=null;const box=document.getElementById('promoSelectedBox');if(box)box.style.display='none';
+ const sel=document.getElementById('servicioId');if(sel){sel.disabled=false;Array.from(sel.options).filter(o=>o.dataset.promo==='true').forEach(o=>o.remove());sel.value='';}
+ cargarHorariosDisponibles();
 }
 
 let currentFilter='barberia';
 function filterServ(t){currentFilter=t; document.getElementById('f-barberia').style.background=t==='barberia'?'#000':'#1a1a1a'; document.getElementById('f-barberia').style.color=t==='barberia'?'#fff':'#666'; document.getElementById('f-mujeres').style.background=t==='mujeres'?'#000':'#1a1a1a'; document.getElementById('f-mujeres').style.color=t==='mujeres'?'#fff':'#666'; document.getElementById('f-todos').style.background=t==='todos'?'#000':'#1a1a1a'; document.getElementById('f-todos').style.color=t==='todos'?'#fff':'#666'; cargarServicios(); cargarServiciosMujeres(); }
-function reservarServicio(id,nombre){showTab('turnos'); setTimeout(()=>{const sel=document.getElementById('servicioId'); sel.value=id; sel.dispatchEvent(new Event('change')); document.getElementById('servicios').scrollIntoView({behavior:'smooth'});},300); }
+function reservarServicio(id,nombre){if(promoSeleccionada)quitarPromoSeleccionada();showTab('turnos'); setTimeout(()=>{const sel=document.getElementById('servicioId'); sel.value=id; sel.dispatchEvent(new Event('change')); document.getElementById('servicios').scrollIntoView({behavior:'smooth'});},300); }
 
 async function cargarServicios(){
 
-const {data}=await supabaseClient.from('servicios').select('*').order('precio');
-if(!data) return;
+const {data:allServices}=await supabaseClient.from('servicios').select('*').order('precio');
+if(!allServices) return;
+const data=allServices.filter(s=>!s.es_promo);
 let h='', sel='<option value="">Elegi servicio</option>', ah='';
 data.forEach(s=>{h+=`<div class="line"><span><b>${s.nombre.toUpperCase()}</b> <span style="color:#666;font-size:11px">${s.duracion_min}MIN</span></span><b style="color:var(--gold)">$${s.precio}</b></div>`; sel+=`<option value="${s.id}">${s.nombre} - $${s.precio}</option>`; ah+=`<div style="display:flex;gap:6px;margin-bottom:6px"><input value="${s.nombre}" id="n_${s.id}" style="flex:2"><input type="number" value="${s.precio}" id="p_${s.id}" style="flex:1"><input type="number" value="${s.duracion_min}" id="d_${s.id}" style="width:60px"><button onclick="guardarServicio('${s.id}')" style="width:50px">OK</button><button onclick="borrarServicio('${s.id}')" class="sec" style="width:36px">X</button></div>`;});
 const el1=document.getElementById('servicios'); if(el1) el1.innerHTML=h;
@@ -597,7 +640,7 @@ if(barberiaList){
 }
 async function cargarServiciosMujeres(){
 const {data}=await supabaseClient.from('servicios').select('*').order('precio');
-let data2 = data?.filter(s=> s.nombre.toLowerCase().includes('color') || s.nombre.toLowerCase().includes('alisado') || s.nombre.toLowerCase().includes('mujer') || s.nombre.toLowerCase().includes('tintura') || s.nombre.toLowerCase().includes('balayage') || s.nombre.toLowerCase().includes('flequillo')) || [];
+let data2 = data?.filter(s=> !s.es_promo && (s.nombre.toLowerCase().includes('color') || s.nombre.toLowerCase().includes('alisado') || s.nombre.toLowerCase().includes('mujer') || s.nombre.toLowerCase().includes('tintura') || s.nombre.toLowerCase().includes('balayage') || s.nombre.toLowerCase().includes('flequillo'))) || [];
 let h='', ah='';
 (data2||[]).forEach(s=>{h+=`<div class="line"><span><b>${s.nombre.toUpperCase()}</b></span><b style="color:#FF8FAB">$${s.precio}</b></div>`; ah+=`<div style="display:flex;gap:6px;margin-bottom:6px"><input value="${s.nombre}" id="nm_${s.id}" style="flex:2"><input type="number" value="${s.precio}" id="pm_${s.id}" style="flex:1"><input type="number" value="${s.duracion_min}" id="dm_${s.id}" style="width:60px"><button onclick="guardarServicioM('${s.id}')" style="width:50px">OK</button><button onclick="borrarServicio('${s.id}')" class="sec" style="width:36px">X</button></div>`;});
 const el=document.getElementById('serviciosMujeres'); if(el) el.innerHTML=h||'<div class="small">Agrega servicios mujer desde ADMIN</div>';
@@ -867,7 +910,7 @@ async function reservar(){
  await cargarHorariosDisponibles();
 }
 
-function reservarPromo(promo){const w=prompt('Tu WhatsApp para reservar promo '+promo); if(!w) return; window.open(`https://wa.me/${w.replace(/\D/g,'')}?text=Hola El Moncho, quiero la PROMO ${promo}`,'_blank');}
+
 function escaparTextoRegistro(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 async function cargarRegistro(){
  const cont=document.getElementById('registroCortes');
