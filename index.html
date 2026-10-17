@@ -473,6 +473,13 @@ async function init(){
 supabaseClient=window.supabase.createClient(SB_URL,SB_KEY);
 supabaseClient.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY')mostrarRecuperacionAdmin();});
 await refrescarAccesoFotos();
+const recoveryUrl=new URL(window.location.href);
+const recoveryHash=new URLSearchParams(window.location.hash.slice(1));
+if(recoveryUrl.searchParams.get('password-recovery')==='1'||recoveryHash.get('type')==='recovery'){
+ const {data:{session}}=await supabaseClient.auth.getSession();
+ if(session){mostrarRecuperacionAdmin();}
+ else{const adminTabButton=document.getElementById('t-admin');if(adminTabButton)adminTabButton.click();document.getElementById('adminLogin').style.display='block';document.getElementById('adminPanel').style.display='none';const status=document.getElementById('adminAuthStatus');if(status)status.textContent='No se pudo validar este enlace. Tocá “Olvidé mi contraseña” para pedir uno nuevo.';}
+}
 const fechaInput=document.getElementById('fecha');
 const servicioSelect=document.getElementById('servicioId');
 if(fechaInput){
@@ -485,7 +492,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v17';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v18';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
