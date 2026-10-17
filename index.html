@@ -175,7 +175,7 @@ button.pink{background:#FF8FAB;color:#000}
 </div>
 
 <div id="tab-admin" style="display:none">
-<div class="card" id="adminLogin"><div class="card-title">ADMIN · ACCESO SEGURO</div><div class="small" style="margin-bottom:8px;color:#bbb">Ingresá con tu cuenta autorizada de Supabase.</div><input id="adminEmail" type="email" autocomplete="username" value="robertocaballero973@gmail.com" placeholder="Correo administrador"><input id="adminPass" type="password" autocomplete="current-password" placeholder="Contraseña de Supabase Auth"><button onclick="loginAdmin()">ENTRAR</button><button type="button" onclick="solicitarRecuperacionAdmin()" style="margin-top:8px">OLVIDÉ MI CONTRASEÑA</button><div id="adminAuthStatus" class="small" style="margin-top:8px;color:var(--gold)"></div><div id="adminRecoveryForm" style="display:none;margin-top:12px"><div class="small" style="margin-bottom:8px;color:#bbb">Elegí una contraseña nueva para esta cuenta.</div><input id="adminNewPass" type="password" autocomplete="new-password" minlength="8" placeholder="Nueva contraseña (mínimo 8 caracteres)"><input id="adminConfirmNewPass" type="password" autocomplete="new-password" minlength="8" placeholder="Repetí la nueva contraseña"><button type="button" onclick="guardarNuevaClaveAdmin()">GUARDAR NUEVA CONTRASEÑA</button></div></div>
+<div class="card" id="adminLogin"><div class="card-title">ADMIN · ACCESO SEGURO</div><div id="adminLoginFields"><div class="small" style="margin-bottom:8px;color:#bbb">Ingresá con tu cuenta autorizada de Supabase.</div><input id="adminEmail" type="email" autocomplete="username" value="robertocaballero973@gmail.com" placeholder="Correo administrador"><input id="adminPass" type="password" autocomplete="current-password" placeholder="Contraseña de Supabase Auth"><button onclick="loginAdmin()">ENTRAR</button><button type="button" onclick="solicitarRecuperacionAdmin()" style="margin-top:8px">OLVIDÉ MI CONTRASEÑA</button></div><div id="adminAuthStatus" class="small" style="margin-top:8px;color:var(--gold)"></div><div id="adminRecoveryForm" style="display:none;margin-top:12px"><div class="small" style="margin-bottom:8px;color:#bbb">Elegí una contraseña nueva. No cierres la sesión ni salgas de esta pantalla hasta guardarla.</div><input id="adminNewPass" type="password" autocomplete="new-password" minlength="8" placeholder="Nueva contraseña (mínimo 8 caracteres)"><input id="adminConfirmNewPass" type="password" autocomplete="new-password" minlength="8" placeholder="Repetí la nueva contraseña"><button type="button" onclick="guardarNuevaClaveAdmin()">GUARDAR NUEVA CONTRASEÑA</button></div></div>
 <div id="adminPanel" style="display:none">
 <div class="admin-block" style="background:#141414;color:#fff;border:1px solid #393126">
 <div class="title">🔒 PANEL ADMIN · CUENTA AUTORIZADA</div>
@@ -492,7 +492,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v18';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v19';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -1233,6 +1233,7 @@ function mostrarRecuperacionAdmin(){
  if(adminTab)adminTab.style.display='block';
  document.getElementById('adminLogin').style.display='block';
  document.getElementById('adminPanel').style.display='none';
+ document.getElementById('adminLoginFields').style.display='none';
  document.getElementById('adminRecoveryForm').style.display='block';
  const status=document.getElementById('adminAuthStatus');if(status)status.textContent='Enlace verificado. Elegí una contraseña nueva.';
 }
@@ -1254,9 +1255,10 @@ async function guardarNuevaClaveAdmin(){
  if(password!==confirm){if(status)status.textContent='Las contraseñas no coinciden.';return;}
  if(status)status.textContent='Guardando la nueva contraseña...';
  const {error}=await supabaseClient.auth.updateUser({password});
- if(error){if(status)status.textContent='No se pudo guardar. Volvé a abrir el enlace de recuperación e intentá de nuevo.';return;}
+ if(error){if(status)status.textContent='No se pudo guardar. No cierres esta sesión de recuperación; si ya la cerraste, el enlace perdió validez y hace falta uno nuevo.';return;}
  await supabaseClient.auth.signOut();
  document.getElementById('adminRecoveryForm').style.display='none';
+ document.getElementById('adminLoginFields').style.display='block';
  document.getElementById('adminNewPass').value='';document.getElementById('adminConfirmNewPass').value='';document.getElementById('adminPass').value='';
  if(status)status.textContent='Contraseña actualizada. Ya podés ingresar con la nueva.';
 }
