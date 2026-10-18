@@ -180,7 +180,8 @@ button.pink{background:#FF8FAB;color:#000}
 <div class="admin-block" style="background:#141414;color:#fff;border:1px solid #393126">
 <div class="title">🔒 PANEL ADMIN · CUENTA AUTORIZADA</div>
 <div id="adminUploadControls" style="display:block">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px"><span class="small" style="color:#bbb">Sesión administrativa segura.</span><button onclick="cerrarSesionAdmin()" class="sec" style="width:auto;padding:7px 10px">CERRAR SESIÓN</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px"><span class="small" style="color:#bbb">Sesión administrativa segura.</span><div style="display:flex;gap:8px"><button type="button" onclick="mostrarCambioClaveAdmin()" class="sec" style="width:auto;padding:7px 10px">CAMBIAR CLAVE</button><button onclick="cerrarSesionAdmin()" class="sec" style="width:auto;padding:7px 10px">CERRAR SESIÓN</button></div></div>
+<div id="adminChangePasswordBox" class="card" style="display:none;margin:10px 0"><div class="card-title">CAMBIAR CONTRASEÑA</div><div class="small" style="margin-bottom:8px;color:#bbb">La sesión está activa. Elegí una clave nueva y guardala sin cerrar sesión.</div><input id="adminPanelNewPass" type="password" autocomplete="new-password" minlength="8" placeholder="Nueva contraseña (mínimo 8 caracteres)"><input id="adminPanelConfirmPass" type="password" autocomplete="new-password" minlength="8" placeholder="Repetí la nueva contraseña"><button type="button" onclick="guardarCambioClaveAdmin()">GUARDAR NUEVA CONTRASEÑA</button><div id="adminPanelPasswordStatus" class="small" style="margin-top:8px;color:var(--gold)"></div></div>
 <details class="admin-accordion" id="adminSubirTrabajos"><summary>📷 Subir trabajos a la galería</summary><div class="admin-accordion-body"><div class="card">
 <div class="card-title">SUBIR CORTE</div>
 <img id="preview" class="preview">
@@ -492,7 +493,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v19';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v20';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -749,6 +750,20 @@ async function exigirAdminFotos(){
  const ok=await refrescarAccesoFotos();
  if(!ok) alert('Iniciá sesión en ADMIN con la cuenta Supabase autorizada.');
  return ok;
+}
+function mostrarCambioClaveAdmin(){document.getElementById('adminChangePasswordBox').style.display='block';document.getElementById('adminPanelNewPass').focus();}
+async function guardarCambioClaveAdmin(){
+ const password=document.getElementById('adminPanelNewPass').value||'';
+ const confirm=document.getElementById('adminPanelConfirmPass').value||'';
+ const status=document.getElementById('adminPanelPasswordStatus');
+ if(password.length<8){status.textContent='Usá al menos 8 caracteres.';return;}
+ if(password!==confirm){status.textContent='Las contraseñas no coinciden.';return;}
+ if(!adminAutenticado){status.textContent='La sesión ya no está activa. No cierres la pantalla; avisame.';return;}
+ status.textContent='Guardando la nueva contraseña...';
+ const {error}=await supabaseClient.auth.updateUser({password});
+ if(error){status.textContent='No se pudo actualizar con esta sesión. Conservá la pantalla abierta y avisame.';return;}
+ document.getElementById('adminPanelNewPass').value='';document.getElementById('adminPanelConfirmPass').value='';
+ status.textContent='Contraseña actualizada. La sesión sigue abierta; ya podés seguir trabajando.';
 }
 async function cerrarSesionAdmin(){
  await supabaseClient.auth.signOut();
