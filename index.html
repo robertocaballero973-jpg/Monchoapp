@@ -239,7 +239,8 @@ button.pink{background:#FF8FAB;color:#000}
   <div class="fin-field"><label for="finCierreNota">Nota de cierre</label><input id="finCierreNota" maxlength="250" placeholder="Opcional"></div>
  </div>
  <div id="finCierreResultado" class="fin-close-result"></div>
- <button class="sec" onclick="guardarCierreCaja()" style="margin-top:8px;background:#000;color:#fff">GUARDAR CIERRE DEL DÍA</button>
+ <button id="finGuardarCierreBtn" class="sec" onclick="guardarCierreCaja()" style="margin-top:8px;background:#000;color:#fff">GUARDAR CIERRE DEL DÍA</button>
+ <button id="finBorrarCierreBtn" class="sec" onclick="borrarCierreCaja()" style="display:none;margin-top:8px;background:#fff;color:#a00;border:1px solid #a00">BORRAR CIERRE GUARDADO</button>
  <div id="finCierreEstado" class="fin-status" aria-live="polite"></div>
 </div>
 
@@ -493,7 +494,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v20';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v21';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -1069,7 +1070,10 @@ async function cargarCierreCaja(){
  document.getElementById('finApertura').value=cierre?Number(cierre.apertura||0):0;
  document.getElementById('finContado').value=cierre?Number(cierre.efectivo_contado||0):0;
  document.getElementById('finCierreNota').value=cierre?cierre.nota||'':'';
- document.getElementById('finCierreEstado').textContent=cierre?'Cierre guardado; podés corregirlo y volver a guardar.':'Todavía no hay cierre guardado para ese día.';
+ document.getElementById('finCierreEstado').textContent=cierre?'Cierre guardado para este día. Podés corregirlo o borrarlo.':'Todavía no hay cierre guardado para ese día.';
+ const guardarBtn=document.getElementById('finGuardarCierreBtn'),borrarBtn=document.getElementById('finBorrarCierreBtn');
+ if(guardarBtn)guardarBtn.textContent=cierre?'CORREGIR / ACTUALIZAR CIERRE':'GUARDAR CIERRE DEL DÍA';
+ if(borrarBtn)borrarBtn.style.display=cierre?'block':'none';
  actualizarResumenCierreCaja();
 }
 function actualizarResumenCierreCaja(){
@@ -1083,7 +1087,15 @@ async function guardarCierreCaja(){
  const status=document.getElementById('finCierreEstado');
  if(!fecha||apertura<0||efectivo_contado<0){status.textContent='Revisá la fecha y los importes del cierre.';return;}
  const {error}=await supabaseClient.from('caja_cierres').upsert({fecha,apertura,efectivo_contado,nota},{onConflict:'fecha'});
- status.textContent=error?'No se guardó el cierre. Revisá la configuración SQL y tu sesión ADMIN.':'Cierre guardado.';if(error)console.warn(error);
+ if(error){status.textContent='No se guardó el cierre. Revisá la configuración SQL y tu sesión ADMIN.';console.warn(error);return;}
+ await cargarCierreCaja();status.textContent='Cierre guardado o corregido para ese día.';
+}
+async function borrarCierreCaja(){
+ const fecha=document.getElementById('finCierreFecha').value,status=document.getElementById('finCierreEstado');
+ if(!fecha||!confirm('¿Borrar el cierre guardado del '+fecha+'? Esto no borra los ingresos ni gastos de ese día.'))return;
+ const {error}=await supabaseClient.from('caja_cierres').delete().eq('fecha',fecha);
+ if(error){status.textContent='No se pudo borrar el cierre. Revisá tu sesión ADMIN.';console.warn(error);return;}
+ await cargarCierreCaja();status.textContent='Cierre borrado. Los movimientos del día siguen guardados.';
 }
 
 let clientesGoldCache=[];
