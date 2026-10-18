@@ -203,7 +203,7 @@ button.pink{background:#FF8FAB;color:#000}
 </div>
 </div>
 
-<div class="admin-shortcuts"><div class="admin-shortcuts-title">ACCESO RÁPIDO · ADMIN</div><div class="admin-shortcut-grid"><button onclick="abrirSeccionAdmin('adminFinanzas')">💰 Finanzas</button><button onclick="abrirSeccionAdmin('adminTurnos')">📅 Turnos</button><button onclick="abrirSeccionAdmin('adminTarjetas')">🏅 Tarjetas Gold</button><button onclick="abrirSeccionAdmin('adminComercial')">✂️ Servicios y promos</button><button onclick="abrirSeccionAdmin('adminGalerias')">📸 Galerías</button><button onclick="abrirSeccionAdmin('adminDiseno')">🎨 Diseño</button></div></div><details class="admin-accordion" id="adminFinanzas" open><summary>💰 Finanzas · caja y movimientos</summary><div class="admin-accordion-body"><div class="admin-block" id="monchoFinanzas">
+<div class="admin-shortcuts"><div class="admin-shortcuts-title">ACCESO RÁPIDO · ADMIN</div><div class="admin-shortcut-grid"><button onclick="abrirSeccionAdmin('adminSubirTrabajos')">📷 Subir trabajos</button><button onclick="abrirSeccionAdmin('adminFinanzas')">💰 Finanzas</button><button onclick="abrirSeccionAdmin('adminTurnos')">📅 Turnos</button><button onclick="abrirSeccionAdmin('adminTarjetas')">🏅 Tarjetas Gold</button><button onclick="abrirSeccionAdmin('adminComercial')">✂️ Servicios y promos</button><button onclick="abrirSeccionAdmin('adminGalerias')">📸 Galerías</button><button onclick="abrirSeccionAdmin('adminDiseno')">🎨 Diseño</button></div></div><details class="admin-accordion" id="adminFinanzas" open><summary>💰 Finanzas · caja y movimientos</summary><div class="admin-accordion-body"><div class="admin-block" id="monchoFinanzas">
 <div class="title">💰 FINANZAS · CAJA Y MOVIMIENTOS</div>
 <div class="small">Registro manual de ingresos y gastos. No procesa pagos. Solo visible con tu sesión ADMIN.</div>
 <div class="fin-subtitle">Resumen del período</div>
@@ -494,7 +494,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v22';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v23';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
