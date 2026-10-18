@@ -494,7 +494,7 @@ buildFontSelectors();
 await loadAppConfig();
 cargarServicios(); cargarGaleria(); cargarClientes(); cargarGaleriaMujeres(); cargarServiciosMujeres(); cargarPromos();
 if('serviceWorker' in navigator){
- const sw=`const C='moncho-design-v21';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
+ const sw=`const C='moncho-design-v22';self.addEventListener('install',e=>{e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith('moncho-design-')&&x!==C).map(x=>caches.delete(x)));const c=await caches.open(C);await c.addAll(['./']);await self.skipWaiting();})())});self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request))))})`;
  const b=new Blob([sw],{type:'text/javascript'}); const u=URL.createObjectURL(b); navigator.serviceWorker.register(u);
 }
 }
@@ -1062,15 +1062,28 @@ function editarMovimientoCaja(id){
 }
 function cancelarEdicionCaja(limpiar=true){finanzasEditId=null;const b=document.getElementById('finGuardarBtn');if(b)b.textContent='GUARDAR MOVIMIENTO';const c=document.getElementById('finCancelarEdicion');if(c)c.style.display='none';if(limpiar){['finConcepto','finImporte','finNota'].forEach(id=>document.getElementById(id).value='');document.getElementById('finTurno').value='';}}
 async function borrarMovimientoCaja(id){if(!confirm('¿Borrar este movimiento financiero?'))return;const {error}=await supabaseClient.from('caja_movimientos').delete().eq('id',id);if(error){alert('No se pudo borrar el movimiento.');console.warn(error);return;}await cargarFinanzas();}
+async function calcularAperturaAutomaticaCaja(fecha){
+ const {data:ultimoCierre,error:e1}=await supabaseClient.from('caja_cierres').select('fecha,efectivo_contado').lt('fecha',fecha).order('fecha',{ascending:false}).limit(1).maybeSingle();
+ if(e1)throw e1;
+ let saldo=Number(ultimoCierre?.efectivo_contado||0);
+ let consulta=supabaseClient.from('caja_movimientos').select('tipo,importe').eq('medio_pago','efectivo').lt('fecha',fecha);
+ if(ultimoCierre?.fecha)consulta=consulta.gt('fecha',ultimoCierre.fecha);
+ const {data:movimientos,error:e2}=await consulta;
+ if(e2)throw e2;
+ for(const m of (movimientos||[])){const importe=Number(m.importe||0);if(m.tipo==='ingreso'||m.tipo==='aporte')saldo+=importe;else if(m.tipo==='gasto'||m.tipo==='retiro')saldo-=importe;}
+ return saldo;
+}
 async function cargarCierreCaja(){
  const fecha=document.getElementById('finCierreFecha').value;if(!fecha||!supabaseClient)return;
  const [{data:cierre,error:e1},{data:mov,error:e2}]=await Promise.all([supabaseClient.from('caja_cierres').select('*').eq('fecha',fecha).maybeSingle(),supabaseClient.from('caja_movimientos').select('tipo,medio_pago,importe').eq('fecha',fecha)]);
- if(e1||e2){console.warn(e1||e2);document.getElementById('finCierreEstado').textContent='Para usar el cierre, ejecutá el SQL de Finanzas.';return;}
+ if(e1||e2){console.warn(e1||e2);document.getElementById('finCierreEstado').textContent='No se pudieron cargar los datos del cierre. Revisá tu sesión y la conexión.';return;}
  finanzasCierreMovimientos=mov||[];
- document.getElementById('finApertura').value=cierre?Number(cierre.apertura||0):0;
+ let apertura=cierre?Number(cierre.apertura||0):0,estadoApertura='';
+ if(!cierre){try{apertura=await calcularAperturaAutomaticaCaja(fecha);estadoApertura='Apertura sugerida automáticamente; revisá que coincida con el efectivo real.';}catch(err){console.warn(err);estadoApertura='No se pudo sugerir la apertura; ingresá el efectivo real manualmente.';}}
+ document.getElementById('finApertura').value=apertura;
  document.getElementById('finContado').value=cierre?Number(cierre.efectivo_contado||0):0;
  document.getElementById('finCierreNota').value=cierre?cierre.nota||'':'';
- document.getElementById('finCierreEstado').textContent=cierre?'Cierre guardado para este día. Podés corregirlo o borrarlo.':'Todavía no hay cierre guardado para ese día.';
+ document.getElementById('finCierreEstado').textContent=cierre?'Cierre guardado para este día. Podés corregirlo o borrarlo.':estadoApertura;
  const guardarBtn=document.getElementById('finGuardarCierreBtn'),borrarBtn=document.getElementById('finBorrarCierreBtn');
  if(guardarBtn)guardarBtn.textContent=cierre?'CORREGIR / ACTUALIZAR CIERRE':'GUARDAR CIERRE DEL DÍA';
  if(borrarBtn)borrarBtn.style.display=cierre?'block':'none';
